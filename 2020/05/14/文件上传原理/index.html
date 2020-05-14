@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>文件上传原理 | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    文件上传原理
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#文件上传原理"><span class="toc-number">1.</span> <span class="toc-text">文件上传原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#PHP文件上传原理：参考博客"><span class="toc-number">1.0.0.1.</span> <span class="toc-text">PHP文件上传原理：参考博客</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP文件上传的基本原理："><span class="toc-number">1.0.0.2.</span> <span class="toc-text">HTTP文件上传的基本原理：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器端："><span class="toc-number">1.0.0.2.1.</span> <span class="toc-text">服务器端：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器端获取文件传输速度的计算方式："><span class="toc-number">1.0.0.2.2.</span> <span class="toc-text">服务器端获取文件传输速度的计算方式：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#判断上传文件（单个）大小是否符合服务器设置："><span class="toc-number">1.0.0.2.3.</span> <span class="toc-text">判断上传文件（单个）大小是否符合服务器设置：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#如何判断批量上传的每一个文件的大小："><span class="toc-number">1.0.0.2.4.</span> <span class="toc-text">如何判断批量上传的每一个文件的大小：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器如何在真正文件上传-读取流-之前获得文件名？"><span class="toc-number">1.0.0.2.5.</span> <span class="toc-text">服务器如何在真正文件上传(读取流)之前获得文件名？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#客户端从服务器读取文件上传进度信息："><span class="toc-number">1.0.0.2.6.</span> <span class="toc-text">客户端从服务器读取文件上传进度信息：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Ajax"><span class="toc-number">1.0.0.2.7.</span> <span class="toc-text">(Ajax)</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="文件上传原理"><a href="#文件上传原理" class="headerlink" title="文件上传原理"></a>文件上传原理</h1><p>文件上传：因为浏览器本身的限制，浏览器是不能直接操作文件系统的，需要通过浏览器所暴露出来的统一接口，由用户主动授权发起来访问文件动作，然后读取文件内容进指定内存里，最后执行提交请求操作，将内存里的文件内容数据上传到服务端，最后服务端解析前端传来的数据信息后存入文件里。</p>
+<h4 id="PHP文件上传原理：参考博客"><a href="#PHP文件上传原理：参考博客" class="headerlink" title="PHP文件上传原理：参考博客"></a>PHP文件上传原理：<a href="https://www.cnblogs.com/promiseslc/p/8365986.html" target="_blank" rel="noopener">参考博客</a></h4><p>1、文件上传原理</p>
+<p>　　将客户端的文件上传到服务器，再将服务器的临时文件上传到指定目录</p>
+<p>2、客户端配置</p>
+<ul>
+<li>提交表单</li>
+<li>表单的发送方式为post</li>
+<li>添加enctype=”multipart/form-data”</li>
+</ul>
+<p>3、服务器端配置</p>
+<ul>
+<li>file_uploads = On，支持HTTP上传</li>
+<li>uoload_tmp_dir = ，临时文件保存目录</li>
+<li>upload_max_filesize = 2M，允许上传文件的最大值</li>
+<li>max_file_uploads = 20 ，允许一次上传到的最大文件数</li>
+<li>post_max_size = 8M，post方式发送数据的最大值</li>
+<li>max_execution_time = -1，设置了脚本被解析器终止之前允许的最大执行时间，单位为秒，防止程序写的不好而占尽服务器资源。-1代表无穷</li>
+<li>max_input_time = 60 ，脚本解析输入数据允许的最大时间，单位为秒</li>
+<li>max_input_nesting_level = 64 ，设置输入变量的嵌套深度</li>
+<li>max_input_vars_ = 1000，接受多少输入的变量（限制分别应用于$_GET、$_POST和$_COOKIE超全局变量，将会导致E_WARNING的产生，更多的输入变量将会从请求中截断。</li>
+<li>memory_limit = 128M，最大单线程的独立内存使用量。也就是一个web请求，给予线程最大的内存使用量的定义</li>
+</ul>
+<p>4、错误信息说明</p>
+<p>1）UPLOAD_ERR_OK：其值为0，没有错误发生，文件上传成功</p>
+<p>2）UPLOAD_ERR_INI_SIZE：其值为1，上传的文件超过了php.ini中upload_max_filesize选项限制的值</p>
+<p>3）UPLOAD_ERR_FORM_SIZE：其值为2，上传文件的大小超过了HTML表单中MAX_FILE_SIZE选项指定的值</p>
+<p>4）UPLOAD_ERR_PARTIAL：其值为3，文件只有部分被上传</p>
+<p>5）UPLOAD_ERR_NO_FILE：其值为4，没有文件被上传</p>
+<p>6）UPLOAD_ERR_NO_TMP_DIR：其值为6，找不到临时文件夹</p>
+<p>7）UPLOAD_ERR_CANT_WRITE：其值为7，文件写入失败</p>
+<p>8）UPLOAD_ERR_EXTENSION：其值为8，上传的文件被PHP扩展程序中断</p>
+<p>5、客户端限制</p>
+<ul>
+<li><p>通过表单隐藏域限制文件上传文件的最大值</p>
+<pre><code>&lt;input type=&#39;hidden&#39; name=&#39;MAX_FILE_SIZE&#39; VALUE=&#39;字节数&#39; /&gt;</code></pre></li>
+<li><p>通过accept属性限制上传文件类型</p>
+<pre><code>&lt;input type=&#39;file&#39; name=&#39;myFile&#39; accept=&#39;文件的MIME类型&#39; /&gt;</code></pre></li>
+</ul>
+<p>6、在客户端的限制，用户可在网页上修改代码后上传，故无实际意义。应在服务器端加以限制</p>
+<p>1）限制上传文件的大小</p>
+<p>2）限制上传文件类型</p>
+<p>3）检测是否为真实图片类型</p>
+<p>4）检测是否为HTTP POST方式上传</p>
+<h4 id="HTTP文件上传的基本原理："><a href="#HTTP文件上传的基本原理：" class="headerlink" title="HTTP文件上传的基本原理："></a>HTTP文件上传的基本原理：</h4><p>使用html 的<input type="file" name="xxx"> 标签，提交form 的几个属性必须为： method=post  encType=multipart/form-data;<br>method 属性必须设为post的原因是：值不是放在URL之后传递到服务器的；<br>encType属性：这个属性管理的是表单的MIME编码<br>几个属性详解：<br>         application/x-www-form-urlencoded   在发送前编码所有字符（默认）<br>       multipart/form-data  不对字符编码，在使用包含文件上传控件的表单时，必须使用该值；对于“multipart/form-data”类型的form表单，浏览器上传的实体内 容中的每个表单字段元素的数据之间用字段分隔界线进行分割，两个分隔界线间的内容称为一个分区，每个分区中的内容可以被看作两部分，一部分是对表单字段元 素进行描述的描述头，另外一部是表单字段元素的主体内容<br>       text/plain 空格转换为“+”，不对特殊字符编码</p>
+<p>归纳的三个重要点：</p>
+<p>1.提交方式必须为post；<br>2.表单中有文件上传的表单项必须为<input type="file"/>；<br>3.必须指定表单类型enctype=”multipart/form-data”。</p>
+<p>例子（代码）：</p>
+<pre><code>&lt;form method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;    
+  &lt;input type=&quot;file&quot; name=&quot;file&quot; value=&quot;请选择文件&quot;&gt;&lt;br /&gt;    
+  &lt;input type=&quot;submit&quot;&gt;    
+&lt;/form&gt;</code></pre><h5 id="服务器端："><a href="#服务器端：" class="headerlink" title="服务器端："></a>服务器端：</h5><p>​       WEB服务器端程序接收到“multipart/form-data”类型的HTTP请求消息后，其核心和基本的编程工作就是读取请求消息中的实体内容，然后解析出每个分区的数据，接着再从每个分区中解析出描述头和主体内容部分。<br>​       要在jsp里获得上传的文件，就是通过request.getInputStream()来得到上传的整个post实体的流，用 request.getHeader(“Content-Type”)来取得实体内容的分界字符串，然后根据http协议，分析取得的上传的实体流，把文 件部分给筛出来，然后在服务器端保存到磁盘文件中，另外因为上传文件时，form的属性enctype=”multipart/form-data”，所 以其他表单参数在上传文件时也无法得到，除了筛出文件进行保存，还应该把其他的参数一起取出保存，以便在jsp程序中调用。</p>
+<p>具体方法如下：<br>1、 根据request获得文件输入流；<br>2、 依次读取行，此时进行两部分内容的处理，<br>  a:获取文件名<br>  以 filename=”xxxxx”来标识一个文件头，<br>  b:获取其他表单值（因为其流是按照multipart/form-data方式来编码的，所以在服务器端，不能     直接用request.getParameter()来获得）<br>    以name=”xxxx”来标识一个表单头，</p>
+<p>​    都以流头的字符标识为值的结束；</p>
+<p>实体内容内部的字段分隔界线是在content-type头中指定的字段分隔界线前面增加了两个减号（-）字符而形成的（由浏览器随机生成，由浏览器 保证不会与用户上传的文件内容重复）<br>当找到一个分区的开始位置后，程序还需要分辨出分区中的描述头和主体内容，并对这两部分内容分开存储。如何分辨出一个分区的描述头和主体部分呢？每 个分区中的描述头和主体内容之间有一空行，再加上描述头后面的换行，这就说明描述头和主体部分之间是使用“\n”、“\r”、“\n”、“\r”这四个连 续的字节内容进行分隔。因此，程序需要把“\n”、“\r”、“\n”、“\r”这四个连续的字节内容作为描述头和主体部分之间的分隔界线，并在字节数组 缓冲区buffer中寻找这个特殊的分隔界线来识别描述头和主体部分。</p>
+<p>3、 根据读到的文件信息（文件名，文件大小等），判断是否合法（文件类型、文件大小判断）。如果合适则返回，如果不合适则创建同名文件并将其删除；</p>
+<p>演示Form 显示提交的流的格式：  UI </p>
+<p>当前的主流文件上传组件性能对比<br>    1、smartUpload          2、FileUpload           3、Cos<br>实例演示性能对比：<br>jspSmartUpload<br>fileUpLoad<br>cos<br>20M 、75M 、300M</p>
+<p>所以选择Cos作为内部读取解析文件流的组件；<br><strong>使用组件而不是自己来解析文件流的原因：</strong><br>1、 读取文件大小的限制，如同smartUpload 组件一样，上传的文件大小会受到JVM内存容量的限制，因为读取的文件流都是存储在内存之中的，而fileUpLoad和cos采用的是当文件读取到了一定的大小就先写到硬盘上的临时目录中；</p>
+<p>2、 读取效率的限制 ，组件可以根据文件的大小设定一定的缓存，来提升读取的效率，分配好内存的缓存大小，及硬盘目录缓存大小；<br>（文件缓存循环机制作的简要介绍，缓冲区如何正好读取到分区界限）</p>
+<p><strong>此类组件的使用及封装方式：</strong><br>MultipartRequest mu = new MultipartRequest(HttpServletRequest request,Directory,MaxSize,”gbk”);</p>
+<p>我们只需要传递一个申请的request流，目录名，它会自动完成相应的解析文件流的过程，然后直接在对应设置的目录中生成对应的同名文件；<br>代理模式：</p>
+<pre><code>HttpServerRequestProxy：代理表单请求
+InputStreamRequestProxy：代理输入流</code></pre><p>整个的代理流程如下：<br>首先类HttpServerRequestProxy 继承于HttpServletRequestWrapper，并覆写它父类的getInputStream() 方法，在这个方法中我们设置它返回InputStreamRequestProxy流对象（当然这个类必须要与ServletInputstream 兼容，所以它必定继承于ServletInputstream），然后我们覆写这个流的read()方法，并在这个方法内部我们对文件上传的进度，速度进 行控制，而不是由组件提供的特定的进度监视器来获取准确的精度；</p>
+<p>运行流程如下：<br>    组件以HttpServerRequestProxy对象为参数进行初始化，在其内部再调用参数的getInputStream()方法获取整个传入流，再使用流的read()方法读取实际内容，这样整个处理流的过程，都是从代理中通过的；</p>
+<h5 id="服务器端获取文件传输速度的计算方式："><a href="#服务器端获取文件传输速度的计算方式：" class="headerlink" title="服务器端获取文件传输速度的计算方式："></a>服务器端获取文件传输速度的计算方式：</h5><ol>
+<li>根据前后读取buffer的时间来测算，但是由于读取request 返回的流太过频繁，导致以毫秒计算，根本没有办法来计算实时速度；（不可行）</li>
+<li>采用一个控制量，固定读取一定数量的buffer后，再根据服务器读取这段的长度所使用的时间来设定速度值；（需要设定BufferNUM的值，实时性较好，资源消耗最少）；</li>
+<li>采用定时器，每过N秒访问一次文件读取的进度，设置相关的信息，但返回的上传速度可能为 0，或者是无穷；</li>
+</ol>
+<h5 id="判断上传文件（单个）大小是否符合服务器设置："><a href="#判断上传文件（单个）大小是否符合服务器设置：" class="headerlink" title="判断上传文件（单个）大小是否符合服务器设置："></a>判断上传文件（单个）大小是否符合服务器设置：</h5><p>（如何快速判断，而不是等二进制流读取完再返回错误信息。）<br>javaScript 客户端脚本判断，但是针对不同的浏览器，不同的权限设置，不一定能成功；（且于服务器端实际读取的文件大小精度有差异，难以靠以上传的流的大小来保证文件是否已经上传完毕）<br>function ShowFileSize()<br>{<br>            var fso = new ActiveXObject(“Scripting.FileSystemObject”);<br>        var f, s, file;<br>        if (“object” != typeof(fso))<br>            return;<br>        file = FormName.fileName.value;<br>        f = fso.GetFile(file);<br>        alert(f.size);<br>}</p>
+<p>服务器即时判断：服务器读取流，直到读取的流的数量大于所设定大的限制，则返回错误信息。（占太多的时间，且浪费服务器资源）<br>服务器端判断：在发送POST请求时，信息头里面都包含 Content-Length 属性，其代表着整个请求的数据长度。我们可以通过简单的判断这个Header数据，发现超过了我们允许的长度则直接断开连接，这样就不会对服务器造成资源浪费。<br>演示：simpleFileUpload   index.jsp</p>
+<h5 id="如何判断批量上传的每一个文件的大小："><a href="#如何判断批量上传的每一个文件的大小：" class="headerlink" title="如何判断批量上传的每一个文件的大小："></a>如何判断批量上传的每一个文件的大小：</h5><p>（使用方法二）<br>1． 在客户端判断文件大小，只提交服务器一个文件流，但是文件大小的精确程度会有一定程度的不同，导致一种假死现象；还会有客户端js代码的权限问题。</p>
+<p>2． 在服务器端判断文件大小，但是服务器在真实读取文件流之前 ，使用上面的方法二，只能得到整个流的大小，不能得到，单个文件的大小；这样只能实现整个上传进度的统计。而不可能实现多个文件分开计算其精度的方法；<br>演示：simpleFileUpload   pLOneStream.jsp</p>
+<p>3．每个文件提交一个文件流，服务器对每个流处理时返回文件大小及文件进度。方法是，每个 <input type=”file”> 标签都置于一个独立的form表单中，然后一次提交；</p>
+<h5 id="服务器如何在真正文件上传-读取流-之前获得文件名？"><a href="#服务器如何在真正文件上传-读取流-之前获得文件名？" class="headerlink" title="服务器如何在真正文件上传(读取流)之前获得文件名？"></a>服务器如何在真正文件上传(读取流)之前获得文件名？</h5><p>​    按照正常的Http上传文件的方式是不能实现的，只有在客户端向服务器提交表单之前先向服务器提交一个Ajax请求，然后服务器调用Ajax请求传递过来 的参数（文件名）来判断是否符合服务器提交要求，如果符合则在客户端的回调函数中提交本文件所属的form表单；如果不符合则返回出错信息；</p>
+<p>如果文件不合法，服务器、客户端如何而实现：<br>（此时服务器已经必定在读http传递过来的文件流，除非判断文件名是在客户端判断，或者是使用Ajax在服务器端判断的方法）<br>1、 客户端使用Ajax 接受服务器返回出错信息，并在服务器内部读取流文件时，如果发现文件不合法则抛出特定的异常，并在服务器内部自行捕获处理；<br>2、 流覆盖；<br>流覆盖演示：streamCover<br>原理：将两个请求同时提交到一个地方，导致后面的流截断前面正在上传的文件流，从而达到删除正在上传的文件的效果；（删除正在上传的文件）</p>
+<h5 id="客户端从服务器读取文件上传进度信息："><a href="#客户端从服务器读取文件上传进度信息：" class="headerlink" title="客户端从服务器读取文件上传进度信息："></a>客户端从服务器读取文件上传进度信息：</h5><h5 id="Ajax"><a href="#Ajax" class="headerlink" title="(Ajax)"></a>(Ajax)</h5><p><strong>几个重要的步骤：</strong><br>1、  构建Ajax 对象；（需要针对不同的浏览器进行构建），参见代码；cosex—UpLoadFile.html—getAjax；<br>2、  设置回调函数 onreadystatechange;<br>3、  设置携带特定参数信息的URL；<br>4、  发送请求；<br>5、  等待回调；</p>
+<p><strong>需要注意的问题：</strong><br>1、  IE缓存问题；<br>解决方法：<br>清除由于IE缓存造成的Ajax不能多次发出请求：<br>服务器端：<br>response.setHeader(“Cache-Control”,”no-cache”);<br>客户端<br> 在Ajax发出的请求URL后添加一个随机数（Math.random()），这样对于IE来说每次请求的页面都不是同一个页面就不会造成直接调用缓存页面的问题；</p>
+<p>2、  同步还是异步请求的问题；<br>Ajax的优势就是可以异步发送请求到服务器，而不需要服务器实时的去相应，所以设为异步；</p>
+<p><strong>服务器端相应Ajax请求的几个问题：</strong><br>1、  Ajax异步请求与传统请求在服务器端的判断方法；<br>request.getHeader(“x-requested-with”);<br>b．在URL后添加一个与服务器端约定好的参数；<br>（在服务器端都必须显示的去判断）<br>2、  字符编码问题；<br>Ajax请求默认的参数默认均为 ”ISO8859-1”，在服务器端必须要进行解码；</p>
+<p><strong>与进度条的集成：</strong><br>根据Ajax从服务器获取的文件信息（文件大小，上传速度，上传百分比等信息），信息每更新一次就设定进度条的值；动态隐藏和显示显示进度条的div；</p>
+<p><strong>UI上传组件应该具备以下基本功能：</strong></p>
+<ol>
+<li>能让用户提供一个上传路径</li>
+<li>能够限制上载文件的大小（防止上传文件过大）<ol start="3">
+<li>能够支持多个文件同时上传及限制并行上传文件的个数（多文件并行上传）</li>
+<li>可以在服务器端进行异常错误捕获，并进行适当的处理</li>
+<li>上传组件的稳定性（上传速度能够保持稳定）</li>
+</ol>
+</li>
+<li>可以设定屏蔽（或指定）固定类型的文件（如以 .exe结尾的文件等）</li>
+<li>能够向用户提供一个友好的交互界面，实时显示该文件上传的进度、当前用户的网络状态、上传此文件已花费时间、传输速率，剩余时间等信息</li>
+<li>支持对已上传或正在上传文件的删除</li>
+<li>用户使用及操作及可扩展 ，并能够灵活的集成到其它项目中</li>
+</ol>
+<pre><code>     Ajax的同步问题 ；（两个不同的页面同时访问一个服务端URL，导致两者得到的值竟然是后者的值）</code></pre><p>一个页面的，多表单提交的问题解决方案：<br>1．  使用Ajax 实现。<br>2．  使用 form 的target 属性提交到一个本页面的iframe 的name 上，那样页面就不会跳转。</p>
+<p>Javascript问题：<br>引号中传字符串值； 可以单双引号嵌套使用<br>Setinterval（）函数传值，采用<br>function(){ realFunction(args)} 的匿名传值方法；<br>3．  取消计时器clearInterval(timerID);</p>
+<p>一个页面多次提交导致流被截断；<br>       如果是提交到一个隐藏的frame中的话，那么会导致流被截断，必须提交到不同的隐藏frame中，才可以异步提交到服务器。</p>
+<p><a href="http://blog.sina.com.cn/s/blog_8f32dc250100wva8.html" target="_blank" rel="noopener">转载来源博客</a></p>
+<p><a href="https://blog.csdn.net/qq_27053493/java/article/details/100589143" target="_blank" rel="noopener">参考博客</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-14</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

