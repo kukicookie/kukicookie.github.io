@@ -10,7 +10,7 @@
 
     <!-- Page Title -->
     
-        <title>title：我的第一篇博客 | Hexo</title>
+        <title>MSF工具 | Hexo</title>
     
     <link rel="icon" href="/img/avatar-default.png">
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
@@ -57,7 +57,7 @@
         <p class="header-title">
              
                 
-                    title：我的第一篇博客
+                    MSF工具
                 
             
         </p>  
@@ -94,7 +94,7 @@
     
         <!-- Article Catalog -->
         <div class="catalog-dropdown col-xs-12 col-sm-12">
-            
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MSF工具"><span class="toc-number">1.</span> <span class="toc-text">MSF工具</span></a></li></ol>
         </div>
     
 
@@ -110,12 +110,58 @@
 
     <!-- Article Content -->
     <div class="post-content">
-        <p>​      太常引·建康中秋夜为吕叔潜赋</p>
-<p>​                      [宋]辛弃疾</p>
-<p>​    一轮秋影转金波。飞镜又重磨。</p>
-<p>​    把酒问姮娥。被白发、欺人奈何。 </p>
-<p>​    乘风好去，长空万里，直下看山河。</p>
-<p>​    斫去桂婆娑。人道是、清光更多。</p>
+        <h1 id="MSF工具"><a href="#MSF工具" class="headerlink" title="MSF工具"></a>MSF工具</h1><p>msfconsole简称msf是一款常用的渗透测试工具，包含了常见的漏洞利用模块和生成各种木马。通过MSF工具可以很容易地获取、开发并对计算机软件漏洞实施攻击。它本身附带数百个已知软件漏洞的专业级漏洞攻击工具。是信息收集、漏洞扫描、权限提升、内网渗透等集成的工具。</p>
+<p>输入msfconsole 进入msfconsole框架</p>
+<pre><code>基本命令
+
+msfconsole   #启动MSF console界面
+
+msfupdate    #msf版本更新
+
+help/?       #打印当下窗口的帮助文档
+
+help command/command --help #打印command命令的帮助文档
+
+connect      #可以看成是msfconsole界面下的nc工具
+
+edit         #编辑模块的ruby文件，与用vim编辑相同
+
+show         #查看命令，可以看当前环境下的exploits、auxiliary、payloads等模块,其中Rank表示不同模块的评级（成功率和使用难易程度的重要参考），
+
+             #最常使用的是`show options`命令，表示当前上下文环境中的选项内容,`show missing`可以查看当前有哪些必须的配置没有设置
+
+show advanced   #一些不常用的高级选项，不会在`show options`中显示
+
+search       #搜索关键词内容对应的模块，如搜索ms10_046漏洞模块：
+（注意搜索出的内容所在基本目录为`/usr/share/metasploit-framework/modules/`）,除此之外search还可以添加一些筛选条件，如name、path、type等
+
+info         #当前模块的基本信息
+
+use          #使用不同的模块文件
+
+set/unset    #设置变量/取消变量设置
+
+setg/unsetg  #设置全局变量/取消全局变量设置，只会设置当前msf运行环境中的变量，退出msf后设置就复位
+
+save         #将设置保存到/root/.msf4/config，msf启动时会读取该文件，这样重新启动msf后设置依然保留
+
+back         #从模块上下文退回到msfconsole初始目录
+
+run/exploit  #运行漏洞模块
+
+sessions     #可以看见当前已经建立的攻击连接，利用`sessions -i id`命令进入指定连接
+
+jobs         #查看后台运行的模块
+
+load/unload  #连接插件，如load openvas，然后会出现相应的openvas命令，使用时需要用openvas_connect连接外部扫描器
+
+loadpath     #调用自己编写的功能模块
+
+route        #向session指定路由
+
+resource     #调用rc文件的命令并执行，以方便直接取得session</code></pre><p>原文链接：<a href="https://blog.csdn.net/Captain_RB/java/article/details/103836565" target="_blank" rel="noopener">https://blog.csdn.net/Captain_RB/java/article/details/103836565</a></p>
+<p>MSF渗透测试：<a href="https://www.freebuf.com/sectool/210292.html#" target="_blank" rel="noopener">https://www.freebuf.com/sectool/210292.html#</a></p>
+<p>一些参数：<a href="https://blog.bbskali.cn/index.php/archives/1760/" target="_blank" rel="noopener">https://blog.bbskali.cn/index.php/archives/1760/</a></p>
   
     </div> 
 
@@ -127,7 +173,7 @@
     <div class="post-info-wrapper">
             
                     <!-- Post Info -->
-                    <p class="post-date">2020-05-14</p>
+                    <p class="post-date">2020-06-29</p>
                     
                     
                         <p class="post-info-categories">

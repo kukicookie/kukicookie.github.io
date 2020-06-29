@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>缓存投毒原理 | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    缓存投毒原理
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#缓存投毒原理"><span class="toc-number">1.</span> <span class="toc-text">缓存投毒原理</span></a></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="缓存投毒原理"><a href="#缓存投毒原理" class="headerlink" title="缓存投毒原理"></a>缓存投毒原理</h1><p><strong>缓存是什么？</strong></p>
+<p>缓存（cache），原始意义是指访问速度比一般随机存取存储器（RAM）快的一种高速存储器，通常它不像系统主存那样使用DRAM技术，而使用昂贵但较快速的SRAM技术。缓存的设置是所有现代计算机系统发挥高性能的重要因素之一。</p>
+<p>如果服务器必须分别对每个HTTP请求发送新的响应，则可能会使服务器过载，从而导致延迟问题和不良的用户体验，尤其是在繁忙时期。缓存主要是减少此类问题的一种方法。</p>
+<p>缓存位于服务器和用户之间，通常在固定的时间内保存（缓存）对特定请求的响应。如果另一个用户在这段时间内发送了同样的请求，则缓存会直接提供响应的副本(缓存)给用户，而无需与服务器直接进行交互。通过减少服务器对重复请求进行处理的次数，来减轻服务器的负担。<br>如下图就是同时间的用户访问同一个内容时，获取资源的过程。</p>
+<p><a href="https://xzfile.aliyuncs.com/media/upload/picture/20200427115852-68b8ac64-883b-1.png" target="_blank" rel="noopener"><img src="https://xzfile.aliyuncs.com/media/upload/picture/20200427115852-68b8ac64-883b-1.png" alt="img"></a></p>
+<p><strong>缓存投毒</strong>，通常也称为域名系统投毒，或DNS缓存投毒。</p>
+<p>缓存投毒通常也称为域名系统投毒，或DNS缓存投毒。它是利用虚假Internet地址替换掉域名系统表中的地址，进而制造破坏。当网络用户在带有该虚假地址的页面中进行搜寻，以访问某链接时，网页浏览器由于受到该虚假条目的影响而打开了不同的网页链接。在这种情况下，蠕虫、木马、浏览器劫持等恶意软件就可能会被下载到本地用户的电脑上。</p>
+<p>随着恶意软件传播的增多，缓存投毒的方法也层出不穷。典型的一种是发送标题吸引人的垃圾邮件并诱导你去打开（比如标题为“你的退税出现严重问题”）。点击邮件中的图片和广告条幅也会将用户指向被投毒的网站。一旦用户的电脑被恶意代码感染，他今后所有的URL请求都将被自动指向恶意IP地址-哪怕被指向的“受害”服务器已经在其网页上清除了恶意代码。对那些知名或被大众信任的网站来说，缓存投毒是个危险的隐形杀手，比如那些自动更新病毒库时所打开的网页。 </p>
+<p>缓存投毒与另外一种打着管理员或技术支持的幌子通过email来轰炸邮箱的DNS布毒方式不同，缓存投毒是一种URL投毒，或称地址投毒。用户上网时，浏览器的地址栏中会追加一段ID以记录用户浏览过的网页。</p>
+<p><strong>Web缓存投毒攻击产生的影响</strong></p>
+<p>Web缓存投毒的影响在很大程度上取决于两个关键因素：</p>
+<p>1、攻击者可以成功地成功缓存什么</p>
+<p>由于投毒的缓存更多是一种分发手段，而不是独立的攻击，因此Web缓存投毒的影响与注入的payload的危害密不可分。与大多数攻击一样，Web缓存投毒也可以与其他攻击结合使用，以进一步扩大潜在影响。</p>
+<p>2、受影响页面上的通信量</p>
+<p>仅当缓存投毒时，投毒响应才会提供给访问受影响页面的用户。结果，根据页面是否受欢迎，影响可能从不存在到严重不等。例如，如果攻击者设法破坏了主要网站主页上缓存的响应，则该攻击可能会影响成千上万的用户，而无需攻击者进行任何后续交互。</p>
+<p><strong>构造Web缓存投毒攻击的攻击步骤：</strong></p>
+<p>1、识别和评估非关键输入<br>缓存投毒攻击依赖于对unkeyed的操作。在cache中进行判别是否由缓存进行响应时会忽略 unkeyed 的输入。因此我们可以使用 unkeyed 输入进行注入payload来引发投毒响应，如果改响应被缓存，就会提供给具有匹配的 cache key 的其他用户。<br>通过向请求中添加随机输入并对响应进行观察是否被影响来进行识别非关键输入。</p>
+<p>2、引起后端服务器的有害响应<br>识别出非关键输入后，下一步就是准确评估网站的处理方式。理解这一点对于成功引发有害反应至关重要。如果输入未正确清理就反映在服务器的响应中，或者用于动态生成其他数据，则这是Web缓存投毒的潜在入口点。</p>
+<p>3、获取响应缓存<br>操纵输入以引起有害的响应是成功的一半。是否缓存响应取决于所有因素，例如文件扩展名，内容类型，路由，状态代码和响应标头。需要花费一些时间来简单地处理不同页面上的请求并研究缓存的行为。一旦确定了如何缓存包含恶意输入的响应，便可以将漏洞利用传递给潜在的受害者。</p>
+<p><strong>利用Web缓存投毒漏洞</strong></p>
+<p>可以使用web缓存投毒来进行：XSS攻击、利用对资源的不安全导入、利用cookie处理漏洞、利用基于DOM的漏洞。</p>
+<p>原文链接：<a href="https://blog.csdn.net/cookieXSS/java/article/details/106161723" target="_blank" rel="noopener">https://blog.csdn.net/cookieXSS/java/article/details/106161723</a></p>
+<p><a href="https://xz.aliyun.com/t/7696#toc-0" target="_blank" rel="noopener">https://xz.aliyun.com/t/7696#toc-0</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-06-26</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>
