@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>DVWA CSRF跨站请求伪造 | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    DVWA CSRF跨站请求伪造
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DVWA-CSRF跨站请求伪造"><span class="toc-number">1.</span> <span class="toc-text">DVWA CSRF跨站请求伪造</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#与XSS区别："><span class="toc-number">1.0.0.1.</span> <span class="toc-text">与XSS区别：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#low级别"><span class="toc-number">1.1.</span> <span class="toc-text">low级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码："><span class="toc-number">1.1.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战："><span class="toc-number">1.1.0.2.</span> <span class="toc-text">实战：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium级别"><span class="toc-number">1.2.</span> <span class="toc-text">medium级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-1"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战：-1"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">实战：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high级别"><span class="toc-number">1.3.</span> <span class="toc-text">high级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-2"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战：-2"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">实战：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible级别"><span class="toc-number">1.4.</span> <span class="toc-text">impossible级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-3"><span class="toc-number">1.4.0.1.</span> <span class="toc-text">源码：</span></a></li></ol></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="DVWA-CSRF跨站请求伪造"><a href="#DVWA-CSRF跨站请求伪造" class="headerlink" title="DVWA CSRF跨站请求伪造"></a>DVWA CSRF跨站请求伪造</h1><blockquote>
+<p>跨站请求伪造（英语：Cross-site request forgery），也被称为 one-click attack 或者 session riding，通常缩写为 CSRF 或者 XSRF， 是一种挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法。跟跨网站脚本（XSS）相比，XSS 利用的是用户对指定网站的信任，CSRF 利用的是网站对用户网页浏览器的信任。</p>
+<p>跨站请求攻击，简单地说，是攻击者通过一些技术手段欺骗用户的浏览器去访问一个自己曾经认证过的网站并运行一些操作（如发邮件，发消息，甚至财产操作如转账和购买商品）。由于浏览器曾经认证过，所以被访问的网站会认为是真正的用户操作而去运行。这利用了web中用户身份验证的一个漏洞：简单的身份验证只能保证请求发自某个用户的浏览器，却不能保证请求本身是用户自愿发出的。<br>例子<br>假如一家银行用以运行转账操作的URL地址如下：<code>http://www.examplebank.com/withdraw?account=AccoutName&amp;amount=1000&amp;for=PayeeName</code><br>那么，一个恶意攻击者可以在另一个网站上放置如下代码： <img src="http://www.examplebank.com/withdraw?account=Alice&amount=1000&for=Badman"><br>如果有账户名为Alice的用户访问了恶意站点，而她之前刚访问过银行不久，登录信息尚未过期，那么她就会损失1000资金。<br>这种恶意的网址可以有很多种形式，藏身于网页中的许多地方。此外，攻击者也不需要控制放置恶意网址的网站。例如他可以将这种地址藏在论坛，博客等任何用户生成内容的网站中。这意味着如果服务端没有合适的防御措施的话，用户即使访问熟悉的可信网站也有受攻击的危险。<br><strong>透过例子能够看出，攻击者并不能通过CSRF攻击来直接获取用户的账户控制权，也不能直接窃取用户的任何信息。他们能做到的，是欺骗用户浏览器，让其以用户的名义运行操作。</strong></p>
+<h4 id="与XSS区别："><a href="#与XSS区别：" class="headerlink" title="与XSS区别："></a>与XSS区别：</h4><p>XSS是通过修改页面Javascript等代码后，发给用户从而实现盗取cookie信息，之后利用cookie进行登陆网站等操作。非法操作是黑客。<br> CSRF并没有盗取cookie信息，而是通过用户直接利用cookie进行操作。非法操作并不是黑客，而是用户本身。</p>
+<p>参考链接：<a href="https://blog.csdn.net/weixin_45382656/article/details/103828019" target="_blank" rel="noopener">https://blog.csdn.net/weixin_45382656/article/details/103828019</a></p>
+<p>参考链接：<a href="https://baike.baidu.com/item/跨站请求伪造/13777878?fromtitle=CSRF&fromid=2735433&fr=aladdin" target="_blank" rel="noopener">https://baike.baidu.com/item/跨站请求伪造/13777878?fromtitle=CSRF&amp;fromid=2735433&amp;fr=aladdin</a></p>
+</blockquote>
+<h2 id="low级别"><a href="#low级别" class="headerlink" title="low级别"></a>low级别</h2><h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+if( isset( $_GET[ &#39;Change&#39; ] ) ) {
+    // Get input
+    $pass_new  = $_GET[ &#39;password_new&#39; ];
+    $pass_conf = $_GET[ &#39;password_conf&#39; ];
+
+    // Do the passwords match?判断是否相同
+    if( $pass_new == $pass_conf ) {
+        // They do!下边将特殊字符转义，然后进行MD5加密，然后更新数据库；
+        $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));
+        $pass_new = md5( $pass_new );
+
+        // Update the database更新数据库
+        $insert = &quot;UPDATE `users` SET password = &#39;$pass_new&#39; WHERE user = &#39;&quot; . dvwaCurrentUser() . &quot;&#39;;&quot;;
+        $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $insert ) or die( &#39;&lt;pre&gt;&#39; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &#39;&lt;/pre&gt;&#39; );
+
+        // Feedback for the user
+        echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;
+    }
+    else {
+        // Issue with passwords matching
+        echo &quot;&lt;pre&gt;Passwords did not match.&lt;/pre&gt;&quot;;
+    }
+
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);//关闭数据库连接
+}
+
+?&gt; </code></pre>
+<p><strong>1、mysql_real_escape_string() 函数:</strong>  转义 SQL 语句中使用的字符串中的特殊字符。<br>下列字符受影响：<br>\x00<br>\n<br>\r<br><br>‘<br>“<br>\x1a<br>如果成功，则该函数返回被转义的字符串。如果失败，则返回 false。</p>
+<p>mysql_real_escape_string(string,connection)<br>string<br>必需。规定要转义的字符串。<br>connection<br>可选。规定 MySQL 连接。如果未规定，则使用上一个连接。</p>
+<p><strong>2、trigger_error() 函数</strong>:  创建用户级别的错误消息。<br>trigger_error() 函数能结合内置的错误处理器所关联，或者可以使用用户定义的函数作为新的错误处理程序(set_error_handler())。</p>
+<p>trigger_error(errormsg,errortype);<br>errormsg<br>必需。规定错误消息。最大长度 1024 字节。<br>errortype<br>可选。规定错误类型。可能的值：E_USER_ERROR、E_USER_WARNING、E_USER_NOTICE（默认）</p>
+<p>服务器通过GET方式接收修改密码的请求，会检查参数password_new与password_conf是否相同，如果相同，就会修改密码，没有任何的防CSRF机制（当然服务器对请求的发送者是做了身份验证的，是检查的cookie，只是这里的代码没有体现）。这段代码直接将新密码写进数据库，没有验证用户的旧密码，也没有对http引用进行确认，就只判断了是不是两次输入相等而已，这样任何别的网站都可以用你cookies对你的帐户进行CSRF攻击。</p>
+<h4 id="实战："><a href="#实战：" class="headerlink" title="实战："></a>实战：</h4><p>两个地方均填123，发现提交成功（因为只判断二者是否相等）。用burpsuite抓包，右键Engagement tools-&gt;Generate CSRF RoC，会自动生成html代码，把它存在F盘，命名为csrf1.html。</p>
+<p>在另一个网页打开file:///F:/csrf1.html,页面会出现submit request的按钮，点击则成功修改密码。跳转到dvwa登录界面，会发现原本的密码已经无法登陆，密码为123。</p>
+<p>（可以伪造成一个链接，受害者点击后密码就会被修改）</p>
+<h2 id="medium级别"><a href="#medium级别" class="headerlink" title="medium级别"></a>medium级别</h2><h4 id="源码：-1"><a href="#源码：-1" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+if( isset( $_GET[ &#39;Change&#39; ] ) ) {
+    // Checks to see where the request came from检查请求来自哪里
+    if( stripos( $_SERVER[ &#39;HTTP_REFERER&#39; ] ,$_SERVER[ &#39;SERVER_NAME&#39; ]) !== false ) {
+
+//加了HTTP_REFERER验证,当$_SERVER中HTTP_REFERER有SERVER_NAME的值时候，才能进行改密码操作。
+ //$_SERVER[&#39;HTTP_REFERER&#39;] #链接到当前页面的前一页面的 URL 地址。
+ //$_SERVER[&#39;SERVER_NAME&#39;] #当前运行脚本所在服务器主机的名称。
+//把之前的csrf1.html文件重命名为dvwa.com.html可以达到绕过的目的        
+
+        // Get input
+        $pass_new  = $_GET[ &#39;password_new&#39; ];
+        $pass_conf = $_GET[ &#39;password_conf&#39; ];
+
+        // Do the passwords match?
+        if( $pass_new == $pass_conf ) {
+            // They do!
+            $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));
+            $pass_new = md5( $pass_new );
+
+            // Update the database
+            $insert = &quot;UPDATE `users` SET password = &#39;$pass_new&#39; WHERE user = &#39;&quot; . dvwaCurrentUser() . &quot;&#39;;&quot;;
+            $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $insert ) or die( &#39;&lt;pre&gt;&#39; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &#39;&lt;/pre&gt;&#39; );
+
+            // Feedback for the user
+            echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;
+        }
+        else {
+            // Issue with passwords matching
+            echo &quot;&lt;pre&gt;Passwords did not match.&lt;/pre&gt;&quot;;
+        }
+    }
+    else {
+        // Didn&#39;t come from a trusted source
+        echo &quot;&lt;pre&gt;That request didn&#39;t look correct.&lt;/pre&gt;&quot;;
+    }
+
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);
+}
+
+?&gt; </code></pre>
+<p>stripos(string,find,start)函数查找字符串在另一字符串中第一次出现的位置（不区分大小写）。<br>注释：stripos() 函数是不区分大小写的。<br>注释：该函数是二进制安全的。<br>string<br>必需。规定要搜索的字符串。<br>find<br>必需。规定要查找的字符。<br>start<br>可选。规定开始搜索的位置。</p>
+<h4 id="实战：-1"><a href="#实战：-1" class="headerlink" title="实战："></a>实战：</h4><p>同样利用burpsuite进行csrf攻击，文件命名为dvwa.com.html就可以绕过，成功修改密码。</p>
+<h2 id="high级别"><a href="#high级别" class="headerlink" title="high级别"></a>high级别</h2><h4 id="源码：-2"><a href="#源码：-2" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php"> &lt;?php
+
+if( isset( $_GET[ &#39;Change&#39; ] ) ) {
+    // Check Anti-CSRF token采用token验证
+    checkToken( $_REQUEST[ &#39;user_token&#39; ], $_SESSION[ &#39;session_token&#39; ], &#39;index.php&#39; );
+
+    // Get input
+    $pass_new  = $_GET[ &#39;password_new&#39; ];
+    $pass_conf = $_GET[ &#39;password_conf&#39; ];
+
+    // Do the passwords match?
+    if( $pass_new == $pass_conf ) {
+        // They do!
+        $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));
+        $pass_new = md5( $pass_new );
+
+        // Update the database
+        $insert = &quot;UPDATE `users` SET password = &#39;$pass_new&#39; WHERE user = &#39;&quot; . dvwaCurrentUser() . &quot;&#39;;&quot;;
+        $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $insert ) or die( &#39;&lt;pre&gt;&#39; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &#39;&lt;/pre&gt;&#39; );
+
+        // Feedback for the user
+        echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;
+    }
+    else {
+        // Issue with passwords matching
+        echo &quot;&lt;pre&gt;Passwords did not match.&lt;/pre&gt;&quot;;
+    }
+
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]))) ? false : $___mysqli_res);
+}
+
+// Generate Anti-CSRF token
+generateSessionToken();
+
+?&gt;
+</code></pre>
+<p>可利用burpsuite中的CSRF Token Tracker绕过token验证插件</p>
+<h4 id="实战：-2"><a href="#实战：-2" class="headerlink" title="实战："></a>实战：</h4><p>burpsuite-&gt;Extender-&gt;BApp Store-&gt;CSRF Token Tracker-&gt;右边页面install</p>
+<p>栏目多了CSRF Token Tracker，点击进入页面-&gt;√Sync requests…-&gt;host填写<a href="http://127.0.0.1，Name填user_token,Value填token字段，并√" target="_blank" rel="noopener">http://127.0.0.1，Name填user_token,Value填token字段，并√</a></p>
+<p>然后将抓到的包send to repeater 可以发现token的值是随机的，登录会发现密码修改成功。</p>
+<p>参考链接：<a href="https://blog.csdn.net/weixin_45382656/article/details/103828019" target="_blank" rel="noopener">https://blog.csdn.net/weixin_45382656/article/details/103828019</a></p>
+<h2 id="impossible级别"><a href="#impossible级别" class="headerlink" title="impossible级别"></a>impossible级别</h2><h4 id="源码：-3"><a href="#源码：-3" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+if( isset( $_GET[ &#39;Change&#39; ] ) ) {
+    // Check Anti-CSRF token
+    checkToken( $_REQUEST[ &#39;user_token&#39; ], $_SESSION[ &#39;session_token&#39; ], &#39;index.php&#39; );
+
+    // Get input
+    $pass_curr = $_GET[ &#39;password_current&#39; ];
+    $pass_new  = $_GET[ &#39;password_new&#39; ];
+    $pass_conf = $_GET[ &#39;password_conf&#39; ];
+
+    // Sanitise current password input
+    $pass_curr = stripslashes( $pass_curr );//删除反斜杠
+    $pass_curr = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_curr ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));
+    $pass_curr = md5( $pass_curr );
+
+    // Check that the current password is correct验证本来的密码对不对
+    $data = $db-&gt;prepare( &#39;SELECT password FROM users WHERE user = (:user) AND password = (:password) LIMIT 1;&#39; );
+    $data-&gt;bindParam( &#39;:user&#39;, dvwaCurrentUser(), PDO::PARAM_STR );
+    $data-&gt;bindParam( &#39;:password&#39;, $pass_curr, PDO::PARAM_STR );
+    $data-&gt;execute();
+
+    // Do both new passwords match and does the current password match the user?
+    if( ( $pass_new == $pass_conf ) &amp;&amp; ( $data-&gt;rowCount() == 1 ) ) {
+        // It does!
+        $pass_new = stripslashes( $pass_new );
+        $pass_new = ((isset($GLOBALS[&quot;___mysqli_ston&quot;]) &amp;&amp; is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_real_escape_string($GLOBALS[&quot;___mysqli_ston&quot;],  $pass_new ) : ((trigger_error(&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;, E_USER_ERROR)) ? &quot;&quot; : &quot;&quot;));
+        $pass_new = md5( $pass_new );
+
+        // Update database with new password
+        $data = $db-&gt;prepare( &#39;UPDATE users SET password = (:password) WHERE user = (:user);&#39; );
+        $data-&gt;bindParam( &#39;:password&#39;, $pass_new, PDO::PARAM_STR );
+        $data-&gt;bindParam( &#39;:user&#39;, dvwaCurrentUser(), PDO::PARAM_STR );
+        $data-&gt;execute();
+
+        // Feedback for the user
+        echo &quot;&lt;pre&gt;Password Changed.&lt;/pre&gt;&quot;;
+    }
+    else {
+        // Issue with passwords matching
+        echo &quot;&lt;pre&gt;Passwords did not match or current password incorrect.&lt;/pre&gt;&quot;;
+    }
+}
+
+// Generate Anti-CSRF token
+generateSessionToken();
+
+?&gt; </code></pre>
+<p>Impossible Security Level的代码利用PDO技术防御SQL注入，至于防护CSRF，则要求用户输入原始密码，攻击者在不知道原始密码的情况下，无论如何都无法进行CSRF攻击。</p>
+<p> 1、什么是PDO？            </p>
+<p>PDO就是PHP data Object 提供了PHP操作多种数据库的统一的接口    </p>
+<p>2、为什么要使用PDO？                </p>
+<p>PDO是PHP5新加入的一个重大功能，我们的数据库服务器为MySQL，所有的程序代码的数据库操作全是一mysql(）或者mysqli()函数来操作，当我们的数据库 需要更换时比如换成，SQL、SERVER、PostgreSQL、MS 等，我们不可能去修改所有的程序代码！所以就要用到PDO，PDO很好的帮我们解决了这个问题，使用PDO操作非常方便，只需要修改数据源格式，和加载相应的驱动文件到PHP.ini即可；    </p>
+<p>原文链接：<a href="https://blog.csdn.net/jiuyue9561/java/article/details/80379910" target="_blank" rel="noopener">https://blog.csdn.net/jiuyue9561/java/article/details/80379910</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-17</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

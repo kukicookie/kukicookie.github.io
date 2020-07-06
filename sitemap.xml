@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/05/14/%E5%8F%91%E5%8D%9A%E5%AE%A2%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2020-07-06T15:18:35.169Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/05/14/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</loc>
+    
+    <lastmod>2020-07-06T15:06:37.648Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/05/17/Sqli-labs%EF%BC%886-10%E5%85%B3%EF%BC%89/</loc>
+    
+    <lastmod>2020-07-06T14:49:46.573Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/05/16/Dvwa%20%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%EF%BC%88File%20Inclusion%EF%BC%89/</loc>
+    
+    <lastmod>2020-07-06T14:42:03.224Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2020/06/29/mysql%20udf%E6%8F%90%E6%9D%83%E5%8E%9F%E7%90%86/</loc>
     
     <lastmod>2020-06-29T12:34:54.144Z</lastmod>
@@ -44,23 +72,16 @@
   </url>
   
   <url>
+    <loc>http://yoursite.com/2020/05/17/DVWA%20CSRF%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/</loc>
+    
+    <lastmod>2020-05-17T08:39:22.967Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2020/05/14/DVWA%20File%20Upload/</loc>
     
     <lastmod>2020-05-14T13:59:38.498Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/05/14/%E5%8F%91%E5%8D%9A%E5%AE%A2%E7%9A%84%E4%B8%80%E7%82%B9%E8%AE%B0%E5%BD%95/</loc>
-    
-    <lastmod>2020-05-14T13:45:46.734Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/05/14/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</loc>
-    
-    <lastmod>2020-05-14T09:51:11.862Z</lastmod>
     
   </url>
   

