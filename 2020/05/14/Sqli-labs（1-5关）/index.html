@@ -186,7 +186,7 @@
 “))and 1=2–+</code></pre><p>一般的代码为： $id=$_GET[‘id’]; $sql=”SELECT * FROM users WHERE id=’$id’ LIMIT 0,1”; 此处考虑两个点，一个是闭合前面你的 ‘ 另一个是处理后面的 ‘ ，一般采用两种思 路，闭合后面的引号或者注释掉，注释掉采用–+ 或者 #（%23）</p>
 <p>(<strong>下面有的符号我打进去的时候没有改成英文输入法，所以直接复制可能有错</strong>)</p>
 <h2 id="第一关："><a href="#第一关：" class="headerlink" title="第一关："></a>第一关：</h2><h4 id="1-判断是数字型还是字符型"><a href="#1-判断是数字型还是字符型" class="headerlink" title="1.判断是数字型还是字符型"></a>1.判断是数字型还是字符型</h4><p> 得字符型</p>
-<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513205214145.png" alt="image-20200513205214145"></p>
+<p><img src="/2020/05/14/Sqli-labs%EF%BC%881-5%E5%85%B3%EF%BC%89/C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513205214145.png" alt="image-20200513205214145"></p>
 <p><strong>问题1：我不是很理解报错这句话limit后面的意思，不明白1后面为啥有个单引号？</strong></p>
 <p>翻译（从right开始）：在第1行“1”限制0,1附近使用的正确语法。</p>
 <p>源码是  $sql=”SELECT * FROM users WHERE id=’$id’ LIMIT 0,1”; （源码在文件夹里边的index.php看）</p>
@@ -236,7 +236,7 @@ $row = mysqli_fetch_array($result, MYSQLI_BOTH);
 <h4 id="4-payload"><a href="#4-payload" class="headerlink" title="4.payload"></a>4.payload</h4><p>（意为有效载荷，简单说就是对于接收者有用的数据；因为前面我们查到有两个位置可以在页面上显示，所以我们就可以利用这两个位置来得到我们想要的信息）</p>
 <p><a href="https://www.cnblogs.com/jiersixi/p/11784769.html" target="_blank" rel="noopener">payload的一些知识的参考博客</a></p>
 <p>1)输入?id=-1’union select 1,database(),3 –+ 注当前数据库名</p>
-<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210135523.png" alt="image-20200513210135523"></p>
+<p><img src="/2020/05/14/Sqli-labs%EF%BC%881-5%E5%85%B3%EF%BC%89/C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210135523.png" alt="image-20200513210135523"></p>
 <p>2)输入?id=-1’ union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=”security”–+ 注表名</p>
 <p>（备注：information_schema数据库是mysql自带的，【INFORMATION_SCHEMA 数据库】 是MySQL自带的，它提供了访问数据库 元数据 的方式。什么是 元数据 呢？元数据是关于数据的数据，如数据库名或表名，列的数据类型，或访问权限等。</p>
 <p>有些时候用于表述该信息的其他术语包括“数据词典”和“系统目录”。</p>
@@ -244,12 +244,12 @@ $row = mysqli_fetch_array($result, MYSQLI_BOTH);
 <p>在 【INFORMATION_SCHEMA 】中，有数个 只读 表。它们实际上是 视图 ，而不是基本表，因此，你将无法看到与之相关的任何文件。</p>
 <p><a href="http://www.luyixian.cn/news_show_9165.aspx" target="_blank" rel="noopener">http://www.luyixian.cn/news_show_9165.aspx</a></p>
 <p>（table_schema即数据表所属的数据库名）</p>
-<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210321131.png" alt="image-20200513210321131"></p>
+<p><img src="/2020/05/14/Sqli-labs%EF%BC%881-5%E5%85%B3%EF%BC%89/C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210321131.png" alt="image-20200513210321131"></p>
 <p>3)输入?id=-1’ union select 1,group_concat(column_name),3 from information_schema.columns where table_name=’users’ –+注某张表的字段，这里以users为例</p>
 <p>（Table_name：表名称）</p>
-<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210339398.png" alt="image-20200513210339398"></p>
+<p><img src="/2020/05/14/Sqli-labs%EF%BC%881-5%E5%85%B3%EF%BC%89/C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210339398.png" alt="image-20200513210339398"></p>
 <p>4）输入?id=-1’ union select 1,group_concat(username),3 from security.users –+注字段的值，这里注 users 表里的 usrname 字段为例</p>
-<p><img src="C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210359537.png" alt="image-20200513210359537"></p>
+<p><img src="/2020/05/14/Sqli-labs%EF%BC%881-5%E5%85%B3%EF%BC%89/C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200513210359537.png" alt="image-20200513210359537"></p>
 <p>【备注：</p>
 <p>1）函数database（）返回当前数据库名</p>
 <p>2）字段名即table_schema等的参考链接：<a href="https://www.cnblogs.com/shoshana-kong/p/10979295.html" target="_blank" rel="noopener">简单版</a>     <a href="https://wenku.baidu.com/view/6358a5fd89eb172ded63b7a8.html" target="_blank" rel="noopener">详细版</a></p>

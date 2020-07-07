@@ -155,7 +155,7 @@
 <p>4）检测是否为HTTP POST方式上传</p>
 <h4 id="HTTP文件上传的基本原理："><a href="#HTTP文件上传的基本原理：" class="headerlink" title="HTTP文件上传的基本原理："></a>HTTP文件上传的基本原理：</h4><p>使用html 的<input type="file" name="xxx"> 标签，提交form 的几个属性必须为： method=post  encType=multipart/form-data;<br>method 属性必须设为post的原因是：值不是放在URL之后传递到服务器的；<br>encType属性：这个属性管理的是表单的MIME编码<br>几个属性详解：<br>         application/x-www-form-urlencoded   在发送前编码所有字符（默认）<br>       multipart/form-data  不对字符编码，在使用包含文件上传控件的表单时，必须使用该值；对于“multipart/form-data”类型的form表单，浏览器上传的实体内 容中的每个表单字段元素的数据之间用字段分隔界线进行分割，两个分隔界线间的内容称为一个分区，每个分区中的内容可以被看作两部分，一部分是对表单字段元 素进行描述的描述头，另外一部是表单字段元素的主体内容<br>       text/plain 空格转换为“+”，不对特殊字符编码</p>
 <p>归纳的三个重要点：</p>
-<p>1.提交方式必须为post；<br>2.表单中有文件上传的表单项必须为<input type="file"/>；<br>3.必须指定表单类型enctype=”multipart/form-data”。</p>
+<p>1.提交方式必须为post；<br>2.表单中有文件上传的表单项必须为<input type="file">；<br>3.必须指定表单类型enctype=”multipart/form-data”。</p>
 <p>例子（代码）：</p>
 <pre><code>&lt;form method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;    
   &lt;input type=&quot;file&quot; name=&quot;file&quot; value=&quot;请选择文件&quot;&gt;&lt;br /&gt;    
@@ -183,7 +183,7 @@ InputStreamRequestProxy：代理输入流</code></pre><p>整个的代理流程�
 <p>服务器即时判断：服务器读取流，直到读取的流的数量大于所设定大的限制，则返回错误信息。（占太多的时间，且浪费服务器资源）<br>服务器端判断：在发送POST请求时，信息头里面都包含 Content-Length 属性，其代表着整个请求的数据长度。我们可以通过简单的判断这个Header数据，发现超过了我们允许的长度则直接断开连接，这样就不会对服务器造成资源浪费。<br>演示：simpleFileUpload   index.jsp</p>
 <h5 id="如何判断批量上传的每一个文件的大小："><a href="#如何判断批量上传的每一个文件的大小：" class="headerlink" title="如何判断批量上传的每一个文件的大小："></a>如何判断批量上传的每一个文件的大小：</h5><p>（使用方法二）<br>1． 在客户端判断文件大小，只提交服务器一个文件流，但是文件大小的精确程度会有一定程度的不同，导致一种假死现象；还会有客户端js代码的权限问题。</p>
 <p>2． 在服务器端判断文件大小，但是服务器在真实读取文件流之前 ，使用上面的方法二，只能得到整个流的大小，不能得到，单个文件的大小；这样只能实现整个上传进度的统计。而不可能实现多个文件分开计算其精度的方法；<br>演示：simpleFileUpload   pLOneStream.jsp</p>
-<p>3．每个文件提交一个文件流，服务器对每个流处理时返回文件大小及文件进度。方法是，每个 <input type=”file”> 标签都置于一个独立的form表单中，然后一次提交；</p>
+<p>3．每个文件提交一个文件流，服务器对每个流处理时返回文件大小及文件进度。方法是，每个 <input type="”file”"> 标签都置于一个独立的form表单中，然后一次提交；</p>
 <h5 id="服务器如何在真正文件上传-读取流-之前获得文件名？"><a href="#服务器如何在真正文件上传-读取流-之前获得文件名？" class="headerlink" title="服务器如何在真正文件上传(读取流)之前获得文件名？"></a>服务器如何在真正文件上传(读取流)之前获得文件名？</h5><p>​    按照正常的Http上传文件的方式是不能实现的，只有在客户端向服务器提交表单之前先向服务器提交一个Ajax请求，然后服务器调用Ajax请求传递过来 的参数（文件名）来判断是否符合服务器提交要求，如果符合则在客户端的回调函数中提交本文件所属的form表单；如果不符合则返回出错信息；</p>
 <p>如果文件不合法，服务器、客户端如何而实现：<br>（此时服务器已经必定在读http传递过来的文件流，除非判断文件名是在客户端判断，或者是使用Ajax在服务器端判断的方法）<br>1、 客户端使用Ajax 接受服务器返回出错信息，并在服务器内部读取流文件时，如果发现文件不合法则抛出特定的异常，并在服务器内部自行捕获处理；<br>2、 流覆盖；<br>流覆盖演示：streamCover<br>原理：将两个请求同时提交到一个地方，导致后面的流截断前面正在上传的文件流，从而达到删除正在上传的文件的效果；（删除正在上传的文件）</p>
 <h5 id="客户端从服务器读取文件上传进度信息："><a href="#客户端从服务器读取文件上传进度信息：" class="headerlink" title="客户端从服务器读取文件上传进度信息："></a>客户端从服务器读取文件上传进度信息：</h5><h5 id="Ajax"><a href="#Ajax" class="headerlink" title="(Ajax)"></a>(Ajax)</h5><p><strong>几个重要的步骤：</strong><br>1、  构建Ajax 对象；（需要针对不同的浏览器进行构建），参见代码；cosex—UpLoadFile.html—getAjax；<br>2、  设置回调函数 onreadystatechange;<br>3、  设置携带特定参数信息的URL；<br>4、  发送请求；<br>5、  等待回调；</p>
